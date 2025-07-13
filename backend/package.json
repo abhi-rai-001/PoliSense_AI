@@ -14,8 +14,11 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
+    "mailparser": "^3.7.4",
     "mammoth": "^1.9.1",
+    "mongoose": "^8.16.3",
     "multer": "^2.0.1",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "pdf2pic": "^3.2.0"
   }
 }
