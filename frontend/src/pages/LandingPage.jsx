@@ -1,7 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Link, Element } from "react-scroll";
-import myHeroImage from "../assets/myHeroImage.png"; 
+import { Element, Link as ScrollLink } from "react-scroll";
+import { Link as RouterLink } from "react-router-dom";
+import myHeroImage from "../assets/myHeroImage.png";
 
 
 export default function LandingPage() {
@@ -11,19 +12,20 @@ export default function LandingPage() {
       <header className="w-full px-8 py-6 flex justify-between items-center bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-50">
         <div className="text-xl font-bold">PoliSense_AI</div>
         <nav className="hidden md:flex gap-8 text-gray-700">
-          <Link to="products" smooth duration={500} className="cursor-pointer hover:text-purple-600">
-            Products
-          </Link>
-          <Link to="features" smooth duration={500} className="cursor-pointer hover:text-purple-600">
-            Features
-          </Link>
-          <Link to="pricing" smooth duration={500} className="cursor-pointer hover:text-purple-600">
-            Pricing
-          </Link>
-          <Link to="contact" smooth duration={500} className="cursor-pointer hover:text-purple-600">
-            Contact Us
-          </Link>
-        </nav>
+  <ScrollLink to="products" smooth duration={500} className="cursor-pointer hover:text-purple-600">
+    Products
+  </ScrollLink>
+  <ScrollLink to="features" smooth duration={500} className="cursor-pointer hover:text-purple-600">
+    Features
+  </ScrollLink>
+  <ScrollLink to="pricing" smooth duration={500} className="cursor-pointer hover:text-purple-600">
+    Pricing
+  </ScrollLink>
+  <ScrollLink to="contact" smooth duration={500} className="cursor-pointer hover:text-purple-600">
+    Contact Us
+  </ScrollLink>
+</nav>
+
         <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full font-semibold">
           Start Free Trial
         </button>
@@ -55,11 +57,12 @@ export default function LandingPage() {
             <p className="text-lg text-gray-700 mb-8">
               Leverage AI to extract, organize, and interpret key information from complex documents.
             </p>
-            <Link to="get-started" smooth duration={500}>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-semibold">
-                Get Started →
-              </button>
-            </Link>
+            <RouterLink to="/upload">
+  <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-semibold">
+    Get Started →
+  </button>
+</RouterLink>
+
           </div>
 
           {/* Hero Image */}
