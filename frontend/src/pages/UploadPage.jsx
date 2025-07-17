@@ -6,29 +6,24 @@ import axios from "axios";
 
 export default function UploadPage() {
   const [file, setFile] = useState(null);
+  const [emailText, setEmailText] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [inputMode, setInputMode] = useState("file");
 
   const maxSizeMB = 10;
+
+  const handleEmailTextChange = (e) => {
+    setEmailText(e.target.value);
+    if (e.target.value.trim()) {
+      setFile(null);
+    }
+  };
 
   const handleFileInput = (event) => {
     const selectedFile = event.target.files[0];
     if (!selectedFile) return;
 
-    const ext = selectedFile.name.split(".").pop().toLowerCase();
-    const sizeMB = selectedFile.size / (1024 * 1024);
-
-    if (!["pdf", "docx", "eml"].includes(ext)) {
-      toast.error(`❌ ${selectedFile.name} has invalid type.`);
-      return;
-    }
-    
-    if (sizeMB > maxSizeMB) {
-      toast.error(`❌ ${selectedFile.name} is too large (${sizeMB.toFixed(2)} MB).`);
-      return;
-    }
-
-    setFile(selectedFile);
-    toast.success(`✅ ${selectedFile.name} ready!`);
+    setEmailText("");
   };
 
   const handleDrop = (e) => {
@@ -41,8 +36,8 @@ export default function UploadPage() {
   };
 
   const handleUpload = async () => {
-    if (!file) {
-      toast.error("No file selected.");
+    if (!file && !emailText.trim()) {
+      toast.error("Please select a file or enter email text.");
       return;
     }
 
@@ -51,15 +46,24 @@ export default function UploadPage() {
 
     try {
       const formData = new FormData();
-      formData.append("file", file);
+      
+      if (file) {
+        formData.append("file", file);
+      } else {
+        const emailBlob = new Blob([emailText], { type: 'text/plain' });
+        const emailFile = new File([emailBlob], 'email.txt', { type: 'text/plain' });
+        formData.append("file", emailFile);
+        formData.append("isEmailText", "true");
+      }
       
       await axios.post("http://localhost:3000/user/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
       
       toast.dismiss();
-      toast.success("✅ File uploaded successfully!");
+      toast.success("✅ Content uploaded successfully!");
       setFile(null);
+      setEmailText("");
     } catch (err) {
       toast.dismiss();
       toast.error(err.response?.data?.message || "Upload failed");
@@ -72,7 +76,6 @@ export default function UploadPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
       <Toaster position="top-right" />
       
-      {/* Header */}
       <header className="w-full px-8 py-6 flex justify-between items-center bg-white/80 backdrop-blur-md shadow-md">
         <Link to="/" className="text-xl font-bold text-gray-800">
           PoliSense_AI
@@ -84,7 +87,6 @@ export default function UploadPage() {
         </nav>
       </header>
 
-      {/* Main Content */}
       <main className="flex-1 flex items-center justify-center px-8 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -101,7 +103,6 @@ export default function UploadPage() {
             </p>
           </div>
 
-          {/* Upload Area */}
           <div
             className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center bg-white/50 backdrop-blur-sm hover:border-blue-400 transition-colors cursor-pointer"
             onDrop={handleDrop}
@@ -134,30 +135,68 @@ export default function UploadPage() {
             />
           </div>
 
-          {/* Upload Button */}
-          {file && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="mt-6 flex gap-4 justify-center"
+          <div className="mt-8">
+            <div className="flex gap-4 mb-4">
+              <button
+                onClick={() => setInputMode("file")}
+                className={`px-4 py-2 rounded-lg ${inputMode === "file" ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+              >
+                📁 Upload File
+              </button>
+              <button
+                onClick={() => setInputMode("text")}
+                className={`px-4 py-2 rounded-lg ${inputMode === "text" ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+              >
+                📧 Paste Email
+              </button>
+            </div>
+
+            {inputMode === "text" && (
+              <div className="bg-white/50 backdrop-blur-sm rounded-lg p-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Paste your email content here:
+                </label>
+                <textarea
+                  value={emailText}
+                  onChange={handleEmailTextChange}
+                  placeholder="Paste email headers and content here..."
+                  className="w-full h-40 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <p className="text-xs text-gray-500 mt-2">
+                  Include headers (From, To, Subject) and email body for best results
+                </p>
+              </div>
+            )}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-6 flex gap-4 justify-center"
+          >
+            <button
+              onClick={handleUpload}
+              disabled={uploading}
+              className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
             >
-              <button
-                onClick={handleUpload}
-                disabled={uploading}
-                className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
-              >
-                {uploading ? "Uploading..." : "Upload & Analyze"}
-              </button>
-              <button
-                onClick={() => setFile(null)}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold transition-colors"
-              >
-                Clear
-              </button>
-            </motion.div>
+              {uploading ? "Uploading..." : "Upload & Analyze"}
+            </button>
+            <button
+              onClick={() => {
+                setFile(null);
+                setEmailText("");
+              }}
+              className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold transition-colors"
+            >
+              Clear
+            </button>
+          </motion.div>
+          ) : (
+            <div className="mt-6 text-gray-600">
+              Please select a file or enter email text to upload.
+            </div>
           )}
 
-          {/* File Types Info */}
           <div className="mt-12 grid md:grid-cols-3 gap-6">
             <div className="text-center p-6 bg-white/60 rounded-lg">
               <div className="text-3xl mb-2">📄</div>
