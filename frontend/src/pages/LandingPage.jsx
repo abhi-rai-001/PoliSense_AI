@@ -1,88 +1,22 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { Element, Link as ScrollLink } from "react-scroll";
-import { Link as RouterLink } from "react-router-dom";
-import myHeroImage from "../assets/myHeroImage.png";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+
 
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen text-gray-800 flex flex-col animate-gradient">
-      {/* Navbar */}
-      <header className="w-full px-8 py-6 flex justify-between items-center bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-50">
-        <div className="text-xl font-bold">PoliSense_AI</div>
-        <nav className="hidden md:flex gap-8 text-gray-700">
-  <ScrollLink to="products" smooth duration={500} className="cursor-pointer hover:text-purple-600">
-    Products
-  </ScrollLink>
-  <ScrollLink to="features" smooth duration={500} className="cursor-pointer hover:text-purple-600">
-    Features
-  </ScrollLink>
-  <ScrollLink to="pricing" smooth duration={500} className="cursor-pointer hover:text-purple-600">
-    Pricing
-  </ScrollLink>
-  <ScrollLink to="contact" smooth duration={500} className="cursor-pointer hover:text-purple-600">
-    Contact Us
-  </ScrollLink>
-</nav>
+    <div className="min-h-screen text-gray-800 flex flex-col bg-white">
 
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full font-semibold">
-          Start Free Trial
-        </button>
-      </header>
 
-      {/* Hero Section */}
-      <Element name="products">
-        <section className="relative flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto px-8 py-20 gap-12">
-          {/* SVG Blob */}
-          <svg
-            className="absolute left-0 top-0 w-full h-full opacity-10"
-            viewBox="0 0 800 800"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#6EE7B7" />
-                <stop offset="100%" stopColor="#A78BFA" />
-              </linearGradient>
-            </defs>
-            <circle cx="400" cy="400" r="300" fill="url(#grad1)" />
-          </svg>
+      <Navbar/>
+      <Hero/>
+     
 
-          {/* Hero Text */}
-          <div className="relative z-10 flex-1">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Your Intelligent Assistant for Document Analysis and Insights
-            </h1>
-            <p className="text-lg text-gray-700 mb-8">
-              Leverage AI to extract, organize, and interpret key information from complex documents.
-            </p>
-            <RouterLink to="/upload">
-  <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-semibold">
-    Get Started →
-  </button>
-</RouterLink>
 
-          </div>
-
-          {/* Hero Image */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-            className="relative z-10 flex-1 flex justify-center"
-          >
-            <img
-              src={myHeroImage}
-              alt="AI Assistant"
-              className="w-full max-w-md rounded-lg shadow-lg"
-            />
-          </motion.div>
-        </section>
-      </Element>
-
-      {/* Features Section */}
-      <Element name="features">
+      
+    
         <section className="py-20 px-8 max-w-6xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Features</h2>
           <p className="text-gray-700 mb-12">
@@ -109,7 +43,7 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-      </Element>
+ 
 
       {/* Pricing Section */}
       <Element name="pricing">
