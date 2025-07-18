@@ -23,7 +23,15 @@ export default function UploadPage() {
     const selectedFile = event.target.files[0];
     if (!selectedFile) return;
 
+    const maxSizeMB = 10;
+    if (selectedFile.size > maxSizeMB * 1024 * 1024) {
+      toast.error(`File size must be less than ${maxSizeMB}MB`);
+      return;
+    }
+
+    setFile(selectedFile);
     setEmailText("");
+    console.log("File selected:", selectedFile.name);
   };
 
   const handleDrop = (e) => {
@@ -191,11 +199,6 @@ export default function UploadPage() {
               Clear
             </button>
           </motion.div>
-          ) : (
-            <div className="mt-6 text-gray-600">
-              Please select a file or enter email text to upload.
-            </div>
-          )}
 
           <div className="mt-12 grid md:grid-cols-3 gap-6">
             <div className="text-center p-6 bg-white/60 rounded-lg">

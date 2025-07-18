@@ -2,6 +2,10 @@ import uploadMongo from "../models/User.model.js";
 import pdf from "pdf-extraction";
 import mammoth from "mammoth";
 import { simpleParser } from "mailparser";
+import { splitTextIntoChunks } from "../utils/splitText.js";
+import axios from 'axios';
+
+const PYTHON_SERVICE_URL = process.env.PYTHON_SERVICE_URL || 'http://localhost:8000';
 
 export async function uploadFile(req, res) {
   try {
@@ -40,8 +44,6 @@ ${body.trim() || emailContent}
         } else {
           parsedText = emailContent;
         }
-        
-        console.log("Email text parsed successfully");
       } catch (parseError) {
         console.error('Email text parsing failed:', parseError);
         parsedText = buffer.toString('utf-8');
@@ -52,7 +54,6 @@ ${body.trim() || emailContent}
       try {
         const result = await mammoth.extractRawText({ buffer });
         parsedText = result.value;
-        console.log("DOCX text extracted:", parsedText.substring(0, 200) + "...");
       } catch (parseError) {
         console.error('DOCX parsing failed:', parseError);
         parsedText = "DOCX parsing failed";
@@ -71,7 +72,6 @@ Date: ${parsed.date || 'Unknown date'}
 Body:
 ${parsed.text || parsed.html || 'No content'}
         `.trim();
-        console.log("EML parsed successfully");
       } catch (parseError) {
         console.error('EML parsing failed:', parseError);
         parsedText = "EML parsing failed";
@@ -79,8 +79,13 @@ ${parsed.text || parsed.html || 'No content'}
     }
     
     else if (mimetype === 'application/pdf') {
-      parsedText = "PDF parsing not implemented yet";
-      console.log("PDF file received, parsing skipped");
+      try {
+        const pdfData = await pdf(buffer);
+        parsedText = pdfData.text || "PDF text extraction failed";
+      } catch (parseError) {
+        console.error('PDF parsing failed:', parseError);
+        parsedText = "PDF parsing failed";
+      }
     }
     
     const newFile = await uploadMongo.create({
@@ -90,6 +95,24 @@ ${parsed.text || parsed.html || 'No content'}
       size,
       parsedText: parsedText || null,
     });
+
+    // Send to Python microservice for vector embedding
+    if (parsedText) {
+      try {
+        await axios.post(`${PYTHON_SERVICE_URL}/add_document`, {
+          doc_id: newFile._id.toString(),
+          content: parsedText,
+          filename: originalname,
+          user_id: "user123", // Replace with actual user ID from Clerk later
+          document_type: mimetype === 'application/pdf' ? 'PDF' : 
+                        mimetype.includes('word') ? 'DOCX' : 
+                        mimetype === 'text/email' ? 'Email' : 'Unknown'
+        });
+        console.log("Document sent to vector database with metadata");
+      } catch (vectorError) {
+        console.error('Vector embedding failed:', vectorError.message);
+      }
+    }
 
     res.status(200).json({
       message: "Content uploaded successfully",
@@ -107,6 +130,32 @@ ${parsed.text || parsed.html || 'No content'}
     res.status(500).json({
       error: "Failed to upload content",
       message: error.message,
+    });
+  }
+}
+
+export async function queryDocuments(req, res) {
+  try {
+    const { question } = req.body;
+    
+    if (!question) {
+      return res.status(400).json({ error: "Question is required" });
+    }
+
+    const response = await axios.post(`${PYTHON_SERVICE_URL}/query`, {
+      question: question
+    });
+
+    res.status(200).json({
+      answer: response.data.answer,
+      source_documents: response.data.source_documents || []
+    });
+
+  } catch (error) {
+    console.error('Query error:', error);
+    res.status(500).json({
+      error: "Failed to query documents",
+      message: error.response?.data?.detail || error.message,
     });
   }
 }
