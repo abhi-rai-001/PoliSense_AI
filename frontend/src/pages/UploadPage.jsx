@@ -1,169 +1,224 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import axios from "axios";
 
 export default function UploadPage() {
-  const [files, setFiles] = useState([]);
+  const [file, setFile] = useState(null);
+  const [emailText, setEmailText] = useState("");
   const [uploading, setUploading] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [inputMode, setInputMode] = useState("file");
 
   const maxSizeMB = 10;
 
-  const handleFiles = (selectedFiles) => {
-    const validFiles = [];
-    Array.from(selectedFiles).forEach((file) => {
-      const ext = file.name.split(".").pop().toLowerCase();
-      const sizeMB = file.size / (1024 * 1024);
-
-      if (!["pdf", "docx", "eml"].includes(ext)) {
-        toast.error(`❌ ${file.name} has invalid type.`);
-      } else if (sizeMB > maxSizeMB) {
-        toast.error(`❌ ${file.name} is too large (${sizeMB.toFixed(2)} MB).`);
-      } else {
-        validFiles.push(file);
-      }
-    });
-
-    if (validFiles.length) {
-      setFiles(validFiles);
-      toast.success(`✅ ${validFiles.length} file(s) ready!`);
+  const handleEmailTextChange = (e) => {
+    setEmailText(e.target.value);
+    if (e.target.value.trim()) {
+      setFile(null);
     }
+  };
+
+  const handleFileInput = (event) => {
+    const selectedFile = event.target.files[0];
+    if (!selectedFile) return;
+
+    const maxSizeMB = 10;
+    if (selectedFile.size > maxSizeMB * 1024 * 1024) {
+      toast.error(`File size must be less than ${maxSizeMB}MB`);
+      return;
+    }
+
+    setFile(selectedFile);
+    setEmailText("");
+    console.log("File selected:", selectedFile.name);
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
-    handleFiles(e.dataTransfer.files);
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile) {
+      const event = { target: { files: [droppedFile] } };
+      handleFileInput(event);
+    }
   };
 
   const handleUpload = async () => {
-    if (!files.length) {
-      toast.error("No files to upload.");
+    if (!file && !emailText.trim()) {
+      toast.error("Please select a file or enter email text.");
       return;
     }
 
     setUploading(true);
-    setProgress(0);
     toast.loading("Uploading...");
 
-    const formData = new FormData();
-    files.forEach((file) => {
-      formData.append("files", file);
-    });
-
     try {
-      // 👉 Uncomment when backend is ready!
-      /*
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Upload failed.");
+      const formData = new FormData();
+      
+      if (file) {
+        formData.append("file", file);
+      } else {
+        const emailBlob = new Blob([emailText], { type: 'text/plain' });
+        const emailFile = new File([emailBlob], 'email.txt', { type: 'text/plain' });
+        formData.append("file", emailFile);
+        formData.append("isEmailText", "true");
       }
-      */
-
-      // Fake upload progress for demo
-      const fakeUpload = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 100) {
-            clearInterval(fakeUpload);
-            setUploading(false);
-            toast.dismiss();
-            toast.success("✅ Upload complete!");
-          }
-          return prev + 5;
-        });
-      }, 100);
+      
+      await axios.post("http://localhost:3000/user/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+      
+      toast.dismiss();
+      toast.success("✅ Content uploaded successfully!");
+      setFile(null);
+      setEmailText("");
     } catch (err) {
       toast.dismiss();
-      toast.error(err.message);
+      toast.error(err.response?.data?.message || "Upload failed");
+    } finally {
       setUploading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-between bg-gradient-to-r from-purple-300 via-blue-300 to-blue-400">
-      <Toaster position="top-center" />
-      {/* Navbar */}
-      <header className="w-full px-8 py-6 flex justify-between items-center bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-50">
-        <div className="text-xl font-bold text-blue-800">PoliSense_AI</div>
-        <Link to="/" className="text-gray-700 hover:text-purple-600">
-          Home
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
+      <Toaster position="top-right" />
+      
+      <header className="w-full px-8 py-6 flex justify-between items-center bg-white/80 backdrop-blur-md shadow-md">
+        <Link to="/" className="text-xl font-bold text-gray-800">
+          PoliSense_AI
         </Link>
+        <nav className="flex gap-6">
+          <Link to="/" className="text-gray-600 hover:text-blue-600 transition">
+            Home
+          </Link>
+        </nav>
       </header>
 
-      {/* Upload Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="bg-white/90 backdrop-blur-md rounded-lg shadow-lg p-8 max-w-md w-full text-center mt-32"
-      >
-        <h1 className="text-2xl font-bold mb-2 text-blue-800">Upload Your Files</h1>
-        <p className="text-gray-700 mb-2">
-          Upload <span className="font-semibold text-gray-800">PDF, DOCX, or EML</span> files only.
-        </p>
-        <p className="text-gray-700 mb-6">
-          Max file size: <span className="font-semibold text-gray-800">{maxSizeMB} MB</span> per file.
-        </p>
-
-        <div
-          onDrop={handleDrop}
-          onDragOver={(e) => e.preventDefault()}
-          className="border-2 border-dashed border-blue-400 rounded-lg p-8 mb-6 cursor-pointer"
-          onClick={() => document.getElementById("fileInput").click()}
+      <main className="flex-1 flex items-center justify-center px-8 py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="w-full max-w-2xl"
         >
-          <p className="text-gray-600">Drag & drop files here, or click to select</p>
-          <input
-            id="fileInput"
-            type="file"
-            multiple
-            accept=".pdf,.docx,.eml"
-            className="hidden"
-            onChange={(e) => handleFiles(e.target.files)}
-          />
-        </div>
+          <div className="text-center mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              Upload Your Document
+            </h1>
+            <p className="text-gray-600">
+              Upload PDF, DOCX, or Email files for AI-powered analysis
+            </p>
+          </div>
 
-        {/* File List */}
-        {files.length > 0 && (
-          <ul className="text-left mb-4 max-h-40 overflow-y-auto">
-            {files.map((file, idx) => (
-              <li key={idx} className="text-sm text-gray-700">
-                📄 {file.name}
-              </li>
-            ))}
-          </ul>
-        )}
+          <div
+            className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center bg-white/50 backdrop-blur-sm hover:border-blue-400 transition-colors cursor-pointer"
+            onDrop={handleDrop}
+            onDragOver={(e) => e.preventDefault()}
+            onClick={() => document.getElementById("fileInput").click()}
+          >
+            <div className="text-6xl mb-4">📁</div>
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">
+              Drop your file here or click to browse
+            </h3>
+            <p className="text-gray-500 text-sm mb-4">
+              Supports PDF, DOCX, and EML files up to {maxSizeMB}MB
+            </p>
 
-        {/* Progress */}
-        {uploading && (
-          <div className="w-full bg-gray-200 rounded-full mb-4">
-            <div
-              className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full"
-              style={{ width: `${progress}%` }}
+            {file && (
+              <div className="text-left mb-4 p-4 bg-green-50 rounded-lg">
+                <p className="text-sm text-gray-700">📄 {file.name}</p>
+                <p className="text-xs text-gray-500">
+                  {(file.size / (1024 * 1024)).toFixed(2)} MB
+                </p>
+              </div>
+            )}
+
+            <input
+              id="fileInput"
+              type="file"
+              accept="application/pdf,.docx,.eml"
+              className="hidden"
+              onChange={handleFileInput}
+            />
+          </div>
+
+          <div className="mt-8">
+            <div className="flex gap-4 mb-4">
+              <button
+                onClick={() => setInputMode("file")}
+                className={`px-4 py-2 rounded-lg ${inputMode === "file" ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+              >
+                📁 Upload File
+              </button>
+              <button
+                onClick={() => setInputMode("text")}
+                className={`px-4 py-2 rounded-lg ${inputMode === "text" ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+              >
+                📧 Paste Email
+              </button>
+            </div>
+
+            {inputMode === "text" && (
+              <div className="bg-white/50 backdrop-blur-sm rounded-lg p-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Paste your email content here:
+                </label>
+                <textarea
+                  value={emailText}
+                  onChange={handleEmailTextChange}
+                  placeholder="Paste email headers and content here..."
+                  className="w-full h-40 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <p className="text-xs text-gray-500 mt-2">
+                  Include headers (From, To, Subject) and email body for best results
+                </p>
+              </div>
+            )}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-6 flex gap-4 justify-center"
+          >
+            <button
+              onClick={handleUpload}
+              disabled={uploading}
+              className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
             >
-              {progress}%
+              {uploading ? "Uploading..." : "Upload & Analyze"}
+            </button>
+            <button
+              onClick={() => {
+                setFile(null);
+                setEmailText("");
+              }}
+              className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold transition-colors"
+            >
+              Clear
+            </button>
+          </motion.div>
+
+          <div className="mt-12 grid md:grid-cols-3 gap-6">
+            <div className="text-center p-6 bg-white/60 rounded-lg">
+              <div className="text-3xl mb-2">📄</div>
+              <h4 className="font-semibold text-gray-800">PDF Files</h4>
+              <p className="text-sm text-gray-600">Contracts, policies, reports</p>
+            </div>
+            <div className="text-center p-6 bg-white/60 rounded-lg">
+              <div className="text-3xl mb-2">📝</div>
+              <h4 className="font-semibold text-gray-800">DOCX Files</h4>
+              <p className="text-sm text-gray-600">Word documents, proposals</p>
+            </div>
+            <div className="text-center p-6 bg-white/60 rounded-lg">
+              <div className="text-3xl mb-2">📧</div>
+              <h4 className="font-semibold text-gray-800">Email Files</h4>
+              <p className="text-sm text-gray-600">EML format emails</p>
             </div>
           </div>
-        )}
-
-        <button
-          onClick={handleUpload}
-          disabled={uploading}
-          className={`${
-            uploading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
-          } text-white px-6 py-3 rounded-full font-semibold w-full`}
-        >
-          {uploading ? "Uploading..." : "Upload Files"}
-        </button>
-      </motion.div>
-
-      {/* Footer */}
-      <footer className="py-8 text-center text-gray-600 text-sm w-full">
-        &copy; {new Date().getFullYear()} PoliSense_AI. All rights reserved.
-      </footer>
+        </motion.div>
+      </main>
     </div>
   );
 }

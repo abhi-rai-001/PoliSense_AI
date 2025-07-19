@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema(
   mimetype: String,
   buffer: Buffer,
   size: Number,
-  parsedText: String, // Store extracted text content
+  parsedText: String, 
 }, { timestamps: true }
 )
 

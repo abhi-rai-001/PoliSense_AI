@@ -1,16 +1,88 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@plugin "daisyui";
+
 html,body{
-    background-color: black;
-    color: white;
+  background-color: black;
+  color: white;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
 }
+
+
+@font-face {
+  font-family: 'TAN-KULTURE';
+  src: url('./assets/fonts/TAN-KULTURE-DISPLAY.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+.card {
+  width: 190px;
+  height: 254px;
+  border-radius: 20px;
+  padding: 5px;
+  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+  background-image: linear-gradient(144deg,#AF40FF, #5B42F3 50%,#00DDEB);
+}
+
+.card__content {
+  background: rgb(5, 6, 45);
+  border-radius: 17px;
+  width: 100%;
+  height: 100%;
+}
+
+
+
 
 @keyframes gradient {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+ 
+.cta {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.cta span {
+  padding-bottom: 7px;
+  letter-spacing: 4px;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+
+.hover-underline-animation {
+  position: relative;
+  color: rgba(255, 255, 255, 0.74);
+  padding-bottom: 20px;
+}
+
+.hover-underline-animation:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  transform-origin: bottom right;
+  transition: transform 0.5s ease-out;
+}
+
+.cta:hover .hover-underline-animation:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
 
 .animate-gradient {
   background: linear-gradient(-45deg, #d1fae5, #bfdbfe, #ddd6fe, #f5d0fe);
@@ -37,4 +109,43 @@ html,body{
 
 .animation-delay-2000 {
   animation-delay: 2s;
+}
+
+
+.active {
+  padding: 17px 40px;
+  border-radius: 50px;
+  cursor: pointer;
+  border: 0;
+    background-color: hsl(261deg 80% 48%);
+  box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
+  color: white;
+
+  box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 15px;
+  transition: all 0.5s ease;
+}
+
+.active:hover {
+  letter-spacing: 3px;
+  background-color: hsl(261deg 80% 48%);
+  color: white;
+  box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
+}
+
+.active:active {
+  letter-spacing: 3px;
+  transform: translateY(10px);
+  transition: 100ms;
+}
+
+.hero-container {
+
+  --color: #E1E1E1;
+  background-color: #F3F3F3;
+  background-image: linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent),
+      linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent);
+  background-size: 55px 55px;
 }
