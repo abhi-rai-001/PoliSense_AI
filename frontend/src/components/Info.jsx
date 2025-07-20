@@ -1,16 +1,18 @@
 import React from 'react'
 import Card from './Card'
 import { HiDocumentText, HiDocument, HiEnvelope } from 'react-icons/hi2'
+import SpotlightCard from '@/animations/Spotlight'
+import GradientText from '@/animations/GradientText'
 
 const Info = () => {
   return (
-    <section className="min-h-screen text-white  px-12">
-      <div className="max-w-6xl mx-auto">
+    <SpotlightCard className= "text-white px-12">
+      <div className=" py-40 mx-auto">
         {/* Header Section */}
         <div className="text-center mb-20">
-          <h1 className="text-4xl md:text-5xl font-semibold mb-8 text-gray-100">
+          <GradientText className="text-4xl mx-auto md:text-5xl font-semibold mb-8 text-gray-100">
             What we offer?
-          </h1>
+          </GradientText>
           <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
             You can upload files in any of the format below
           </p>
@@ -37,7 +39,7 @@ const Info = () => {
           />
         </div>
       </div>
-    </section>
+    </SpotlightCard>
   )
 }
 

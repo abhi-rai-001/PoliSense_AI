@@ -8,7 +8,7 @@ import Threads from '@/animations/Thread';
 const Hero = () => {
   return (
     <>
-<div className="z-1 absolute top-0 w-full h-full ">
+<div className="z-1 absolute top-0 w-full h-screen ">
   <Threads
     amplitude={1}
     distance={0}
@@ -16,7 +16,7 @@ const Hero = () => {
     
   />
 </div>
-    <div className="relative z-1 h-auto p-100 flex px-10 mx-auto overflow-hidden">
+    <div className="relative z-1 p-90 flex px-10 mx-auto overflow-hidden">
 
       <div className="absolute inset-0 z-50 pointer-events-none">
         {/* <SplashCursor
