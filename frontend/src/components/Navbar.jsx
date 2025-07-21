@@ -1,19 +1,27 @@
 import React from 'react'
-
-
+import { Link } from 'react-router-dom'
 
 const Navbar = () => {
   return (
     <div className='w-[100vw] fixed flex justify-between items-center z-10 px-20 py-10 backdrop-blur-md bg-black/10  text-white'>
-      <div className='font-[TAN-KULTURE] cursor-none tracking-wider text-2xl uppercase'> Polisense.AI
-    </div>
+      <Link to="/" className='font-[TAN-KULTURE] cursor-pointer tracking-wider text-2xl uppercase hover:text-gray-300 transition-colors'> 
+        Polisense.AI
+      </Link>
       
-      <div className='flex justify-around w-1/2 pl-10'> 
-        <button className='cta '> <span className="hover-underline-animation px-1"> Home </span> </button>
-        <button className='cta '> <span className="hover-underline-animation px-1"> About Us </span> </button>
-        <button className='cta '> <span className="hover-underline-animation px-1"> Contact Us </span> </button>
-        <button className='active'> <span className="px-1"> Login </span> </button>
-         </div>
+      <div className='flex justify-around items-center w-1/2 pl-10'> 
+        <Link to="/" className='cta'> 
+          <span className="hover-underline-animation px-1"> Home </span> 
+        </Link>
+        <Link to="/about" className='cta'> 
+          <span className="hover-underline-animation px-1"> About Us </span> 
+        </Link>
+        <Link to="/contact" className='cta'> 
+          <span className="hover-underline-animation px-1"> Contact Us </span> 
+        </Link>
+        <Link to="/upload" className='active'> 
+          <span className="px-1"> Get Started </span> 
+        </Link>
+      </div>
     </div>
   )
 }

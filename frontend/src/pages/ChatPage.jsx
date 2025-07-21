@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaRobot, FaUser, FaPaperPlane, FaFileUpload } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import GradientText from "../animations/GradientText";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState([
@@ -20,27 +21,21 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-purple-100 via-white to-blue-100 text-gray-800">
-      {/* Navbar */}
-      <header className="w-full px-8 py-6 flex justify-between items-center bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-50">
-        {/* Logo → Landing Page */}
-        <Link to="/" className="text-xl font-bold text-purple-700 hover:text-purple-900 transition-colors">
-          PoliSense_AI
-        </Link>
-
-        {/* Nav Buttons */}
-        <nav className="flex gap-6 text-gray-700 font-medium">
-          <Link to="/" className="hover:text-purple-600">Home</Link>
-          <Link to="/upload" className="hover:text-purple-600">Upload Documents</Link>
-          <a href="/#contact" className="hover:text-purple-600">Contact Us</a>
-          <button
-            onClick={() => alert("Support coming soon!")}
-            className="hover:text-purple-600"
-          >
-            Support
-          </button>
-        </nav>
-      </header>
+    <div className="min-h-screen flex flex-col bg-black text-white">
+      {/* Header with title */}
+      <div className="px-8 py-8 text-center border-b border-gray-800">
+        <GradientText
+          colors={["#40ffaa", "#4079ff", "#40ffaa"]}
+          animationSpeed={8}
+          showBorder={false}
+          className="text-3xl mx-auto md:text-4xl font-bold"
+        >
+          AI Document Assistant
+        </GradientText>
+        <p className="text-gray-400 mt-2">
+          Ask questions about your uploaded documents
+        </p>
+      </div>
 
       {/* Chat Area */}
       <main className="flex-grow px-4 md:px-8 py-6 overflow-y-auto space-y-4 max-w-4xl mx-auto w-full">
@@ -55,22 +50,22 @@ export default function ChatPage() {
             }`}
           >
             {msg.sender === "ai" && (
-              <div className="p-2 bg-purple-200 rounded-full text-white">
-                <FaRobot className="text-purple-600" />
+              <div className="p-2 bg-gray-800 rounded-full text-white">
+                <FaRobot className="text-blue-400" />
               </div>
             )}
             <div
               className={`max-w-xs md:max-w-md px-4 py-3 rounded-2xl shadow ${
                 msg.sender === "ai"
-                  ? "bg-white text-left"
-                  : "bg-blue-600 text-white text-right"
+                  ? "bg-gray-900/50 border border-gray-800 text-left text-white"
+                  : "bg-gradient-to-r from-blue-600 to-purple-600 text-white text-right"
               }`}
             >
               {msg.text}
             </div>
             {msg.sender === "user" && (
-              <div className="p-2 bg-blue-100 rounded-full">
-                <FaUser className="text-blue-600" />
+              <div className="p-2 bg-gray-800 rounded-full">
+                <FaUser className="text-blue-400" />
               </div>
             )}
           </motion.div>
@@ -78,9 +73,9 @@ export default function ChatPage() {
       </main>
 
       {/* Input Area */}
-      <div className="px-4 md:px-8 py-4 bg-white/80 backdrop-blur-md shadow-inner">
+      <div className="px-4 md:px-8 py-4 bg-black/80 backdrop-blur-md border-t border-gray-800">
         <div className="flex items-center gap-3 max-w-4xl mx-auto">
-          <label className="cursor-pointer text-gray-500 hover:text-blue-500">
+          <label className="cursor-pointer text-gray-400 hover:text-blue-400">
             <input type="file" className="hidden" />
             <FaFileUpload size={18} />
           </label>
@@ -89,11 +84,11 @@ export default function ChatPage() {
             value={input}
             placeholder="Ask anything about your document..."
             onChange={(e) => setInput(e.target.value)}
-            className="flex-grow px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="flex-grow px-4 py-2 rounded-full bg-gray-800/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           <button
             onClick={handleSend}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2 rounded-full"
           >
             <FaPaperPlane />
           </button>

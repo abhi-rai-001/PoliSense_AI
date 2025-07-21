@@ -6,6 +6,8 @@ import UploadPage from "./pages/UploadPage";
 import ChatPage from "./pages/ChatPage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
 
 export default function App() {
   useEffect(() => {
@@ -38,6 +40,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<><Navbar/> <LandingPage /> <Footer/> </>} />
         <Route path="/upload" element={<><Navbar/> <UploadPage /> <Footer/> </>} />
+        <Route path="/about" element={<><Navbar/> <AboutPage /> <Footer/> </>} />
+        <Route path="/contact" element={<><Navbar/> <ContactPage /> <Footer/> </>} />
         <Route path="/chat" element={<ChatPage />} />
       </Routes>
     </Router>
