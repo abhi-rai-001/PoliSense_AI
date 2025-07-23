@@ -1,11 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import GeometricLogo from './GeometricLogo'
 
 const Navbar = () => {
   return (
     <div className='w-[100vw] fixed flex justify-between items-center z-10 px-20 py-10 backdrop-blur-md bg-black/10  text-white'>
-      <Link to="/" className='font-[TAN-KULTURE] cursor-pointer tracking-wider text-2xl uppercase hover:text-gray-300 transition-colors'> 
-        Polisense.AI
+      <Link to="/" className='font-[TAN-KULTURE] items-center flex cursor-pointer tracking-wider text-2xl uppercase hover:text-gray-300 transition-colors'> 
+       Polisense <GeometricLogo className='size-20'/>
       </Link>
       
       <div className='flex justify-around items-center w-1/2 pl-10'> 
@@ -18,8 +19,8 @@ const Navbar = () => {
         <Link to="/contact" className='cta'> 
           <span className="hover-underline-animation px-1"> Contact Us </span> 
         </Link>
-        <Link to="/upload" className='active'> 
-          <span className="px-1"> Get Started </span> 
+        <Link to="/login" className='active'> 
+          <span className="px-1"> Login </span> 
         </Link>
       </div>
     </div>

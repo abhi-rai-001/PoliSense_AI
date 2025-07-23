@@ -1,99 +1,247 @@
-// src/pages/ChatPage.jsx
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaRobot, FaUser, FaPaperPlane, FaFileUpload } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import GradientText from "../animations/GradientText";
+import axios from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function ChatPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [messages, setMessages] = useState([
-    { sender: "ai", text: "Hi there! How can I assist you with your documents today?" },
+    { 
+      sender: "ai", 
+      text: "Hi there! I'm ready to help you analyze your uploaded documents. What would you like to know?" 
+    },
   ]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSend = () => {
-    if (input.trim() === "") return;
+  useEffect(() => {
+    let isPageVisible = true;
+
+    const clearDocuments = async () => {
+      try {
+        await axios.delete("http://localhost:3000/user/clear-all-documents");
+        console.log("Documents cleared");
+      } catch (error) {
+        console.error('Failed to clear documents:', error);
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden && isPageVisible) {
+        // Page is being hidden (navigation away)
+        const navigationType = performance.getEntriesByType('navigation')[0]?.type;
+        if (navigationType !== 'reload') {
+          clearDocuments();
+        }
+      }
+      isPageVisible = !document.hidden;
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // Cleanup on unmount (route change)
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      
+      // Clear documents when component unmounts (navigation)
+      const navigationType = performance.getEntriesByType('navigation')[0]?.type;
+      if (navigationType !== 'reload') {
+        clearDocuments();
+      }
+    };
+  }, []);
+
+  const handleSend = async () => {
+    if (input.trim() === "" || isLoading) return;
+    
     setMessages((prev) => [...prev, { sender: "user", text: input }]);
+    const userQuestion = input;
     setInput("");
-    setTimeout(() => {
-      setMessages((prev) => [...prev, { sender: "ai", text: "Thanks for your message! (AI response goes here)" }]);
-    }, 500);
+    setIsLoading(true);
+    
+    try {
+      const response = await axios.post("http://localhost:3000/user/query", {
+        question: userQuestion,
+        userId: "user123"
+      });
+      
+      setMessages((prev) => [...prev, { 
+        sender: "ai", 
+        text: response.data.answer,
+        sources: response.data.source_documents || []
+      }]);
+      
+    } catch (error) {
+      console.error('Query failed:', error);
+      setMessages((prev) => [...prev, { 
+        sender: "ai", 
+        text: "I apologize, but I encountered an error while processing your question. Please try again or rephrase your query."
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-black text-white">
-      {/* Header with title */}
-      <div className="px-8 py-8 text-center border-b border-gray-800">
-        <GradientText
-          colors={["#40ffaa", "#4079ff", "#40ffaa"]}
-          animationSpeed={8}
-          showBorder={false}
-          className="text-3xl mx-auto md:text-4xl font-bold"
-        >
-          AI Document Assistant
-        </GradientText>
-        <p className="text-gray-400 mt-2">
-          Ask questions about your uploaded documents
-        </p>
-      </div>
-
-      {/* Chat Area */}
-      <main className="flex-grow px-4 md:px-8 py-6 overflow-y-auto space-y-4 max-w-4xl mx-auto w-full">
-        {messages.map((msg, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.05 }}
-            className={`flex items-start gap-3 ${
-              msg.sender === "user" ? "justify-end" : "justify-start"
-            }`}
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
+      {/* Header */}
+      <header className="px-6 py-6 border-b border-gray-800/50 backdrop-blur-sm bg-black/20">
+        <div className="max-w-4xl mx-auto text-center">
+          <GradientText
+            colors={["#40ffaa", "#4079ff", "#40ffaa"]}
+            animationSpeed={8}
+            showBorder={false}
+            className="text-2xl mx-auto md:text-3xl font-bold"
           >
-            {msg.sender === "ai" && (
-              <div className="p-2 bg-gray-800 rounded-full text-white">
-                <FaRobot className="text-blue-400" />
-              </div>
-            )}
-            <div
-              className={`max-w-xs md:max-w-md px-4 py-3 rounded-2xl shadow ${
-                msg.sender === "ai"
-                  ? "bg-gray-900/50 border border-gray-800 text-left text-white"
-                  : "bg-gradient-to-r from-blue-600 to-purple-600 text-white text-right"
+            AI Document Assistant
+          </GradientText>
+          <p className="text-gray-400 mt-2 text-sm md:text-base">
+            Ask intelligent questions about your uploaded documents
+          </p>
+        </div>
+      </header>
+
+      {/* Chat Messages Area */}
+      <main className="flex-1 overflow-y-auto px-4 py-6">
+        <div className="max-w-4xl mx-auto space-y-6">
+          {messages.map((msg, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              className={`flex items-start gap-4 ${
+                msg.sender === "user" ? "justify-end" : "justify-start"
               }`}
             >
-              {msg.text}
-            </div>
-            {msg.sender === "user" && (
-              <div className="p-2 bg-gray-800 rounded-full">
-                <FaUser className="text-blue-400" />
+              {/* AI Avatar */}
+              {msg.sender === "ai" && (
+                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                  <FaRobot className="text-white text-sm" />
+                </div>
+              )}
+
+              {/* Message Bubble */}
+              <div
+                className={`max-w-[70%] px-6 py-4 rounded-2xl shadow-lg ${
+                  msg.sender === "ai"
+                    ? "bg-gray-800/60 backdrop-blur-sm border border-gray-700/50 text-gray-100"
+                    : "bg-gradient-to-r from-blue-600 to-purple-600 text-white ml-auto"
+                }`}
+              >
+                <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap">
+                  {msg.text}
+                </p>
+                
+                {/* Sources Section */}
+                {msg.sender === "ai" && msg.sources && msg.sources.length > 0 && (
+                  <div className="mt-4 pt-3 border-t border-gray-600/30">
+                    <p className="text-xs text-gray-400 mb-3 font-medium flex items-center gap-1">
+                      📚 Sources Referenced:
+                    </p>
+                    <div className="space-y-2">
+                      {msg.sources.map((source, idx) => (
+                        <div key={idx} className="bg-gray-700/40 rounded-lg p-3 border-l-3 border-blue-400">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-blue-300 font-medium text-xs">
+                              {source.filename}
+                            </span>
+                            <span className="text-gray-400 text-xs px-2 py-1 bg-gray-600/50 rounded">
+                              {source.docType}
+                            </span>
+                          </div>
+                          <p className="text-gray-300 text-xs leading-relaxed">
+                            {source.chunk}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </motion.div>
-        ))}
+
+              {/* User Avatar */}
+              {msg.sender === "user" && (
+                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg">
+                  <FaUser className="text-white text-sm" />
+                </div>
+              )}
+            </motion.div>
+          ))}
+
+          {/* Loading Indicator */}
+          {isLoading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex items-start gap-4"
+            >
+              <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                <FaRobot className="text-white text-sm" />
+              </div>
+              <div className="bg-gray-800/60 backdrop-blur-sm border border-gray-700/50 px-6 py-4 rounded-2xl">
+                <div className="flex items-center space-x-2">
+                  <div className="flex space-x-1">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                  </div>
+                  <span className="text-gray-400 text-sm">Analyzing your documents...</span>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </div>
       </main>
 
       {/* Input Area */}
-      <div className="px-4 md:px-8 py-4 bg-black/80 backdrop-blur-md border-t border-gray-800">
-        <div className="flex items-center gap-3 max-w-4xl mx-auto">
-          <label className="cursor-pointer text-gray-400 hover:text-blue-400">
-            <input type="file" className="hidden" />
-            <FaFileUpload size={18} />
-          </label>
-          <input
-            type="text"
-            value={input}
-            placeholder="Ask anything about your document..."
-            onChange={(e) => setInput(e.target.value)}
-            className="flex-grow px-4 py-2 rounded-full bg-gray-800/50 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-          <button
-            onClick={handleSend}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2 rounded-full"
-          >
-            <FaPaperPlane />
-          </button>
+      <footer className="px-4 py-4 border-t border-gray-800/50 backdrop-blur-sm bg-black/20">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center gap-3 bg-gray-800/50 backdrop-blur-sm rounded-full border border-gray-700/50 p-2">
+            <label className="cursor-pointer text-gray-400 hover:text-blue-400 transition-colors p-2">
+              <input type="file" className="hidden" />
+              <FaFileUpload size={18} />
+            </label>
+            
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Ask anything about your documents..."
+              className="flex-1 bg-transparent text-white placeholder-gray-400 focus:outline-none px-2 py-2"
+              disabled={isLoading}
+            />
+            
+            <button
+              onClick={handleSend}
+              disabled={isLoading || input.trim() === ""}
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white p-3 rounded-full transition-all duration-200 hover:scale-105"
+            >
+              {isLoading ? (
+                <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+              ) : (
+                <FaPaperPlane size={16} />
+              )}
+            </button>
+          </div>
+          
+          <p className="text-center text-xs text-gray-500 mt-3">
+            Press Enter to send • Upload documents to get started
+          </p>
         </div>
-      </div>
+      </footer>
     </div>
   );
 }

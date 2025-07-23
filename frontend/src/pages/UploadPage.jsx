@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import GradientText from "../animations/GradientText";
 
 export default function UploadPage() {
+  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [emailText, setEmailText] = useState("");
   const [uploading, setUploading] = useState(false);
   const [inputMode, setInputMode] = useState("file");
+
+  // Remove the useEffect that clears documents
 
   const maxSizeMB = 10;
 
@@ -30,6 +33,18 @@ export default function UploadPage() {
       return;
     }
 
+    // Clear previous documents when new file is selected
+    const clearPreviousDocuments = async () => {
+      try {
+        await axios.delete("http://localhost:3000/user/clear-documents", {
+          data: { userId: "user123" }
+        });
+      } catch (error) {
+        console.error('Failed to clear previous documents:', error);
+      }
+    };
+
+    clearPreviousDocuments();
     setFile(selectedFile);
     setEmailText("");
     console.log("File selected:", selectedFile.name);
@@ -55,6 +70,7 @@ export default function UploadPage() {
 
     try {
       const formData = new FormData();
+      const userId = "user123"; // Replace with actual user ID from auth
       
       if (file) {
         formData.append("file", file);
@@ -65,14 +81,22 @@ export default function UploadPage() {
         formData.append("isEmailText", "true");
       }
       
+      formData.append("userId", userId); // Add user ID
+      
       await axios.post("http://localhost:3000/user/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
       
       toast.dismiss();
-      toast.success("✅ Content uploaded successfully!");
+      toast.success("Content uploaded successfully");
       setFile(null);
       setEmailText("");
+      
+      // Redirect to chat page after successful upload
+      setTimeout(() => {
+        navigate('/chat');
+      }, 1500); // Small delay to show success message
+      
     } catch (err) {
       toast.dismiss();
       toast.error(err.response?.data?.message || "Upload failed");
@@ -83,7 +107,35 @@ export default function UploadPage() {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
-      <Toaster position="top-right" />
+      <Toaster 
+        position="top-center"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#1f2937',
+            color: '#ffffff',
+            border: '1px solid #374151',
+          },
+          success: {
+            style: {
+              background: '#065f46',
+              border: '1px solid #059669',
+            },
+          },
+          error: {
+            style: {
+              background: '#7f1d1d',
+              border: '1px solid #dc2626',
+            },
+          },
+          loading: {
+            style: {
+              background: '#1e40af',
+              border: '1px solid #3b82f6',
+            },
+          },
+        }}
+      />
       
       <main className="flex-1 flex items-center justify-center px-8 py-32">
         <motion.div
@@ -106,71 +158,121 @@ export default function UploadPage() {
             </p>
           </div>
 
-          <div
-            className="border-2 border-dashed border-gray-700 rounded-lg p-12 text-center bg-gray-900/50 backdrop-blur-sm hover:border-blue-400 transition-colors cursor-pointer"
-            onDrop={handleDrop}
-            onDragOver={(e) => e.preventDefault()}
-            onClick={() => document.getElementById("fileInput").click()}
-          >
-            <div className="text-6xl mb-4">📁</div>
-            <h3 className="text-xl font-semibold text-white mb-2">
-              Drop your file here or click to browse
-            </h3>
-            <p className="text-gray-400 text-sm mb-4">
-              Supports PDF, DOCX, and EML files up to {maxSizeMB}MB
-            </p>
-
-            {file && (
-              <div className="text-left mb-4 p-4 bg-green-900/30 border border-green-700 rounded-lg">
-                <p className="text-sm text-green-300">📄 {file.name}</p>
-                <p className="text-xs text-green-400">
-                  {(file.size / (1024 * 1024)).toFixed(2)} MB
-                </p>
-              </div>
-            )}
-
-            <input
-              id="fileInput"
-              type="file"
-              accept="application/pdf,.docx,.eml"
-              className="hidden"
-              onChange={handleFileInput}
-            />
+          <div className="flex gap-4 mb-4 mx-auto">
+            <button
+              onClick={() => setInputMode("file")}
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+                inputMode === "file" 
+                  ? "bg-blue-600 text-white scale-105" 
+                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              }`}
+            >
+              📁 Upload File
+            </button>
+            <button
+              onClick={() => setInputMode("text")}
+              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+                inputMode === "text" 
+                  ? "bg-blue-600 text-white scale-105" 
+                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              }`}
+            >
+              📧 Paste Email
+            </button>
           </div>
 
-          <div className="mt-8">
-            <div className="flex gap-4 mb-4">
-              <button
-                onClick={() => setInputMode("file")}
-                className={`px-4 py-2 rounded-lg ${inputMode === "file" ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-300 hover:bg-gray-700"}`}
+          {/* Animated Upload/Paste Area */}
+          <AnimatePresence mode="wait">
+            {inputMode === "file" ? (
+              <motion.div
+                key="file-upload"
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="border-2 border-dashed border-gray-700 rounded-lg p-12 text-center bg-gray-900/50 backdrop-blur-sm hover:border-blue-400 transition-colors cursor-pointer"
+                onDrop={handleDrop}
+                onDragOver={(e) => e.preventDefault()}
+                onClick={() => document.getElementById("fileInput").click()}
               >
-                📁 Upload File
-              </button>
-              <button
-                onClick={() => setInputMode("text")}
-                className={`px-4 py-2 rounded-lg ${inputMode === "text" ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-300 hover:bg-gray-700"}`}
-              >
-                📧 Paste Email
-              </button>
-            </div>
+                <motion.div 
+                  className="text-6xl mb-4"
+                  animate={{ rotate: [0, 5, -5, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                >
+                  📁
+                </motion.div>
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  Drop your file here or click to browse
+                </h3>
+                <p className="text-gray-400 text-sm mb-4">
+                  Supports PDF, DOCX, and EML files up to {maxSizeMB}MB
+                </p>
 
-            {inputMode === "text" && (
-              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-lg p-4">
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Paste your email content here:
-                </label>
+                {file && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="text-left mb-4 p-4 bg-green-900/30 border border-green-700 rounded-lg"
+                  >
+                    <p className="text-sm text-green-300">📄 {file.name}</p>
+                    <p className="text-xs text-green-400">
+                      {(file.size / (1024 * 1024)).toFixed(2)} MB
+                    </p>
+                  </motion.div>
+                )}
+
+                <input
+                  id="fileInput"
+                  type="file"
+                  accept="application/pdf,.docx,.eml"
+                  className="hidden"
+                  onChange={handleFileInput}
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="email-paste"
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+                className="bg-gray-900/50 backdrop-blur-sm border-2 border-gray-700 rounded-lg p-8 hover:border-blue-400 transition-colors"
+              >
+                <motion.div 
+                  className="text-6xl mb-4 text-center"
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                >
+                 
+                </motion.div>
+                <h3 className="text-xl font-semibold text-white mb-4 text-center">
+                  Paste Your Email Content
+                </h3>
                 <textarea
                   value={emailText}
                   onChange={handleEmailTextChange}
                   placeholder="Paste email headers and content here..."
-                  className="w-full h-40 p-3 bg-gray-800/50 border border-gray-700 text-white rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full h-48 p-4 bg-gray-800/50 border border-gray-600 text-white rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                 />
-                <p className="text-xs text-gray-400 mt-2">
+                <p className="text-xs text-gray-400 mt-3 text-center">
                   Include headers (From, To, Subject) and email body for best results
                 </p>
-              </div>
+                
+                {emailText.trim() && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    className="mt-4 p-3 bg-green-900/30 border border-green-700 rounded-lg"
+                  >
+                    <p className="text-sm text-green-300">
+                      ✅ Email content ready ({emailText.length} characters)
+                    </p>
+                  </motion.div>
+                )}
+              </motion.div>
             )}
-          </div>
+          </AnimatePresence>
 
           <motion.div
             initial={{ opacity: 0 }}
