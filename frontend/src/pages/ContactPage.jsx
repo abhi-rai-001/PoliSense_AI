@@ -1,35 +1,11 @@
-import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FaEnvelope, FaInstagram, FaTwitter, FaLinkedin, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
-import toast, { Toaster } from "react-hot-toast";
+import { FaEnvelope, FaInstagram, FaLinkedin, FaMapMarkerAlt } from "react-icons/fa";
 import GradientText from "../animations/GradientText";
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: ""
-  });
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    toast.success("Message sent successfully! We'll get back to you soon.");
-    setFormData({ name: "", email: "", subject: "", message: "" });
-  };
-
   return (
     <div className="min-h-screen bg-black py-10 text-white">
-      <Toaster position="top-right" />
-      
       {/* Main Content */}
       <main className="px-8 py-32">
         <motion.div
@@ -52,174 +28,104 @@ export default function ContactPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12">
-            {/* Contact Form */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-8"
-            >
-              <GradientText
-                colors={["#40ffaa", "#4079ff", "#40ffaa"]}
-                animationSpeed={8}
-                showBorder={false}
-                className="text-2xl font-bold mb-6"
-              >
-                Send us a Message
-              </GradientText>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Subject</label>
-                  <input
-                    type="text"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Message</label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows="5"
-                    className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                    required
-                  ></textarea>
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
-                >
-                  Send Message
-                </button>
-              </form>
-            </motion.div>
-
+          <div className="grid md:grid-cols-1 gap-12 max-w-4xl mx-auto">
             {/* Contact Information */}
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
               className="space-y-8"
             >
               {/* Contact Details */}
-              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-8">
+              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-8 text-center">
                 <GradientText
                   colors={["#40ffaa", "#4079ff", "#40ffaa"]}
                   animationSpeed={8}
                   showBorder={false}
-                  className="text-2xl font-bold mb-6"
+                  className="text-2xl font-bold mb-6 mx-auto"
                 >
                   Get in Touch
                 </GradientText>
                 <div className="space-y-4">
-                  <div className="flex items-center">
+                  <div className="flex items-center justify-center">
                     <FaEnvelope className="w-5 h-5 text-blue-400 mr-4" />
-                    <span className="text-gray-300">contact@polisense.ai</span>
+                    <span className="text-gray-300">raiabhinav182@gmail.com</span>
                   </div>
-                  <div className="flex items-center">
-                    <FaPhone className="w-5 h-5 text-blue-400 mr-4" />
-                    <span className="text-gray-300">+1 (555) 123-4567</span>
-                  </div>
-                  <div className="flex items-center">
+                  <div className="flex items-center justify-center">
                     <FaMapMarkerAlt className="w-5 h-5 text-blue-400 mr-4" />
-                    <span className="text-gray-300">San Francisco, CA</span>
+                    <span className="text-gray-300">Pune, India</span>
                   </div>
+                </div>
+                <div className="mt-6 p-4 bg-blue-900/20 rounded-lg border border-blue-800/30">
+                  <p className="text-sm text-blue-300">
+                    💬 We'll get back to you as soon as possible!
+                  </p>
                 </div>
               </div>
 
               {/* Social Media */}
-              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-8">
+              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-8 text-center">
                 <GradientText
                   colors={["#40ffaa", "#4079ff", "#40ffaa"]}
                   animationSpeed={8}
                   showBorder={false}
-                  className="text-xl font-bold mb-6"
+                  className="text-xl font-bold mb-6 mx-auto"
                 >
-                  Follow Us
+                  Connect With Us
                 </GradientText>
-                <div className="flex space-x-4">
+                <p className="text-gray-400 mb-6 text-sm">
+                  Follow us on social media for updates and connect directly with our team!
+                </p>
+                <div className="flex space-x-4 justify-center">
                   <a
-                    href="https://instagram.com/polisense.ai"
+                    href="https://www.instagram.com/its_abhinavrai?igsh=MWo2eGQxcDlmMTg1bQ%3D%3D&utm_source=qr"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-3 rounded-full hover:scale-110 transition-transform"
+                    className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-3 rounded-full hover:scale-110 transition-transform group"
                   >
                     <FaInstagram className="w-5 h-5" />
                   </a>
                   <a
-                    href="https://twitter.com/polisense_ai"
+                    href="https://www.linkedin.com/in/abhinav-rai-2611a8259?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-blue-500 text-white p-3 rounded-full hover:scale-110 transition-transform"
-                  >
-                    <FaTwitter className="w-5 h-5" />
-                  </a>
-                  <a
-                    href="https://linkedin.com/company/polisense-ai"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-blue-700 text-white p-3 rounded-full hover:scale-110 transition-transform"
+                    className="bg-blue-700 text-white p-3 rounded-full hover:scale-110 transition-transform group"
                   >
                     <FaLinkedin className="w-5 h-5" />
                   </a>
                 </div>
-              </div>
-
-              {/* Business Hours */}
-              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl p-8">
-                <GradientText
-                  colors={["#40ffaa", "#4079ff", "#40ffaa"]}
-                  animationSpeed={8}
-                  showBorder={false}
-                  className="text-xl font-bold mb-6"
-                >
-                  Business Hours
-                </GradientText>
-                <div className="space-y-2 text-gray-300">
-                  <div className="flex justify-between">
-                    <span>Monday - Friday</span>
-                    <span>9:00 AM - 6:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Saturday</span>
-                    <span>10:00 AM - 4:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Sunday</span>
-                    <span>Closed</span>
-                  </div>
-                </div>
+            
               </div>
             </motion.div>
           </div>
+
+          {/* Additional CTA Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="text-center mt-16 p-8 bg-gradient-to-r from-blue-900/20 to-purple-900/20 rounded-2xl border border-gray-700"
+          >
+            <h3 className="text-2xl font-bold mb-4">
+              <GradientText
+                colors={["#40ffaa", "#4079ff"]}
+                animationSpeed={6}
+                showBorder={false}
+                className=" mx-auto"
+              >
+                Ready to Get Started?
+              </GradientText>
+            </h3>
+            <p className="text-gray-300 mb-6">
+              Don't have a question but want to try PoliSense.AI? Start analyzing your documents today!
+            </p>
+            <Link
+              to="/upload"
+              className="inline-block bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-all transform hover:scale-105"
+            >
+              Try PoliSense.AI Now
+            </Link>
+          </motion.div>
         </motion.div>
       </main>
     </div>
