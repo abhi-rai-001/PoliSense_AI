@@ -4,7 +4,13 @@ import cors from "cors";
 import userRoutes from './routes/user.route.js'
 import { connectDB } from "./lib/db.js";
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
+
+// Check required environment variables
+if (!process.env.MONGO_URI) {
+  console.error("MONGO_URI environment variable is required");
+  process.exit(1);
+}
 
 // CORS
 app.use(cors({
@@ -15,8 +21,7 @@ app.use(cors({
 // Middlewares
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
-// app.use('/auth',authController);
-app.use('/user',userRoutes);
+app.use('/user', userRoutes);
 
 app.listen(PORT, () => {
   console.log("Listening on port ", PORT);

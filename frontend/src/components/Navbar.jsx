@@ -19,7 +19,7 @@ const Navbar = () => {
         <Link to="/contact" className='cta'> 
           <span className="hover-underline-animation px-1"> Contact Us </span> 
         </Link>
-        <Link to="/login" className='active'> 
+        <Link to="/sign-in" className='active'> 
           <span className="px-1"> Login </span> 
         </Link>
       </div>

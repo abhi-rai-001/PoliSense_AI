@@ -6,5 +6,6 @@ const router = express.Router();
 router.post('/upload', upload.single('file'), uploadFile);
 router.post('/query', queryDocuments);
 router.delete('/clear-all-documents', clearAllDocuments);
+router.delete('/clear-documents', clearAllDocuments);
 
 export default router;

@@ -1,27 +1,19 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Lenis from 'lenis';
 import LandingPage from "./pages/LandingPage";
 import UploadPage from "./pages/UploadPage";
 import ChatPage from "./pages/ChatPage";
+import SignInPage from "./pages/SignIn";
+import SignUpPage from "./pages/SignUp";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 
-export default function App() {
+function App() {
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      direction: 'vertical',
-      gestureDirection: 'vertical',
-      smooth: true,
-      mouseMultiplier: 0.5,
-      smoothTouch: false,
-      touchMultiplier: 2,
-      infinite: false,
-    });
+    const lenis = new Lenis();
 
     function raf(time) {
       lenis.raf(time);
@@ -29,10 +21,6 @@ export default function App() {
     }
 
     requestAnimationFrame(raf);
-
-    return () => {
-      lenis.destroy();
-    };
   }, []);
 
   return (
@@ -43,7 +31,12 @@ export default function App() {
         <Route path="/about" element={<><Navbar/> <AboutPage />  </>} />
         <Route path="/contact" element={<><Navbar/> <ContactPage /> <Footer/> </>} />
         <Route path="/chat" element={<ChatPage />} />
+        <Route path="/sign-in/*" element={<SignInPage />} />
+        <Route path="/sign-up/*" element={<SignUpPage />} />
+        <Route path="/login" element={<Navigate to="/sign-in" replace />} />
       </Routes>
     </Router>
   );
 }
+
+export default App;

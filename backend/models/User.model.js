@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema(
   mimetype: String,
   buffer: Buffer,
   size: Number,
-  parsedText: String, 
+  parsedText: String,
+  userId: String,
 }, { timestamps: true }
 )
 

@@ -9,7 +9,6 @@ const PYTHON_SERVICE_URL = process.env.PYTHON_SERVICE_URL || 'http://localhost:8
 
 export async function uploadFile(req, res) {
   try {
-    // Clear all previous documents first
     try {
       await uploadMongo.deleteMany({});
       await axios.delete(`${PYTHON_SERVICE_URL}/clear_all_documents`);
@@ -20,7 +19,7 @@ export async function uploadFile(req, res) {
 
     const { originalname, mimetype, buffer, size } = req.file;
     const isEmailText = req.body.isEmailText === "true";
-    const userId = req.body.userId || "anonymous"; // Get from request
+    const userId = req.body.userId || "anonymous";
     
     let parsedText = null;
     
@@ -104,17 +103,16 @@ ${parsed.text || parsed.html || 'No content'}
       buffer,
       size,
       parsedText: parsedText || null,
-      userId: userId, // Add user ID to MongoDB
+      userId: userId,
     });
 
-    // Send to Python microservice with user ID
     if (parsedText) {
       try {
         await axios.post(`${PYTHON_SERVICE_URL}/add_document`, {
           doc_id: newFile._id.toString(),
           content: parsedText,
           filename: originalname,
-          user_id: userId, // Use actual user ID
+          user_id: userId,
           document_type: mimetype === 'application/pdf' ? 'PDF' : 
                         mimetype.includes('word') ? 'DOCX' : 
                         mimetype === 'text/email' ? 'Email' : 'Unknown'
@@ -148,7 +146,7 @@ ${parsed.text || parsed.html || 'No content'}
 export async function queryDocuments(req, res) {
   try {
     const { question } = req.body;
-    const userId = req.body.userId || "anonymous"; // Get from request
+    const userId = req.body.userId || "anonymous";
     
     if (!question) {
       return res.status(400).json({ error: "Question is required" });
@@ -156,17 +154,31 @@ export async function queryDocuments(req, res) {
 
     const response = await axios.post(`${PYTHON_SERVICE_URL}/query`, {
       question: question,
-      user_id: userId // Send user ID to Python service
+      user_id: userId
     });
 
+    const responseData = response.data;
+    
     res.status(200).json({
-      answer: response.data.answer,
-      source_documents: response.data.sources || response.data.source_documents || []
+      Decision: responseData.Decision,
+      Amount: responseData.Amount,
+      Justification: responseData.Justification,
+      answer: responseData.answer || responseData.Justification?.Summary || "No answer available",
+      sources: responseData.sources || []
     });
 
   } catch (error) {
     console.error('Query error:', error);
     res.status(500).json({
+      Decision: "Information Only",
+      Amount: "Not applicable", 
+      Justification: {
+        Summary: "Failed to process your request due to technical difficulties.",
+        Clauses: [{
+          Reference: "System Error",
+          Text: "Please try again or contact support if the issue persists"
+        }]
+      },
       error: "Failed to query documents",
       message: error.response?.data?.detail || error.message,
     });
@@ -177,17 +189,14 @@ export async function clearAllDocuments(req, res) {
   try {
     console.log("Clearing all documents...");
     
-    // Delete all from MongoDB
     const mongoResult = await uploadMongo.deleteMany({});
     console.log(`Deleted ${mongoResult.deletedCount} documents from MongoDB`);
     
-    // Delete all from Python RAG service
     try {
       const pythonResponse = await axios.delete(`${PYTHON_SERVICE_URL}/clear_all_documents`);
       console.log("Python service response:", pythonResponse.data);
     } catch (pythonError) {
       console.error("Python service error:", pythonError.response?.data || pythonError.message);
-      // Continue even if Python service fails
     }
     
     res.status(200).json({ 

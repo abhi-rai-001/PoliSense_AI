@@ -32,7 +32,6 @@ export default function ChatPage() {
 
     const handleVisibilityChange = () => {
       if (document.hidden && isPageVisible) {
-        // Page is being hidden (navigation away)
         const navigationType = performance.getEntriesByType('navigation')[0]?.type;
         if (navigationType !== 'reload') {
           clearDocuments();
@@ -43,11 +42,9 @@ export default function ChatPage() {
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Cleanup on unmount (route change)
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       
-      // Clear documents when component unmounts (navigation)
       const navigationType = performance.getEntriesByType('navigation')[0]?.type;
       if (navigationType !== 'reload') {
         clearDocuments();
@@ -69,11 +66,16 @@ export default function ChatPage() {
         userId: "user123"
       });
       
-      setMessages((prev) => [...prev, { 
-        sender: "ai", 
-        text: response.data.answer,
-        sources: response.data.source_documents || []
-      }]);
+      const aiMessage = {
+        sender: "ai",
+        text: response.data.answer || "No response available",
+        Decision: response.data.Decision,
+        Amount: response.data.Amount,
+        Justification: response.data.Justification,
+        sources: response.data.sources || []
+      };
+      
+      setMessages((prev) => [...prev, aiMessage]);
       
     } catch (error) {
       console.error('Query failed:', error);
@@ -95,7 +97,6 @@ export default function ChatPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
-      {/* Header */}
       <header className="px-6 py-6 border-b border-gray-800/50 backdrop-blur-sm bg-black/20">
         <div className="max-w-4xl mx-auto text-center">
           <GradientText
@@ -112,7 +113,6 @@ export default function ChatPage() {
         </div>
       </header>
 
-      {/* Chat Messages Area */}
       <main className="flex-1 overflow-y-auto px-4 py-6">
         <div className="max-w-4xl mx-auto space-y-6">
           {messages.map((msg, index) => (
@@ -125,14 +125,12 @@ export default function ChatPage() {
                 msg.sender === "user" ? "justify-end" : "justify-start"
               }`}
             >
-              {/* AI Avatar */}
               {msg.sender === "ai" && (
                 <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
                   <FaRobot className="text-white text-sm" />
                 </div>
               )}
 
-              {/* Message Bubble */}
               <div
                 className={`max-w-[70%] px-6 py-4 rounded-2xl shadow-lg ${
                   msg.sender === "ai"
@@ -140,38 +138,43 @@ export default function ChatPage() {
                     : "bg-gradient-to-r from-blue-600 to-purple-600 text-white ml-auto"
                 }`}
               >
-                <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap">
-                  {msg.text}
-                </p>
-                
-                {/* Sources Section */}
-                {msg.sender === "ai" && msg.sources && msg.sources.length > 0 && (
-                  <div className="mt-4 pt-3 border-t border-gray-600/30">
-                    <p className="text-xs text-gray-400 mb-3 font-medium flex items-center gap-1">
-                      📚 Sources Referenced:
-                    </p>
+                {msg.sender === "ai" && msg.Decision ? (
+                  <div className="space-y-4">
                     <div className="space-y-2">
-                      {msg.sources.map((source, idx) => (
-                        <div key={idx} className="bg-gray-700/40 rounded-lg p-3 border-l-3 border-blue-400">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-blue-300 font-medium text-xs">
-                              {source.filename}
-                            </span>
-                            <span className="text-gray-400 text-xs px-2 py-1 bg-gray-600/50 rounded">
-                              {source.docType}
-                            </span>
-                          </div>
-                          <p className="text-gray-300 text-xs leading-relaxed">
-                            {source.chunk}
-                          </p>
-                        </div>
-                      ))}
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg">�</span>
+                        <span className="font-semibold text-white">Analysis:</span>
+                      </div>
+                      <div className="text-gray-200 leading-relaxed pl-6">
+                        {msg.Justification?.Summary || msg.Justification || msg.text}
+                      </div>
                     </div>
+
+                    {/* Sources section commented out temporarily
+                    {msg.sources && msg.sources.length > 0 && (
+                      <div className="pt-3 border-t border-gray-600/30">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-lg">📚</span>
+                          <span className="font-medium text-gray-300">Sources:</span>
+                        </div>
+                        <div className="space-y-1 pl-6">
+                          {msg.sources.map((source, idx) => (
+                            <div key={idx} className="text-sm text-gray-400">
+                              {source.filename || `Document ${idx + 1}`}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    */}
                   </div>
+                ) : (
+                  <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap">
+                    {msg.text}
+                  </p>
                 )}
               </div>
 
-              {/* User Avatar */}
               {msg.sender === "user" && (
                 <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg">
                   <FaUser className="text-white text-sm" />
@@ -180,7 +183,6 @@ export default function ChatPage() {
             </motion.div>
           ))}
 
-          {/* Loading Indicator */}
           {isLoading && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -205,7 +207,6 @@ export default function ChatPage() {
         </div>
       </main>
 
-      {/* Input Area */}
       <footer className="px-4 py-4 border-t border-gray-800/50 backdrop-blur-sm bg-black/20">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-3 bg-gray-800/50 backdrop-blur-sm rounded-full border border-gray-700/50 p-2">
