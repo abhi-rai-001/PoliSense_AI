@@ -68,36 +68,48 @@ class QuotaManager:
 
 # Query parser class
 class QueryParser:
-    def parse_query(self, question: str) -> Dict:
-        question_lower = question.lower()
-        
-        # Determine intent
-        intent = "general"
-        if any(word in question_lower for word in ["covered", "cover", "eligible", "claim"]):
-            intent = "coverage_check"
-        elif any(word in question_lower for word in ["how much", "amount", "cost", "price"]):
-            intent = "amount_inquiry"
-        elif any(word in question_lower for word in ["what is", "explain", "define"]):
-            intent = "definition"
-        
-        # Extract entities
-        entities = {
-            "coverage_types": [],
-            "claim_types": [],
-            "amounts": []
+    def parse_query(self, query: str) -> Dict:
+        """Enhanced query parsing for structured extraction"""
+        parsed = {
+            "original_question": query,
+            "age": None,
+            "gender": None,
+            "procedure": None,
+            "location": None,
+            "policy_duration": None,
+            "intent": "general_inquiry",
+            "entities": []
         }
         
-        # Extract coverage types
-        coverage_keywords = ["comprehensive", "collision", "liability", "medical", "dental"]
-        for keyword in coverage_keywords:
-            if keyword in question_lower:
-                entities["coverage_types"].append(keyword)
+        query_lower = query.lower()
         
-        return {
-            "intent": intent,
-            "entities": entities,
-            "original_question": question
-        }
+        # Extract age
+        age_match = re.search(r'(\d{1,3})\s*(?:year|yr|y\.o\.?|male|female|m|f)', query_lower)
+        if age_match:
+            parsed["age"] = int(age_match.group(1))
+        
+        # Extract gender
+        if re.search(r'\b(?:male|m)\b', query_lower):
+            parsed["gender"] = "male"
+        elif re.search(r'\b(?:female|f)\b', query_lower):
+            parsed["gender"] = "female"
+        
+        # Extract procedure/medical terms
+        medical_terms = re.findall(r'\b(?:surgery|operation|treatment|procedure|knee|heart|brain|cancer|diabetes)\b', query_lower)
+        if medical_terms:
+            parsed["procedure"] = medical_terms[0]
+        
+        # Extract location
+        location_match = re.search(r'\b(?:in|at)\s+([A-Za-z]+(?:\s+[A-Za-z]+)*)', query)
+        if location_match:
+            parsed["location"] = location_match.group(1)
+        
+        # Extract policy duration
+        duration_match = re.search(r'(\d+)\s*(?:month|year|day)s?\s*(?:old\s+)?(?:policy|insurance)', query_lower)
+        if duration_match:
+            parsed["policy_duration"] = duration_match.group(0)
+        
+        return parsed
 
 # Initialize global objects
 quota_manager = QuotaManager()
@@ -326,33 +338,50 @@ def generate_structured_response(context: str, parsed_query: Dict) -> Dict:
         entities = parsed_query["entities"]
         question = parsed_query["original_question"]
         
-prompt = f"""You are a helpful and intelligent insurance assistant. Your task is to carefully understand the user’s question, extract all relevant details, and answer clearly based on the provided policy document. Your response must be in clean, valid JSON format.
+        # Extract entities for the prompt
+        age = parsed_query.get("age")
+        procedure = parsed_query.get("procedure")
+        location = parsed_query.get("location")
+        policy_duration = parsed_query.get("policy_duration")
+        
+        prompt = f"""
+You are a helpful and intelligent insurance assistant. Your job is to understand the user's query, validate the key entities extracted from it, and generate a clear, accurate decision based on the provided policy context.
 
-📄 Context (from policy document):
+🔍 EXTRACTED ENTITIES:
+- Age: {age}
+- Procedure: {procedure}
+- Location: {location}
+- Policy Duration: {policy_duration}
+
+📄 POLICY CONTEXT:
 {context}
 
-❓ User Query:
-{question}
+❓ USER QUESTION:
+{parsed_query['original_question']}
 
-✅ Your job:
+Your task:
+1. Review the extracted entities and explain how each one affects policy applicability.
+2. Match the query against the policy document and identify if the procedure is covered.
+3. Use relevant clauses to justify the decision.
+4. Respond only with a clean JSON object in the exact structure below.
 
-1. Carefully **understand the user’s question** — including details like age, condition, procedure, location, policy duration, or any other important info.
-2. Match it against the policy document.
-3. Decide whether the case is **Approved**, **Rejected**, **Partially Approved**, or **Information Only**.
-4. Clearly explain your answer in simple, friendly language.
-5. Include the exact policy clause(s) that support your answer.
-
-📤 Respond ONLY with this JSON structure:
-
+Return JSON in this format:
 {{
   "Decision": "Approved" | "Rejected" | "Partially Approved" | "Information Only",
-  "Amount": "₹ amount / % / calculation logic / N/A",
+  "Amount": "₹ amount / % / logic / N/A",
   "Justification": {{
-    "Summary": "A short, human-friendly explanation that clearly answers what the user asked",
+    "Summary": "Short, human-friendly explanation clearly answering what the user asked",
+    "EntityValidation": {{
+      "Age": "Explain if age impacts eligibility or payout",
+      "Procedure": "Confirm whether this procedure is covered and under what conditions",
+      "Location": "Mention any geographic restrictions or relevance",
+      "PolicyDuration": "Explain how the duration of policy affects coverage, such as waiting period or exclusions"
+    }},
     "Clauses": [
       {{
         "Reference": "Clause number or title",
-        "Text": "Exact clause text used to support your decision"
+        "Text": "Exact clause text from the policy document",
+        "Relevance": "Explain how this clause affects the outcome"
       }}
     ]
   }}
@@ -361,19 +390,15 @@ prompt = f"""You are a helpful and intelligent insurance assistant. Your task is
 📌 Decision Meanings:
 - "Approved" → fully covered
 - "Rejected" → not covered
-- "Partially Approved" → covered with limitations or conditions
-- "Information Only" → general explanation or reference (not a claim decision)
+- "Partially Approved" → covered with some conditions or limits
+- "Information Only" → general reference or non-claim answer
 
-🧠 Rules for You:
-
-- Always use a **friendly, simple tone** — like you're helping a real person.
-- In the `"Summary"` field, speak directly to the user and answer what they actually asked.
-- Use `"Information Only"` when it’s a general question (e.g. “Does this policy cover checkups?”).
-- Use `"N/A"` in `"Amount"` if the question is not about a claim.
-- Always quote from the actual document in the `"Clauses"` section.
-- DO NOT include markdown, code blocks, backticks, or extra explanations. Just return the JSON.
-
-Return ONLY the JSON.
+🧠 Rules for Output:
+- Answer clearly and politely, like you're helping a real person.
+- The "Summary" must directly address the user's specific question.
+- Always populate the "EntityValidation" section based on the entity values.
+- Use the actual clause text in the "Clauses" array and explain its role.
+- DO NOT include markdown, backticks, code blocks, or any extra commentary. Respond with ONLY the valid JSON.
 """
 
         response = model_ai.generate_content(prompt)
