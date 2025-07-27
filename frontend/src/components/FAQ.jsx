@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import GradientText from '@/animations/GradientText'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Link } from 'react-router-dom'
 
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState(null)
@@ -106,9 +107,11 @@ const FAQ = () => {
         {/* Contact CTA */}
         <div className="text-center mt-12">
           <p className="text-gray-400 mb-4">Still have questions?</p>
+          <Link to='/contact'>
           <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-full font-semibold transition-all">
             Contact Support
           </button>
+          </Link>
         </div>
       </div>
     </section>
