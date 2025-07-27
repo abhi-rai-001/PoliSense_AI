@@ -5,10 +5,12 @@ import { FaRobot, FaUser, FaPaperPlane, FaFileUpload } from "react-icons/fa";
 import GradientText from "../animations/GradientText";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useUser } from "@clerk/clerk-react";
 
 export default function ChatPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useUser();
   const [messages, setMessages] = useState([
     { 
       sender: "ai", 
@@ -22,9 +24,13 @@ export default function ChatPage() {
     let isPageVisible = true;
 
     const clearDocuments = async () => {
+      if (!user?.id) return;
+      
       try {
-        await axios.delete("http://localhost:3000/user/clear-all-documents");
-        console.log("Documents cleared");
+        await axios.delete("http://localhost:3000/user/clear-all-documents", {
+          data: { userId: user.id } // Make sure this uses user.id, not hardcoded value
+        });
+        console.log("Documents cleared for user:", user.id);
       } catch (error) {
         console.error('Failed to clear documents:', error);
       }
@@ -50,10 +56,15 @@ export default function ChatPage() {
         clearDocuments();
       }
     };
-  }, []);
+  }, [user?.id]);
 
   const handleSend = async () => {
     if (input.trim() === "" || isLoading) return;
+    
+    if (!user?.id) {
+      toast.error("User not authenticated");
+      return;
+    }
     
     setMessages((prev) => [...prev, { sender: "user", text: input }]);
     const userQuestion = input;
@@ -63,7 +74,7 @@ export default function ChatPage() {
     try {
       const response = await axios.post("http://localhost:3000/user/query", {
         question: userQuestion,
-        userId: "user123"
+        userId: user.id // Use actual Clerk user ID
       });
       
       const aiMessage = {
@@ -132,7 +143,7 @@ export default function ChatPage() {
               )}
 
               <div
-                className={`max-w-[70%] px-6 py-4 rounded-2xl shadow-lg ${
+                className={`max-w-[75%] px-6 py-4 rounded-2xl shadow-lg ${
                   msg.sender === "ai"
                     ? "bg-gray-800/60 backdrop-blur-sm border border-gray-700/50 text-gray-100"
                     : "bg-gradient-to-r from-blue-600 to-purple-600 text-white ml-auto"
@@ -140,33 +151,65 @@ export default function ChatPage() {
               >
                 {msg.sender === "ai" && msg.Decision ? (
                   <div className="space-y-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">�</span>
-                        <span className="font-semibold text-white">Analysis:</span>
-                      </div>
-                      <div className="text-gray-200 leading-relaxed pl-6">
-                        {msg.Justification?.Summary || msg.Justification || msg.text}
-                      </div>
+                    {/* Decision Badge */}
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        msg.Decision === 'Approved' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
+                        msg.Decision === 'Rejected' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                        msg.Decision === 'Partially Approved' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                        'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                      }`}>
+                        {msg.Decision}
+                      </span>
+                      {msg.Amount && msg.Amount !== "Not applicable" && (
+                        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                          {msg.Amount}
+                        </span>
+                      )}
                     </div>
 
-                    {/* Sources section commented out temporarily
-                    {msg.sources && msg.sources.length > 0 && (
-                      <div className="pt-3 border-t border-gray-600/30">
+                    {/* Main Response */}
+                    <div className="text-gray-200 leading-relaxed">
+                      {msg.Justification?.Summary || msg.Justification || msg.text}
+                    </div>
+
+                    {/* Policy Clauses */}
+                    {msg.Justification?.Clauses && msg.Justification.Clauses.length > 0 && (
+                      <div className="mt-4 pt-3 border-t border-gray-600/30">
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="text-lg">📚</span>
-                          <span className="font-medium text-gray-300">Sources:</span>
+                          <span className="text-sm font-medium text-gray-300">📋 Policy References:</span>
                         </div>
-                        <div className="space-y-1 pl-6">
-                          {msg.sources.map((source, idx) => (
-                            <div key={idx} className="text-sm text-gray-400">
-                              {source.filename || `Document ${idx + 1}`}
+                        <div className="space-y-2">
+                          {msg.Justification.Clauses.map((clause, idx) => (
+                            <div key={idx} className="bg-gray-700/30 rounded-lg p-3 border-l-2 border-blue-400/50">
+                              <div className="text-xs text-blue-400 font-medium mb-1">
+                                {clause.Reference}
+                              </div>
+                              <div className="text-sm text-gray-300 italic">
+                                "{clause.Text}"
+                              </div>
                             </div>
                           ))}
                         </div>
                       </div>
                     )}
-                    */}
+
+                    {/* Sources */}
+                    {/* {msg.sources && msg.sources.length > 0 && (
+                      <div className="pt-3 border-t border-gray-600/30">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-sm font-medium text-gray-300">📚 Sources:</span>
+                        </div>
+                        <div className="space-y-1">
+                          {msg.sources.map((source, idx) => (
+                            <div key={idx} className="text-xs text-gray-400 flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 bg-gray-500 rounded-full"></span>
+                              {source.filename || `Document ${idx + 1}`}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )} */}
                   </div>
                 ) : (
                   <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap">

@@ -1,0 +1,21 @@
+# Environment variables
+.env
+.env.*
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Cache directories
+.cache/
+.parcel-cache/
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/

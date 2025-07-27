@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import GeometricLogo from './GeometricLogo'
+import {  SignedOut, UserButton } from '@clerk/clerk-react'
 
 const Navbar = () => {
   return (
@@ -19,9 +20,13 @@ const Navbar = () => {
         <Link to="/contact" className='cta'> 
           <span className="hover-underline-animation px-1"> Contact Us </span> 
         </Link>
+        <SignedOut>
         <Link to="/sign-in" className='active'> 
           <span className="px-1"> Login </span> 
         </Link>
+        </SignedOut>
+        
+        <UserButton/>
       </div>
     </div>
   )

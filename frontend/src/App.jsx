@@ -10,6 +10,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   useEffect(() => {
@@ -27,12 +29,28 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<><Navbar/> <LandingPage /> <Footer/> </>} />
-        <Route path="/upload" element={<><Navbar/> <UploadPage /> <Footer/> </>} />
+        <Route 
+          path="/upload" 
+          element={
+            <ProtectedRoute>
+              <Navbar/> 
+              <UploadPage /> 
+              <Footer/> 
+            </ProtectedRoute>
+          } 
+        />
         <Route path="/about" element={<><Navbar/> <AboutPage />  </>} />
         <Route path="/contact" element={<><Navbar/> <ContactPage /> <Footer/> </>} />
-        <Route path="/chat" element={<ChatPage />} />
-        <Route path="/sign-in/*" element={<SignInPage />} />
-        <Route path="/sign-up/*" element={<SignUpPage />} />
+        <Route 
+          path="/chat" 
+          element={
+            <ProtectedRoute>
+              <ChatPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route path="/sign-in/*" element={<SignedOut><SignInPage /></SignedOut>} />
+        <Route path="/sign-up/*" element={<SignedOut><SignUpPage /></SignedOut>} />
         <Route path="/login" element={<Navigate to="/sign-in" replace />} />
       </Routes>
     </Router>

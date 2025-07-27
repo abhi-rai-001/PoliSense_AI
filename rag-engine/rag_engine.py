@@ -190,9 +190,29 @@ def add_document(data: AddDocument):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/debug/user/{user_id}")
+def debug_user_documents(user_id: str):
+    """Debug endpoint to check user documents"""
+    try:
+        result = collection.get(
+            where={"user_id": user_id},
+            include=["documents", "metadatas"]
+        )
+        
+        return {
+            "user_id": user_id,
+            "document_count": len(result['ids']) if result['ids'] else 0,
+            "document_ids": result['ids'] if result['ids'] else [],
+            "sample_metadata": result['metadatas'][0] if result.get('metadatas') and result['metadatas'] else None
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
 @app.post("/query")
 def query_documents(data: QueryRequest):
     try:
+        print(f"🔍 Query from user: {data.user_id}, Question: {data.question}")
+        
         # Parse the query for structure and intent
         parsed_query = query_parser.parse_query(data.question)
         
@@ -201,13 +221,22 @@ def query_documents(data: QueryRequest):
         
         embedding = model.encode(search_query).tolist()
         
-        # Query documents with user filtering - GET MORE CHUNKS
+        # Debug: Check what documents exist for this user
+        debug_result = collection.get(
+            where={"user_id": data.user_id},
+            include=["metadatas"]
+        )
+        print(f"📊 Found {len(debug_result['ids']) if debug_result['ids'] else 0} documents for user {data.user_id}")
+        
+        # Query documents with user filtering
         result = collection.query(
             query_embeddings=[embedding], 
-            n_results=5,  # Increased from 3 to 5
+            n_results=5,
             where={"user_id": data.user_id},
             include=["documents", "metadatas", "distances"]
         )
+        
+        print(f"🎯 Query returned {len(result['documents'][0]) if result['documents'] and result['documents'][0] else 0} chunks")
         
         if not result['documents'] or not result['documents'][0]:
             return {
@@ -224,7 +253,7 @@ def query_documents(data: QueryRequest):
             }
         
         # Get more relevant chunks for better context
-        relevant_chunks = result['documents'][0][:4]  # Increased from 2 to 4
+        relevant_chunks = result['documents'][0][:4]
         context = "\n\n".join(relevant_chunks)
         
         # Generate structured response in required format
@@ -234,13 +263,13 @@ def query_documents(data: QueryRequest):
         simple_answer = structured_response["Justification"]["Summary"]
         
         return {
-            **structured_response,  # This includes Decision, Amount, Justification
-            "answer": simple_answer,  # For backward compatibility
+            **structured_response,
+            "answer": simple_answer,
             "sources": result.get('metadatas', [[]])[0] if result.get('metadatas') else []
         }
         
     except Exception as e:
-        print(f"Query error: {e}")
+        print(f"❌ Query error: {e}")
         return {
             "Decision": "Information Only",
             "Amount": "Not applicable",
@@ -297,35 +326,55 @@ def generate_structured_response(context: str, parsed_query: Dict) -> Dict:
         entities = parsed_query["entities"]
         question = parsed_query["original_question"]
         
-        prompt = f"""You are an insurance claims and policy assistant. Analyze the context and provide a structured response.
+prompt = f"""You are a helpful and intelligent insurance assistant. Your task is to carefully understand the user’s question, extract all relevant details, and answer clearly based on the provided policy document. Your response must be in clean, valid JSON format.
 
-Context: {context}
+📄 Context (from policy document):
+{context}
 
-Question: {question}
+❓ User Query:
+{question}
 
-IMPORTANT: You must respond with a valid JSON object in this EXACT format:
+✅ Your job:
+
+1. Carefully **understand the user’s question** — including details like age, condition, procedure, location, policy duration, or any other important info.
+2. Match it against the policy document.
+3. Decide whether the case is **Approved**, **Rejected**, **Partially Approved**, or **Information Only**.
+4. Clearly explain your answer in simple, friendly language.
+5. Include the exact policy clause(s) that support your answer.
+
+📤 Respond ONLY with this JSON structure:
 
 {{
   "Decision": "Approved" | "Rejected" | "Partially Approved" | "Information Only",
-  "Amount": "specific amount or calculation method",
+  "Amount": "₹ amount / % / calculation logic / N/A",
   "Justification": {{
-    "Summary": "brief explanation of the decision",
+    "Summary": "A short, human-friendly explanation that clearly answers what the user asked",
     "Clauses": [
       {{
-        "Reference": "specific clause reference",
-        "Text": "exact clause text from the policy"
+        "Reference": "Clause number or title",
+        "Text": "Exact clause text used to support your decision"
       }}
     ]
   }}
 }}
 
-Guidelines:
-- Decision: Use "Approved" if fully covered, "Rejected" if not covered, "Partially Approved" if conditions/limits apply
-- Amount: Extract specific amounts, percentages, or calculation methods (e.g., "50% of actual cost", "$5,000", "Sum Insured limit")
-- Summary: Explain why this decision was made in 1-2 sentences
-- Clauses: Extract actual clause references and their exact text from the context
+📌 Decision Meanings:
+- "Approved" → fully covered
+- "Rejected" → not covered
+- "Partially Approved" → covered with limitations or conditions
+- "Information Only" → general explanation or reference (not a claim decision)
 
-Respond ONLY with valid JSON in the exact format above. DO NOT include markdown code blocks or backticks in your response:"""
+🧠 Rules for You:
+
+- Always use a **friendly, simple tone** — like you're helping a real person.
+- In the `"Summary"` field, speak directly to the user and answer what they actually asked.
+- Use `"Information Only"` when it’s a general question (e.g. “Does this policy cover checkups?”).
+- Use `"N/A"` in `"Amount"` if the question is not about a claim.
+- Always quote from the actual document in the `"Clauses"` section.
+- DO NOT include markdown, code blocks, backticks, or extra explanations. Just return the JSON.
+
+Return ONLY the JSON.
+"""
 
         response = model_ai.generate_content(prompt)
         print(f"DEBUG: Gemini response received: {response.text[:100]}...")
@@ -494,6 +543,32 @@ def clear_all_documents():
         }
     except Exception as e:
         print(f"Error clearing documents: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/clear_user_documents")
+def clear_user_documents(data: ClearUserRequest):
+    try:
+        # Get documents for specific user
+        result = collection.get(
+            where={"user_id": data.user_id},
+            include=["metadatas"]
+        )
+        
+        if not result['ids']:
+            return {
+                "message": f"No documents found for user {data.user_id}", 
+                "documents_deleted": 0
+            }
+        
+        # Delete user-specific documents
+        collection.delete(ids=result['ids'])
+        
+        return {
+            "message": f"Documents cleared for user {data.user_id}",
+            "documents_deleted": len(result['ids'])
+        }
+    except Exception as e:
+        print(f"Error clearing user documents: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":

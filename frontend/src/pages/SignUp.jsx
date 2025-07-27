@@ -3,7 +3,7 @@ import { SignUp } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
-// Import the actual GradientText component
+
 import GradientText from "../animations/GradientText";
 
 export default function SignUpPage() {
@@ -49,9 +49,10 @@ export default function SignUpPage() {
                 colors={["#40ffaa", "#4079ff", "#40ffaa"]}
                 animationSpeed={8}
                 showBorder={false}
-                className="text-5xl md:text-6xl lg:text-7xl mx-auto font-bold mb-6 leading-tight"
+                className="text-5xl md:text-6xl lg:text-7xl mx-auto font-bold mb-6 leading-tight font-tan-kulture   uppercase"
+                
               >
-                Join PoliSense
+                Join Us
               </GradientText>
             </div>
             <p className="text-gray-400 text-xl md:text-2xl max-w-2xl mx-auto leading-relaxed opacity-0 animate-[fadeInUp_0.6s_ease-out_0.4s_forwards]">

@@ -3,10 +3,12 @@ import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
+import { useUser } from "@clerk/clerk-react";
 import GradientText from "../animations/GradientText";
 
 export default function UploadPage() {
   const navigate = useNavigate();
+  const { user } = useUser();
   const [file, setFile] = useState(null);
   const [emailText, setEmailText] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -27,7 +29,6 @@ export default function UploadPage() {
     const selectedFile = event.target.files[0];
     if (!selectedFile) return;
 
-    const maxSizeMB = 10;
     if (selectedFile.size > maxSizeMB * 1024 * 1024) {
       toast.error(`File size must be less than ${maxSizeMB}MB`);
       return;
@@ -35,9 +36,11 @@ export default function UploadPage() {
 
     // Clear previous documents when new file is selected
     const clearPreviousDocuments = async () => {
+      if (!user?.id) return;
+      
       try {
         await axios.delete("http://localhost:3000/user/clear-documents", {
-          data: { userId: "user123" }
+          data: { userId: user.id } // Use actual Clerk user ID
         });
       } catch (error) {
         console.error('Failed to clear previous documents:', error);
@@ -65,12 +68,18 @@ export default function UploadPage() {
       return;
     }
 
+    if (!user?.id) {
+      toast.error("User not authenticated");
+      return;
+    }
+
+    console.log("DEBUG: Uploading with user ID:", user.id); // Add this debug line
+
     setUploading(true);
     toast.loading("Uploading...");
 
     try {
       const formData = new FormData();
-      const userId = "user123"; // Replace with actual user ID from auth
       
       if (file) {
         formData.append("file", file);
@@ -81,7 +90,9 @@ export default function UploadPage() {
         formData.append("isEmailText", "true");
       }
       
-      formData.append("userId", userId); // Add user ID
+      formData.append("userId", user.id); // Make sure this line exists and uses user.id
+      
+      console.log("DEBUG: FormData userId:", formData.get("userId")); // Add this debug line
       
       await axios.post("http://localhost:3000/user/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" }
@@ -92,10 +103,9 @@ export default function UploadPage() {
       setFile(null);
       setEmailText("");
       
-      // Redirect to chat page after successful upload
       setTimeout(() => {
         navigate('/chat');
-      }, 1500); // Small delay to show success message
+      }, 1500);
       
     } catch (err) {
       toast.dismiss();

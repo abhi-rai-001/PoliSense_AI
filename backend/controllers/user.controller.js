@@ -9,18 +9,21 @@ const PYTHON_SERVICE_URL = process.env.PYTHON_SERVICE_URL || 'http://localhost:8
 
 export async function uploadFile(req, res) {
   try {
+    const { file, body } = req;
+    const { buffer, mimetype, originalname, size } = file;
+    const { userId, isEmailText } = body;
+
+    console.log(`📁 Upload request - User: ${userId}, File: ${originalname}, Type: ${mimetype}`);
+
+    // Clear previous documents first
     try {
-      await uploadMongo.deleteMany({});
+      await uploadMongo.deleteMany({ userId: userId });
       await axios.delete(`${PYTHON_SERVICE_URL}/clear_all_documents`);
-      console.log("Cleared previous documents before upload");
+      console.log("✅ Cleared previous documents before upload");
     } catch (clearError) {
-      console.error("Failed to clear previous documents:", clearError.message);
+      console.error("❌ Failed to clear previous documents:", clearError.message);
     }
 
-    const { originalname, mimetype, buffer, size } = req.file;
-    const isEmailText = req.body.isEmailText === "true";
-    const userId = req.body.userId || "anonymous";
-    
     let parsedText = null;
     
     if (isEmailText && mimetype === 'text/plain') {
@@ -106,9 +109,13 @@ ${parsed.text || parsed.html || 'No content'}
       userId: userId,
     });
 
+    console.log(`💾 Saved to MongoDB - ID: ${newFile._id}, User: ${userId}`);
+
     if (parsedText) {
       try {
-        await axios.post(`${PYTHON_SERVICE_URL}/add_document`, {
+        console.log(`🔄 Sending to vector DB - User: ${userId}, Content length: ${parsedText.length}`);
+        
+        const vectorResponse = await axios.post(`${PYTHON_SERVICE_URL}/add_document`, {
           doc_id: newFile._id.toString(),
           content: parsedText,
           filename: originalname,
@@ -117,9 +124,10 @@ ${parsed.text || parsed.html || 'No content'}
                         mimetype.includes('word') ? 'DOCX' : 
                         mimetype === 'text/email' ? 'Email' : 'Unknown'
         });
-        console.log("Document sent to vector database with metadata");
+        
+        console.log("✅ Vector DB response:", vectorResponse.data);
       } catch (vectorError) {
-        console.error('Vector embedding failed:', vectorError.message);
+        console.error('❌ Vector embedding failed:', vectorError.response?.data || vectorError.message);
       }
     }
 
@@ -131,11 +139,12 @@ ${parsed.text || parsed.html || 'No content'}
         mimetype: newFile.mimetype,
         size: newFile.size,
         parsedText: parsedText ? 'Available' : 'Not available',
+        userId: userId
       },
     });
     
   } catch (error) {
-    console.error('Upload error:', error);
+    console.error('❌ Upload error:', error);
     res.status(500).json({
       error: "Failed to upload content",
       message: error.message,
@@ -148,13 +157,25 @@ export async function queryDocuments(req, res) {
     const { question } = req.body;
     const userId = req.body.userId || "anonymous";
     
+    console.log(`🔍 Query request - User: ${userId}, Question: "${question}"`);
+    
     if (!question) {
       return res.status(400).json({ error: "Question is required" });
     }
 
+    // Check if user has documents in MongoDB
+    const mongoCount = await uploadMongo.countDocuments({ userId: userId });
+    console.log(`📊 MongoDB documents for user ${userId}: ${mongoCount}`);
+
     const response = await axios.post(`${PYTHON_SERVICE_URL}/query`, {
       question: question,
       user_id: userId
+    });
+
+    console.log(`🤖 RAG response for user ${userId}:`, {
+      decision: response.data.Decision,
+      hasAnswer: !!response.data.answer,
+      sourcesCount: response.data.sources?.length || 0
     });
 
     const responseData = response.data;
@@ -168,7 +189,7 @@ export async function queryDocuments(req, res) {
     });
 
   } catch (error) {
-    console.error('Query error:', error);
+    console.error('❌ Query error:', error);
     res.status(500).json({
       Decision: "Information Only",
       Amount: "Not applicable", 
@@ -187,27 +208,32 @@ export async function queryDocuments(req, res) {
 
 export async function clearAllDocuments(req, res) {
   try {
-    console.log("Clearing all documents...");
+    const userId = req.body.userId;
+    console.log(`Clearing documents for user: ${userId}`);
     
-    const mongoResult = await uploadMongo.deleteMany({});
-    console.log(`Deleted ${mongoResult.deletedCount} documents from MongoDB`);
+    // Clear user-specific documents from MongoDB
+    const mongoResult = await uploadMongo.deleteMany({ userId: userId });
+    console.log(`Deleted ${mongoResult.deletedCount} documents from MongoDB for user ${userId}`);
     
+    // Clear user-specific documents from Python service
     try {
-      const pythonResponse = await axios.delete(`${PYTHON_SERVICE_URL}/clear_all_documents`);
+      const pythonResponse = await axios.post(`${PYTHON_SERVICE_URL}/clear_user_documents`, {
+        user_id: userId
+      });
       console.log("Python service response:", pythonResponse.data);
     } catch (pythonError) {
       console.error("Python service error:", pythonError.response?.data || pythonError.message);
     }
     
     res.status(200).json({ 
-      message: "All documents cleared successfully",
+      message: `Documents cleared successfully for user ${userId}`,
       documentsDeleted: mongoResult.deletedCount
     });
     
   } catch (error) {
-    console.error('Clear all documents error:', error);
+    console.error('Clear documents error:', error);
     res.status(500).json({
-      error: "Failed to clear all documents",
+      error: "Failed to clear documents",
       message: error.message
     });
   }
