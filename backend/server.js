@@ -14,8 +14,8 @@ if (!process.env.MONGO_URI) {
 
 // CORS
 app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true, // Allow cookies with requests
+  origin: 'https://polisense-ai.vercel.app',
+  credentials: true, 
 }));
 
 // Middlewares
