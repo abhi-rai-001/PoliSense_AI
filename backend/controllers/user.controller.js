@@ -13,6 +13,11 @@ export async function uploadFile(req, res) {
     const { buffer, mimetype, originalname, size } = file;
     const { userId, isEmailText } = body;
 
+    // Ensure we have a valid Clerk user ID
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
     console.log(`📁 Upload request - User: ${userId}, File: ${originalname}, Type: ${mimetype}`);
 
     // Clear previous documents first
@@ -155,7 +160,12 @@ ${parsed.text || parsed.html || 'No content'}
 export async function queryDocuments(req, res) {
   try {
     const { question } = req.body;
-    const userId = req.body.userId || "anonymous";
+    const userId = req.body.userId;
+    
+    // Ensure we have a valid Clerk user ID
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
     
     console.log(`🔍 Query request - User: ${userId}, Question: "${question}"`);
     
@@ -172,19 +182,57 @@ export async function queryDocuments(req, res) {
       user_id: userId
     });
 
-    console.log(`🤖 RAG response for user ${userId}:`, {
-      decision: response.data.Decision,
-      hasAnswer: !!response.data.answer,
-      sourcesCount: response.data.sources?.length || 0
-    });
+    console.log(`🤖 RAG response for user ${userId}:`, response.data);
 
-    const responseData = response.data;
+    let responseData = response.data;
+    
+    // Parse JSON response if it's embedded in the justification
+    if (responseData.Justification?.Summary && responseData.Justification.Summary.includes('```json')) {
+      try {
+        const jsonMatch = responseData.Justification.Summary.match(/```json\s*(\{[\s\S]*?\})\s*```/);
+        if (jsonMatch) {
+          const parsedJson = JSON.parse(jsonMatch[1]);
+          responseData = {
+            ...responseData,
+            Decision: parsedJson.decision || responseData.Decision,
+            Amount: parsedJson.amount || responseData.Amount,
+            Justification: {
+              Summary: parsedJson.justification || responseData.Justification.Summary,
+              Clauses: parsedJson.relevant_clauses || []
+            }
+          };
+        }
+      } catch (parseError) {
+        console.error('Failed to parse JSON response:', parseError);
+      }
+    }
+
+    // Convert string clauses to object format for frontend
+    if (responseData.Justification?.Clauses && Array.isArray(responseData.Justification.Clauses)) {
+      const formattedClauses = responseData.Justification.Clauses.map((clause, index) => {
+        if (typeof clause === 'string') {
+          // Extract key terms for better reference names
+          const keyTerms = clause.toLowerCase().match(/\b(encryption|privacy|security|data|user|right|policy|deletion|storage)\b/g);
+          const referenceName = keyTerms && keyTerms.length > 0 
+            ? `${keyTerms[0].charAt(0).toUpperCase() + keyTerms[0].slice(1)} Section`
+            : `Document Section ${index + 1}`;
+          
+          return {
+            Reference: referenceName,
+            Text: clause
+          };
+        }
+        return clause;
+      });
+      
+      responseData.Justification.Clauses = formattedClauses;
+    }
     
     res.status(200).json({
       Decision: responseData.Decision,
       Amount: responseData.Amount,
       Justification: responseData.Justification,
-      answer: responseData.answer || responseData.Justification?.Summary || "No answer available",
+      answer: responseData.Justification?.Summary || responseData.answer || "No answer available",
       sources: responseData.sources || []
     });
 
@@ -209,6 +257,12 @@ export async function queryDocuments(req, res) {
 export async function clearAllDocuments(req, res) {
   try {
     const userId = req.body.userId;
+    
+    // Ensure we have a valid Clerk user ID
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+    
     console.log(`Clearing documents for user: ${userId}`);
     
     // Clear user-specific documents from MongoDB

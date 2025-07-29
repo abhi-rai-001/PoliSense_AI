@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { FaRobot, FaUser, FaPaperPlane, FaFileUpload } from "react-icons/fa";
 import GradientText from "../animations/GradientText";
@@ -11,6 +11,7 @@ export default function ChatPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useUser();
+  const messagesEndRef = useRef(null);
   const [messages, setMessages] = useState([
     { 
       sender: "ai", 
@@ -57,6 +58,15 @@ export default function ChatPage() {
       }
     };
   }, [user?.id]);
+
+  // Auto-scroll to bottom when messages change
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isLoading]);
 
   const handleSend = async () => {
     if (input.trim() === "" || isLoading) return;
@@ -177,7 +187,7 @@ export default function ChatPage() {
                     {msg.Justification?.Clauses && msg.Justification.Clauses.length > 0 && (
                       <div className="mt-4 pt-3 border-t border-gray-600/30">
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="text-sm font-medium text-gray-300">📋 Policy References:</span>
+                          <span className="text-sm font-medium text-gray-300">📋 Document References:</span>
                         </div>
                         <div className="space-y-2">
                           {msg.Justification.Clauses.map((clause, idx) => (
@@ -247,6 +257,9 @@ export default function ChatPage() {
               </div>
             </motion.div>
           )}
+
+          {/* Auto-scroll anchor */}
+          <div ref={messagesEndRef} />
         </div>
       </main>
 
