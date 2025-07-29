@@ -28,7 +28,7 @@ export default function ChatPage() {
       if (!user?.id) return;
       
       try {
-        await axios.delete("http://localhost:3000/user/clear-all-documents", {
+        await axios.delete("https://polisense-backend.onrender.com/user/clear-all-documents", {
           data: { userId: user.id } // Make sure this uses user.id, not hardcoded value
         });
         console.log("Documents cleared for user:", user.id);
@@ -82,7 +82,7 @@ export default function ChatPage() {
     setIsLoading(true);
     
     try {
-      const response = await axios.post("http://localhost:3000/user/query", {
+      const response = await axios.post("https://polisense-backend.onrender.com/user/query", {
         question: userQuestion,
         userId: user.id // Use actual Clerk user ID
       });
