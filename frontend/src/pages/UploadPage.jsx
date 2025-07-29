@@ -14,7 +14,7 @@ export default function UploadPage() {
   const [uploading, setUploading] = useState(false);
   const [inputMode, setInputMode] = useState("file");
 
-  // Remove the useEffect that clears documents
+
 
   const maxSizeMB = 10;
 
@@ -39,7 +39,7 @@ export default function UploadPage() {
       if (!user?.id) return;
       
       try {
-        await axios.delete("http://localhost:3000/user/clear-documents", {
+        await axios.delete("https://polisense-rag.onrender.com/user/clear-documents", {
           data: { userId: user.id } // Use actual Clerk user ID
         });
       } catch (error) {
@@ -94,7 +94,7 @@ export default function UploadPage() {
       
       console.log("DEBUG: FormData userId:", formData.get("userId")); // Add this debug line
       
-      await axios.post("http://localhost:3000/user/upload", formData, {
+      await axios.post("https://polisense-rag.onrender.com/user/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
       
