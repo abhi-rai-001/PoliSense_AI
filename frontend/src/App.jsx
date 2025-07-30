@@ -51,6 +51,7 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        <Route path="/sign-in/sso-callback" element={<div>Processing SSO authentication...</div>} />
         <Route path="/sign-in/*" element={<SignedOut><SignInPage /></SignedOut>} />
         <Route path="/sign-up/*" element={<SignedOut><SignUpPage /></SignedOut>} />
         <Route path="/login" element={<Navigate to="/sign-in" replace />} />

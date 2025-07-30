@@ -17,8 +17,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       frontendApi="clerk.polisense.info"
       signInUrl="/sign-in"
       signUpUrl="/sign-up"
-      afterSignInUrl="/upload"
-      afterSignUpUrl="/upload"
+      fallbackRedirectUrl="/upload"
+      forceRedirectUrl="/upload"
     >
       <App />
     </ClerkProvider>
