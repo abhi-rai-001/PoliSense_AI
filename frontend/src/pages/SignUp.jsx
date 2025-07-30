@@ -76,8 +76,6 @@ export default function SignUpPage() {
                     path="/sign-up" 
                     routing="path" 
                     signInUrl="/sign-in"
-                    fallbackRedirectUrl="/upload"
-                    forceRedirectUrl="/upload"
                     appearance={{
                       baseTheme: "dark",
                       layout: {
