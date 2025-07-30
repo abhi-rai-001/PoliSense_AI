@@ -12,8 +12,15 @@ if (!PUBLISHABLE_KEY) {
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} frontendApi="clerk.polisense.info">
-    <App />
+    <ClerkProvider 
+      publishableKey={PUBLISHABLE_KEY} 
+      frontendApi="clerk.polisense.info"
+      signInUrl="/sign-in"
+      signUpUrl="/sign-up"
+      afterSignInUrl="/upload"
+      afterSignUpUrl="/upload"
+    >
+      <App />
     </ClerkProvider>
   </React.StrictMode>
 );
