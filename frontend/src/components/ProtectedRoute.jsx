@@ -1,11 +1,11 @@
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth } from "../contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
-  const { isSignedIn, isLoaded } = useAuth();
+  const { isSignedIn, loading } = useAuth();
 
   // Show loading while auth state is being determined
-  if (!isLoaded) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-white">Loading...</div>

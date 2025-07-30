@@ -5,12 +5,12 @@ import { FaRobot, FaUser, FaPaperPlane, FaFileUpload } from "react-icons/fa";
 import GradientText from "../animations/GradientText";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function ChatPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useUser();
+  const { user } = useAuth();
   const messagesEndRef = useRef(null);
   const [messages, setMessages] = useState([
     { 

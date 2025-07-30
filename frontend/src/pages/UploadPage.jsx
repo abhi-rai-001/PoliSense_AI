@@ -3,12 +3,12 @@ import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "../contexts/AuthContext";
 import GradientText from "../animations/GradientText";
 
 export default function UploadPage() {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user } = useAuth();
   const [file, setFile] = useState(null);
   const [emailText, setEmailText] = useState("");
   const [uploading, setUploading] = useState(false);

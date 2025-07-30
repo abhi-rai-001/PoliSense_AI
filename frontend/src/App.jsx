@@ -10,7 +10,6 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 
@@ -52,8 +51,8 @@ function App() {
           } 
         />
 
-        <Route path="/sign-in/*" element={<SignedOut><SignInPage /></SignedOut>} />
-        <Route path="/sign-up/*" element={<SignedOut><SignUpPage /></SignedOut>} />
+        <Route path="/sign-in" element={<SignInPage />} />
+        <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/login" element={<Navigate to="/sign-in" replace />} />
       </Routes>
     </Router>
