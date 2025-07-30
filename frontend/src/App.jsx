@@ -12,6 +12,8 @@ import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { SSOCallback } from "@clerk/clerk-react";
+
 
 function App() {
   useEffect(() => {
@@ -39,6 +41,8 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        <Route path="/sign-in/sso-callback" element={<SSOCallback />} />
+
         <Route path="/about" element={<><Navbar/> <AboutPage />  </>} />
         <Route path="/contact" element={<><Navbar/> <ContactPage /> <Footer/> </>} />
         <Route 
