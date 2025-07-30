@@ -16,12 +16,22 @@ const Navbar = () => {
   };
 
   return (
-    <div className='w-[100vw] fixed flex justify-between items-center z-10 px-20 py-10 backdrop-blur-md bg-black/10  text-white'>
-      <Link to="/" className='font-[TAN-KULTURE] items-center flex cursor-pointer tracking-wider text-2xl uppercase hover:text-gray-300 transition-colors'> 
-       Polisense <GeometricLogo className='size-20'/>
+    <div className='w-full fixed flex justify-between items-center z-10 px-4 sm:px-8 md:px-12 lg:px-20 py-4 md:py-6 lg:py-10 backdrop-blur-md bg-black/10 text-white'>
+      <Link to="/" className='font-[TAN-KULTURE] items-center flex cursor-pointer tracking-wider text-lg sm:text-xl md:text-2xl uppercase hover:text-gray-300 transition-colors'> 
+       Polisense <GeometricLogo className='w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20'/>
       </Link>
       
-      <div className={`flex justify-around items-center ${isSignedIn?'w-2/5':'w-1/2'} `}> 
+      {/* Mobile Menu Button */}
+      <div className="md:hidden">
+        <button className="text-white hover:text-gray-300 transition-colors">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+      
+      {/* Desktop Navigation */}
+      <div className={`hidden md:flex justify-around items-center ${isSignedIn?'w-2/5':'w-1/2'}`}> 
         <Link to="/" className='cta'> 
           <span className="hover-underline-animation px-1"> Home </span> 
         </Link>
@@ -37,8 +47,8 @@ const Navbar = () => {
             <span className="px-1"> Login </span> 
           </Link>
         ) : (
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 lg:space-x-4">
+            <div className="hidden lg:flex items-center space-x-2">
               {user?.photoURL && (
                 <img 
                   src={user.photoURL} 

@@ -25,13 +25,13 @@ export default function ChatPage() {
     let isPageVisible = true;
 
     const clearDocuments = async () => {
-      if (!user?.id) return;
+      if (!user?.uid) return;
       
       try {
         await axios.delete("https://polisense-backend.onrender.com/user/clear-all-documents", {
-          data: { userId: user.id } // Make sure this uses user.id, not hardcoded value
+          data: { userId: user.uid } // Make sure this uses user.uid, not hardcoded value
         });
-        console.log("Documents cleared for user:", user.id);
+        console.log("Documents cleared for user:", user.uid);
       } catch (error) {
         console.error('Failed to clear documents:', error);
       }
@@ -71,7 +71,7 @@ export default function ChatPage() {
   const handleSend = async () => {
     if (input.trim() === "" || isLoading) return;
     
-    if (!user?.id) {
+    if (!user?.uid) {
       toast.error("User not authenticated");
       return;
     }
@@ -84,7 +84,7 @@ export default function ChatPage() {
     try {
       const response = await axios.post("https://polisense-backend.onrender.com/user/query", {
         question: userQuestion,
-        userId: user.id // Use actual Clerk user ID
+        userId: user.uid // Use actual Firebase user ID
       });
       
       const aiMessage = {
@@ -118,24 +118,24 @@ export default function ChatPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
-      <header className="px-6 py-6 border-b border-gray-800/50 backdrop-blur-sm bg-black/20">
+      <header className="px-4 sm:px-6 py-4 sm:py-6 border-b border-gray-800/50 backdrop-blur-sm bg-black/20">
         <div className="max-w-4xl mx-auto text-center">
           <GradientText
             colors={["#40ffaa", "#4079ff", "#40ffaa"]}
             animationSpeed={8}
             showBorder={false}
-            className="text-2xl mx-auto md:text-3xl font-bold"
+            className="text-xl sm:text-2xl md:text-3xl font-bold"
           >
             AI Document Assistant
           </GradientText>
-          <p className="text-gray-400 mt-2 text-sm md:text-base">
+          <p className="text-gray-400 mt-2 text-xs sm:text-sm md:text-base">
             Ask intelligent questions about your uploaded documents
           </p>
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto px-4 py-6">
-        <div className="max-w-4xl mx-auto space-y-6">
+      <main className="flex-1 overflow-y-auto px-2 sm:px-4 py-4 sm:py-6">
+        <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
           {messages.map((msg, index) => (
             <motion.div
               key={index}
@@ -153,7 +153,7 @@ export default function ChatPage() {
               )}
 
               <div
-                className={`max-w-[75%] px-6 py-4 rounded-2xl shadow-lg ${
+                className={`max-w-[85%] sm:max-w-[75%] px-3 sm:px-4 md:px-6 py-3 sm:py-4 rounded-2xl shadow-lg ${
                   msg.sender === "ai"
                     ? "bg-gray-800/60 backdrop-blur-sm border border-gray-700/50 text-gray-100"
                     : "bg-gradient-to-r from-blue-600 to-purple-600 text-white ml-auto"
@@ -263,9 +263,9 @@ export default function ChatPage() {
         </div>
       </main>
 
-      <footer className="px-4 py-4 border-t border-gray-800/50 backdrop-blur-sm bg-black/20">
+      <footer className="px-2 sm:px-4 py-3 sm:py-4 border-t border-gray-800/50 backdrop-blur-sm bg-black/20">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-3 bg-gray-800/50 backdrop-blur-sm rounded-full border border-gray-700/50 p-2">
+          <div className="flex items-center gap-2 sm:gap-3 bg-gray-800/50 backdrop-blur-sm rounded-full border border-gray-700/50 p-2">
             <label className="cursor-pointer text-gray-400 hover:text-blue-400 transition-colors p-2">
               <input type="file" className="hidden" />
               <FaFileUpload size={18} />
@@ -277,7 +277,7 @@ export default function ChatPage() {
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Ask anything about your documents..."
-              className="flex-1 bg-transparent text-white placeholder-gray-400 focus:outline-none px-2 py-2"
+              className="flex-1 bg-transparent text-white placeholder-gray-400 focus:outline-none px-2 py-2 text-sm sm:text-base"
               disabled={isLoading}
             />
             

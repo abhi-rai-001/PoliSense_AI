@@ -48,30 +48,30 @@ export default function SignInPage() {
         </Link>
       </nav>
 
-      <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-100px)] px-8">
+      <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-100px)] px-4 sm:px-6 md:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full max-w-md"
+          className="w-full max-w-sm sm:max-w-md"
         >
           <div className="text-center mb-8">
             <GradientText
               colors={["#40ffaa", "#4079ff", "#40ffaa"]}
               animationSpeed={8}
               showBorder={false}
-              className="text-4xl md:text-5xl mx-auto font-bold mb-4"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl mx-auto font-bold mb-4"
             >
               Welcome Back
             </GradientText>
-            <p className="text-gray-400 text-lg">
+            <p className="text-gray-400 text-sm sm:text-base md:text-lg">
               Sign in to continue your AI-powered document analysis
             </p>
           </div>
 
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-2xl blur-xl"></div>
-            <div className="relative bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-2xl p-6">
+            <div className="relative bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-2xl p-4 sm:p-6">
               {error && (
                 <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
                   {error}

@@ -65,8 +65,8 @@ export default function SignUpPage() {
       </nav>
 
       {/* Main Content */}
-      <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-100px)] px-8">
-        <div className="w-full max-w-6xl">
+      <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-100px)] px-4 sm:px-6 md:px-8">
+        <div className="w-full max-w-4xl lg:max-w-6xl">
           {/* Header */}
           <div className="text-center mb-12">
             <div className="opacity-0 animate-[scaleIn_0.6s_ease-out_0.2s_forwards]">
@@ -85,12 +85,12 @@ export default function SignUpPage() {
           </div>
 
           {/* Sign Up Form - Centered */}
-          <div className="flex justify-center mb-16">
+          <div className="flex justify-center mb-8 sm:mb-12 md:mb-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="w-full max-w-lg"
+              className="w-full max-w-sm sm:max-w-md md:max-w-lg"
             >
               {/* Firebase Sign Up Component */}
               <div className="relative">
@@ -143,7 +143,7 @@ export default function SignUpPage() {
               <p className="text-gray-500 text-sm">Everything you need for intelligent document analysis</p>
             </div>
             
-            <div className="grid grid-cols-3 gap-8 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-8">
               {[
                 {
                   icon: "🤖",

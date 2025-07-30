@@ -36,11 +36,11 @@ export default function UploadPage() {
 
     // Clear previous documents when new file is selected
     const clearPreviousDocuments = async () => {
-      if (!user?.id) return;
+      if (!user?.uid) return;
       
       try {
         await axios.delete("https://polisense-backend.onrender.com/user/clear-documents", {
-          data: { userId: user.id } // Use actual Clerk user ID
+          data: { userId: user.uid } // Use actual Firebase user ID
         });
       } catch (error) {
         console.error('Failed to clear previous documents:', error);
@@ -68,12 +68,12 @@ export default function UploadPage() {
       return;
     }
 
-    if (!user?.id) {
+    if (!user?.uid) {
       toast.error("User not authenticated");
       return;
     }
 
-    console.log("DEBUG: Uploading with user ID:", user.id); // Add this debug line
+    console.log("DEBUG: Uploading with user ID:", user.uid); // Add this debug line
 
     setUploading(true);
     toast.loading("Uploading...");
@@ -90,7 +90,7 @@ export default function UploadPage() {
         formData.append("isEmailText", "true");
       }
       
-      formData.append("userId", user.id); // Make sure this line exists and uses user.id
+      formData.append("userId", user.uid); // Make sure this line exists and uses user.uid
       
       console.log("DEBUG: FormData userId:", formData.get("userId")); // Add this debug line
       
@@ -147,28 +147,28 @@ export default function UploadPage() {
         }}
       />
       
-      <main className="flex-1 flex items-center justify-center px-8 py-32">
+      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 md:px-8 py-16 sm:py-24 md:py-32">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full max-w-2xl"
+          className="w-full max-w-lg sm:max-w-xl md:max-w-2xl"
         >
           <div className="text-center mb-8">
             <GradientText
               colors={["#40ffaa", "#4079ff", "#40ffaa"]}
               animationSpeed={8}
               showBorder={false}
-              className="text-3xl md:text-4xl mx-auto font-bold mb-4"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl mx-auto font-bold mb-4"
             >
               Upload Your Document
             </GradientText>
-            <p className="text-gray-400">
+            <p className="text-gray-400 text-sm sm:text-base md:text-lg">
               Upload PDF, DOCX, or Email files for AI-powered analysis
             </p>
           </div>
 
-          <div className="flex gap-4 mb-4 mx-auto">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-4 mx-auto">
             <button
               onClick={() => setInputMode("file")}
               className={`px-4 py-2 rounded-lg transition-all duration-300 ${
@@ -200,22 +200,22 @@ export default function UploadPage() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.95 }}
                 transition={{ duration: 0.4, ease: "easeInOut" }}
-                className="border-2 border-dashed border-gray-700 rounded-lg p-12 text-center bg-gray-900/50 backdrop-blur-sm hover:border-blue-400 transition-colors cursor-pointer"
+                className="border-2 border-dashed border-gray-700 rounded-lg p-6 sm:p-8 md:p-12 text-center bg-gray-900/50 backdrop-blur-sm hover:border-blue-400 transition-colors cursor-pointer"
                 onDrop={handleDrop}
                 onDragOver={(e) => e.preventDefault()}
                 onClick={() => document.getElementById("fileInput").click()}
               >
                 <motion.div 
-                  className="text-6xl mb-4"
+                  className="text-4xl sm:text-5xl md:text-6xl mb-4"
                   animate={{ rotate: [0, 5, -5, 0] }}
                   transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
                 >
                   📁
                 </motion.div>
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">
                   Drop your file here or click to browse
                 </h3>
-                <p className="text-gray-400 text-sm mb-4">
+                <p className="text-gray-400 text-xs sm:text-sm mb-4">
                   Supports PDF, DOCX, and EML files up to {maxSizeMB}MB
                 </p>
 
@@ -247,23 +247,23 @@ export default function UploadPage() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.95 }}
                 transition={{ duration: 0.4, ease: "easeInOut" }}
-                className="bg-gray-900/50 backdrop-blur-sm border-2 border-gray-700 rounded-lg p-8 hover:border-blue-400 transition-colors"
+                className="bg-gray-900/50 backdrop-blur-sm border-2 border-gray-700 rounded-lg p-4 sm:p-6 md:p-8 hover:border-blue-400 transition-colors"
               >
                 <motion.div 
-                  className="text-6xl mb-4 text-center"
+                  className="text-4xl sm:text-5xl md:text-6xl mb-4 text-center"
                   animate={{ scale: [1, 1.1, 1] }}
                   transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
                 >
-                 
+                  📧
                 </motion.div>
-                <h3 className="text-xl font-semibold text-white mb-4 text-center">
+                <h3 className="text-lg sm:text-xl font-semibold text-white mb-4 text-center">
                   Paste Your Email Content
                 </h3>
                 <textarea
                   value={emailText}
                   onChange={handleEmailTextChange}
                   placeholder="Paste email headers and content here..."
-                  className="w-full h-48 p-4 bg-gray-800/50 border border-gray-600 text-white rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  className="w-full h-32 sm:h-40 md:h-48 p-3 sm:p-4 bg-gray-800/50 border border-gray-600 text-white rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-sm sm:text-base"
                 />
                 <p className="text-xs text-gray-400 mt-3 text-center">
                   Include headers (From, To, Subject) and email body for best results
