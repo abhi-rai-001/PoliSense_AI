@@ -14,7 +14,7 @@ if (!process.env.MONGO_URI) {
 
 // CORS
 app.use(cors({
-  origin: 'https://polisense-ai.vercel.app',
+  origin: 'https://www.polisense.info',
   credentials: true, 
 }));
 
