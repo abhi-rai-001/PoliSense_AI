@@ -41,7 +41,6 @@ function App() {
             </ProtectedRoute>
           } 
         />
-        <Route path="/sign-in/sso-callback" element={<SSOCallback />} />
 
         <Route path="/about" element={<><Navbar/> <AboutPage />  </>} />
         <Route path="/contact" element={<><Navbar/> <ContactPage /> <Footer/> </>} />
@@ -53,6 +52,7 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        <Route path="/sign-in/sso-callback" element={<SSOCallback />} />
         <Route path="/sign-in/*" element={<SignedOut><SignInPage /></SignedOut>} />
         <Route path="/sign-up/*" element={<SignedOut><SignUpPage /></SignedOut>} />
         <Route path="/login" element={<Navigate to="/sign-in" replace />} />
