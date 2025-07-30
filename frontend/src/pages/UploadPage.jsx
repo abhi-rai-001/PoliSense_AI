@@ -116,7 +116,7 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-black pt-20 text-white flex flex-col">
       <Toaster 
         position="top-center"
         toastOptions={{

@@ -124,7 +124,7 @@ export default function ChatPage() {
             colors={["#40ffaa", "#4079ff", "#40ffaa"]}
             animationSpeed={8}
             showBorder={false}
-            className="text-xl sm:text-2xl md:text-3xl font-bold"
+            className="text-xl sm:text-2xl mx-auto md:text-3xl font-bold"
           >
             AI Document Assistant
           </GradientText>
@@ -266,10 +266,7 @@ export default function ChatPage() {
       <footer className="px-2 sm:px-4 py-3 sm:py-4 border-t border-gray-800/50 backdrop-blur-sm bg-black/20">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-2 sm:gap-3 bg-gray-800/50 backdrop-blur-sm rounded-full border border-gray-700/50 p-2">
-            <label className="cursor-pointer text-gray-400 hover:text-blue-400 transition-colors p-2">
-              <input type="file" className="hidden" />
-              <FaFileUpload size={18} />
-            </label>
+
             
             <input
               type="text"
