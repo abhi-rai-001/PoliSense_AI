@@ -1,0 +1,71 @@
+{
+	"info": {
+		"_postman_id": "hackathon-test-collection",
+		"name": "Hackathon API Test",
+		"description": "Test collection for Bajaj Finserv HackerX Competition API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Test Hackathon API",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer fc3848ee29750f0714f4c397a91427f2357c66eb5ba66fdbc5f2dc70d2c72c35"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"documents\": \"https://hackrx.blob.core.windows.net/assets/policy.pdf?sv=2023-01-03&st=2025-07-04T09%3A11%3A24Z&se=2027-07-05T09%3A11%3A00Z&sr=b&sp=r&sig=N4a9OU0w0QXO6AOIBiu4bpl7AXvEZogeT%2FjUHNO7HzQ%3D\",\n    \"questions\": [\n        \"What is the grace period for premium payment under the National Parivar Mediclaim Plus Policy?\",\n        \"What is the waiting period for pre-existing diseases (PED) to be covered?\",\n        \"Does this policy cover maternity expenses, and what are the conditions?\"\n    ]\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/hackrx/run",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"hackrx",
+						"run"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/health",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://polisense-backend.onrender.com",
+			"type": "string"
+		}
+	]
+} 

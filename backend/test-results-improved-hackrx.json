@@ -1,0 +1,49 @@
+{
+  "timestamp": "2025-08-02T16:38:10.612Z",
+  "testType": "Improved HackRX Endpoint Test",
+  "documentId": "Arogya_Sanjeevani_Policy",
+  "questions": [
+    "What is the minimum and maximum sum insured under the Arogya Sanjeevani Policy?",
+    "What is the waiting period for pre-existing diseases to be covered?",
+    "Does the policy cover cataract surgery? If yes, what is the limit?",
+    "What is the grace period for renewal of the policy?",
+    "What are the room rent and ICU limits?",
+    "Is AYUSH treatment covered under this policy?",
+    "Are dental treatments covered?",
+    "What is the co-payment clause for people above 60 years?",
+    "Are ambulance charges reimbursed under this policy?",
+    "Is there any policy on mental illness coverage?",
+    "What exclusions apply during the initial 30 days?",
+    "Does the policy cover expenses related to COVID-19?",
+    "Are plastic or cosmetic surgeries covered?",
+    "Are congenital external defects covered?",
+    "What is the policy on day care procedures?"
+  ],
+  "answers": [
+    "Information not found in the provided document sections. Checked sections: 1.22, 1.22, 1.22, 1.22 [Traceability: Checked sections: 1.22, 1.22, 1.22, 1.22] [Confidence: Low] [Sections: 1.22, 1.22, 1.22, 1.22]",
+    "There is a waiting period of thirty-six (36) months of continuous coverage from the first policy inception for pre-existing diseases and their direct complications to be covered.",
+    "The policy has a specific waiting period of two (2) years for cataract surgery.",
+    "A grace period of thirty days is provided for premium payment after the due date to renew or continue the policy without losing continuity benefits.",
+    "Yes, for Plan A, the daily room rent is capped at 1% of the Sum Insured, and ICU charges are capped at 2% of the Sum Insured. These limits do not apply if the treatment is for a listed procedure in a Preferred Provider Network (PPN).",
+    "The policy covers medical expenses for inpatient treatment under Ayurveda, Yoga, Naturopathy, Unani, Siddha, and Homeopathy systems up to the Sum Insured limit, provided the treatment is taken in an AYUSH Hospital.",
+    "Information not found in the provided document sections. Checked sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1 [Traceability: Checked sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1] [Confidence: Low] [Sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1]",
+    "Co-payment of 5% on all claims for Insured Person aged less than equal to 75 years on policy inception. [Traceability: Keyword match: 'co-payment' found in query] [Confidence: High] [Sections: 7.5.2, 7.5.2, 7.5.2, 7.5.2]",
+    "Information not found in the provided document sections. Checked sections: 7.5, 7.5, 7.5, 7.5 [Traceability: Checked sections: 7.5, 7.5, 7.5, 7.5] [Confidence: Low] [Sections: 7.5, 7.5, 7.5, 7.5]",
+    "Information not found in the provided document sections. Checked sections: 2.18, 5.15.2, 2.18, 5.15.2 [Traceability: Checked sections: 2.18, 5.15.2, 2.18, 5.15.2] [Confidence: Low] [Sections: 2.18, 5.15.2, 2.18, 5.15.2]",
+    "Information not found in the provided document sections. Checked sections: 5.15.2, 5.15.2, 5.15.2, 5.15.2 [Traceability: Checked sections: 5.15.2, 5.15.2, 5.15.2, 5.15.2] [Confidence: Low] [Sections: 5.15.2, 5.15.2, 5.15.2, 5.15.2]",
+    "Information not found in the provided document sections. Checked sections: 1.19.1, 1.19.1, 1.19.1, 1.19.1 [Traceability: Checked sections: 1.19.1, 1.19.1, 1.19.1, 1.19.1] [Confidence: Low] [Sections: 1.19.1, 1.19.1, 1.19.1, 1.19.1]",
+    "Information not found in the provided document sections. Checked sections: 1.3.38, 1.3.38, 7.5.5, 7.5.5 [Traceability: Checked sections: 1.3.38, 1.3.38, 7.5.5, 7.5.5] [Confidence: Low] [Sections: 1.3.38, 1.3.38, 7.5.5, 7.5.5]",
+    "Information not found in the provided document sections. Checked sections: 7.5.9, 7.5.10, 7.5.9, 7.5.10 [Traceability: Checked sections: 7.5.9, 7.5.10, 7.5.9, 7.5.10] [Confidence: Low] [Sections: 7.5.9, 7.5.10, 7.5.9, 7.5.10]",
+    "Information not found in the provided document sections. Checked sections: 2.36, 2.36, 2.36, 2.36 [Traceability: Checked sections: 2.36, 2.36, 2.36, 2.36] [Confidence: Low] [Sections: 2.36, 2.36, 2.36, 2.36]"
+  ],
+  "responseTime": 68053,
+  "validation": {
+    "totalQuestions": 15,
+    "validAnswers": 15,
+    "invalidAnswers": 0,
+    "successRate": "100.0%",
+    "avgTraceabilityScore": "60.0%",
+    "avgQualityScore": "46.7%",
+    "overallScore": "72.0%"
+  }
+}

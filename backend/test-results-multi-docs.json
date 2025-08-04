@@ -1,0 +1,1000 @@
+{
+  "timestamp": "2025-08-02T16:31:20.731Z",
+  "testType": "Multi-Document Test",
+  "documentsCount": 6,
+  "successfulTests": 6,
+  "overallSuccessRate": "100.0%",
+  "totalWeightedScore": "168.00",
+  "documentResults": [
+    {
+      "documentName": "Arogya Sanjeevani Policy - CIN - U10200WB1906GOI001713 1.pdf",
+      "documentId": "Arogya Sanjeevani Policy - CIN - U10200WB1906GOI001713 1",
+      "success": true,
+      "responseTime": 46496,
+      "validAnswers": 15,
+      "totalQuestions": 15,
+      "successRate": 100,
+      "traceabilityScore": 60,
+      "qualityScore": 46.666666666666664,
+      "documentWeight": 0.5,
+      "weightedScore": 8,
+      "detailedResults": [
+        {
+          "question": "What is the grace period for premium payment?",
+          "answer": "A grace period of thirty days is provided for premium payment after the due date to renew or continue the policy without losing continuity benefits.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 0.5,
+          "scoreContribution": 0.5
+        },
+        {
+          "question": "What is the waiting period for pre-existing diseases?",
+          "answer": "There is a waiting period of thirty-six (36) months of continuous coverage from the first policy inception for pre-existing diseases and their direct complications to be covered.",
+          "traceabilityScore": 0,
+          "qualityScore": 60,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 0.5,
+          "scoreContribution": 0.5
+        },
+        {
+          "question": "Is cataract surgery covered under this policy?",
+          "answer": "The policy has a specific waiting period of two (2) years for cataract surgery.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1.5,
+          "documentWeight": 0.5,
+          "scoreContribution": 0.75
+        },
+        {
+          "question": "What are the room rent limits in this policy?",
+          "answer": "Yes, for Plan A, the daily room rent is capped at 1% of the Sum Insured, and ICU charges are capped at 2% of the Sum Insured. These limits do not apply if the treatment is for a listed procedure in a Preferred Provider Network (PPN).",
+          "traceabilityScore": 0,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1.5,
+          "documentWeight": 0.5,
+          "scoreContribution": 0.75
+        },
+        {
+          "question": "Does this policy cover AYUSH treatments?",
+          "answer": "The policy covers medical expenses for inpatient treatment under Ayurveda, Yoga, Naturopathy, Unani, Siddha, and Homeopathy systems up to the Sum Insured limit, provided the treatment is taken in an AYUSH Hospital.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 0.5,
+          "scoreContribution": 0.5
+        },
+        {
+          "question": "Is there any co-payment clause in this policy?",
+          "answer": "Co-payment of 5% on all claims for Insured Person aged less than equal to 75 years on policy inception. [Traceability: Keyword match: 'co-payment' found in query] [Confidence: High] [Sections: 7.5.28, 5.10.1, 5.10.1, 5.10.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 0.5,
+          "scoreContribution": 0.5
+        },
+        {
+          "question": "Are dental treatments covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.5.17, 7.5, 7.5.1, 7.5 [Traceability: Checked sections: 2.5.17, 7.5, 7.5.1, 7.5] [Confidence: Low] [Sections: 2.5.17, 7.5, 7.5.1, 7.5]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 0.5,
+          "scoreContribution": 0.5
+        },
+        {
+          "question": "What are the ambulance charges covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 7.5, 7.5, 7.5, 7.5 [Traceability: Checked sections: 7.5, 7.5, 7.5, 7.5] [Confidence: Low] [Sections: 7.5, 7.5, 7.5, 7.5]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 0.5,
+          "scoreContribution": 0.5
+        },
+        {
+          "question": "Is mental illness covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.3.23, 2.5.3, 1.3.28, 1.3.39 [Traceability: Checked sections: 1.3.23, 2.5.3, 1.3.28, 1.3.39] [Confidence: Low] [Sections: 1.3.23, 2.5.3, 1.3.28, 1.3.39]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 0.5,
+          "scoreContribution": 0.5
+        },
+        {
+          "question": "What is the waiting period for specific diseases?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22 [Traceability: Checked sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22] [Confidence: Low] [Sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22]",
+          "traceabilityScore": 0,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 0.5,
+          "scoreContribution": 0.5
+        },
+        {
+          "question": "Is COVID-19 treatment covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.53, 2.53, 2.53, 2.53 [Traceability: Checked sections: 2.53, 2.53, 2.53, 2.53] [Confidence: Low] [Sections: 2.53, 2.53, 2.53, 2.53]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 0.5,
+          "scoreContribution": 0.5
+        },
+        {
+          "question": "Are plastic surgery expenses covered?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.3.38, 1.1.1, 7.5.5, 3.1.5 [Traceability: Checked sections: 1.3.38, 1.1.1, 7.5.5, 3.1.5] [Confidence: Low] [Sections: 1.3.38, 1.1.1, 7.5.5, 3.1.5]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 0.5,
+          "scoreContribution": 0.5
+        },
+        {
+          "question": "Are congenital diseases covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1 [Traceability: Checked sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1] [Confidence: Low] [Sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 0.5,
+          "scoreContribution": 0.5
+        },
+        {
+          "question": "What day care procedures are covered?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.5.1, 2.14, 2.22.1, 2.5.1 [Traceability: Checked sections: 2.5.1, 2.14, 2.22.1, 2.5.1] [Confidence: Low] [Sections: 2.5.1, 2.14, 2.22.1, 2.5.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 0.5,
+          "scoreContribution": 0.5
+        },
+        {
+          "question": "What is the sum insured available in this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.20, 2.20, 2.20, 2.20 [Traceability: Checked sections: 2.20, 2.20, 2.20, 2.20] [Confidence: Low] [Sections: 2.20, 2.20, 2.20, 2.20]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 0.5,
+          "scoreContribution": 0.5
+        }
+      ]
+    },
+    {
+      "documentName": "Bajaj.pdf",
+      "documentId": "Bajaj",
+      "success": true,
+      "responseTime": 47495,
+      "validAnswers": 15,
+      "totalQuestions": 15,
+      "successRate": 100,
+      "traceabilityScore": 60,
+      "qualityScore": 46.666666666666664,
+      "documentWeight": 2,
+      "weightedScore": 32,
+      "detailedResults": [
+        {
+          "question": "What is the grace period for premium payment?",
+          "answer": "A grace period of thirty days is provided for premium payment after the due date to renew or continue the policy without losing continuity benefits.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What is the waiting period for pre-existing diseases?",
+          "answer": "There is a waiting period of thirty-six (36) months of continuous coverage from the first policy inception for pre-existing diseases and their direct complications to be covered.",
+          "traceabilityScore": 0,
+          "qualityScore": 60,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is cataract surgery covered under this policy?",
+          "answer": "The policy has a specific waiting period of two (2) years for cataract surgery.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1.5,
+          "documentWeight": 2,
+          "scoreContribution": 3
+        },
+        {
+          "question": "What are the room rent limits in this policy?",
+          "answer": "Yes, for Plan A, the daily room rent is capped at 1% of the Sum Insured, and ICU charges are capped at 2% of the Sum Insured. These limits do not apply if the treatment is for a listed procedure in a Preferred Provider Network (PPN).",
+          "traceabilityScore": 0,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1.5,
+          "documentWeight": 2,
+          "scoreContribution": 3
+        },
+        {
+          "question": "Does this policy cover AYUSH treatments?",
+          "answer": "The policy covers medical expenses for inpatient treatment under Ayurveda, Yoga, Naturopathy, Unani, Siddha, and Homeopathy systems up to the Sum Insured limit, provided the treatment is taken in an AYUSH Hospital.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is there any co-payment clause in this policy?",
+          "answer": "Co-payment of 5% on all claims for Insured Person aged less than equal to 75 years on policy inception. [Traceability: Keyword match: 'co-payment' found in query] [Confidence: High] [Sections: 7.5.28, 5.10.1, 5.10.1, 5.10.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Are dental treatments covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.5.17, 7.5, 7.5.1, 7.5 [Traceability: Checked sections: 2.5.17, 7.5, 7.5.1, 7.5] [Confidence: Low] [Sections: 2.5.17, 7.5, 7.5.1, 7.5]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What are the ambulance charges covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 7.5, 7.5, 7.5, 7.5 [Traceability: Checked sections: 7.5, 7.5, 7.5, 7.5] [Confidence: Low] [Sections: 7.5, 7.5, 7.5, 7.5]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is mental illness covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.3.23, 2.5.3, 1.3.28, 1.3.39 [Traceability: Checked sections: 1.3.23, 2.5.3, 1.3.28, 1.3.39] [Confidence: Low] [Sections: 1.3.23, 2.5.3, 1.3.28, 1.3.39]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What is the waiting period for specific diseases?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22 [Traceability: Checked sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22] [Confidence: Low] [Sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22]",
+          "traceabilityScore": 0,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is COVID-19 treatment covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.53, 2.53, 2.53, 2.53 [Traceability: Checked sections: 2.53, 2.53, 2.53, 2.53] [Confidence: Low] [Sections: 2.53, 2.53, 2.53, 2.53]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Are plastic surgery expenses covered?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.3.38, 1.1.1, 7.5.5, 3.1.5 [Traceability: Checked sections: 1.3.38, 1.1.1, 7.5.5, 3.1.5] [Confidence: Low] [Sections: 1.3.38, 1.1.1, 7.5.5, 3.1.5]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Are congenital diseases covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1 [Traceability: Checked sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1] [Confidence: Low] [Sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What day care procedures are covered?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.5.1, 2.14, 2.22.1, 2.5.1 [Traceability: Checked sections: 2.5.1, 2.14, 2.22.1, 2.5.1] [Confidence: Low] [Sections: 2.5.1, 2.14, 2.22.1, 2.5.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What is the sum insured available in this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.20, 2.20, 2.20, 2.20 [Traceability: Checked sections: 2.20, 2.20, 2.20, 2.20] [Confidence: Low] [Sections: 2.20, 2.20, 2.20, 2.20]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        }
+      ]
+    },
+    {
+      "documentName": "Chola.pdf",
+      "documentId": "Chola",
+      "success": true,
+      "responseTime": 52810,
+      "validAnswers": 15,
+      "totalQuestions": 15,
+      "successRate": 100,
+      "traceabilityScore": 60,
+      "qualityScore": 46.666666666666664,
+      "documentWeight": 2,
+      "weightedScore": 32,
+      "detailedResults": [
+        {
+          "question": "What is the grace period for premium payment?",
+          "answer": "A grace period of thirty days is provided for premium payment after the due date to renew or continue the policy without losing continuity benefits.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What is the waiting period for pre-existing diseases?",
+          "answer": "There is a waiting period of thirty-six (36) months of continuous coverage from the first policy inception for pre-existing diseases and their direct complications to be covered.",
+          "traceabilityScore": 0,
+          "qualityScore": 60,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is cataract surgery covered under this policy?",
+          "answer": "The policy has a specific waiting period of two (2) years for cataract surgery.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1.5,
+          "documentWeight": 2,
+          "scoreContribution": 3
+        },
+        {
+          "question": "What are the room rent limits in this policy?",
+          "answer": "Yes, for Plan A, the daily room rent is capped at 1% of the Sum Insured, and ICU charges are capped at 2% of the Sum Insured. These limits do not apply if the treatment is for a listed procedure in a Preferred Provider Network (PPN).",
+          "traceabilityScore": 0,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1.5,
+          "documentWeight": 2,
+          "scoreContribution": 3
+        },
+        {
+          "question": "Does this policy cover AYUSH treatments?",
+          "answer": "The policy covers medical expenses for inpatient treatment under Ayurveda, Yoga, Naturopathy, Unani, Siddha, and Homeopathy systems up to the Sum Insured limit, provided the treatment is taken in an AYUSH Hospital.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is there any co-payment clause in this policy?",
+          "answer": "Co-payment of 5% on all claims for Insured Person aged less than equal to 75 years on policy inception. [Traceability: Keyword match: 'co-payment' found in query] [Confidence: High] [Sections: 7.5.28, 5.10.1, 5.10.1, 5.10.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Are dental treatments covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.5.17, 7.5, 7.5.1, 7.5 [Traceability: Checked sections: 2.5.17, 7.5, 7.5.1, 7.5] [Confidence: Low] [Sections: 2.5.17, 7.5, 7.5.1, 7.5]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What are the ambulance charges covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 7.5, 7.5, 7.5, 7.5 [Traceability: Checked sections: 7.5, 7.5, 7.5, 7.5] [Confidence: Low] [Sections: 7.5, 7.5, 7.5, 7.5]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is mental illness covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.3.23, 2.5.3, 1.3.28, 1.3.39 [Traceability: Checked sections: 1.3.23, 2.5.3, 1.3.28, 1.3.39] [Confidence: Low] [Sections: 1.3.23, 2.5.3, 1.3.28, 1.3.39]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What is the waiting period for specific diseases?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22 [Traceability: Checked sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22] [Confidence: Low] [Sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22]",
+          "traceabilityScore": 0,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is COVID-19 treatment covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.53, 2.53, 2.53, 2.53 [Traceability: Checked sections: 2.53, 2.53, 2.53, 2.53] [Confidence: Low] [Sections: 2.53, 2.53, 2.53, 2.53]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Are plastic surgery expenses covered?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.3.38, 1.1.1, 7.5.5, 3.1.5 [Traceability: Checked sections: 1.3.38, 1.1.1, 7.5.5, 3.1.5] [Confidence: Low] [Sections: 1.3.38, 1.1.1, 7.5.5, 3.1.5]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Are congenital diseases covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1 [Traceability: Checked sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1] [Confidence: Low] [Sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What day care procedures are covered?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.5.1, 2.14, 2.22.1, 2.5.1 [Traceability: Checked sections: 2.5.1, 2.14, 2.22.1, 2.5.1] [Confidence: Low] [Sections: 2.5.1, 2.14, 2.22.1, 2.5.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What is the sum insured available in this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.20, 2.20, 2.20, 2.20 [Traceability: Checked sections: 2.20, 2.20, 2.20, 2.20] [Confidence: Low] [Sections: 2.20, 2.20, 2.20, 2.20]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        }
+      ]
+    },
+    {
+      "documentName": "Edelweiss.pdf",
+      "documentId": "Edelweiss",
+      "success": true,
+      "responseTime": 53796,
+      "validAnswers": 15,
+      "totalQuestions": 15,
+      "successRate": 100,
+      "traceabilityScore": 60,
+      "qualityScore": 46.666666666666664,
+      "documentWeight": 2,
+      "weightedScore": 32,
+      "detailedResults": [
+        {
+          "question": "What is the grace period for premium payment?",
+          "answer": "A grace period of thirty days is provided for premium payment after the due date to renew or continue the policy without losing continuity benefits.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What is the waiting period for pre-existing diseases?",
+          "answer": "There is a waiting period of thirty-six (36) months of continuous coverage from the first policy inception for pre-existing diseases and their direct complications to be covered.",
+          "traceabilityScore": 0,
+          "qualityScore": 60,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is cataract surgery covered under this policy?",
+          "answer": "The policy has a specific waiting period of two (2) years for cataract surgery.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1.5,
+          "documentWeight": 2,
+          "scoreContribution": 3
+        },
+        {
+          "question": "What are the room rent limits in this policy?",
+          "answer": "Yes, for Plan A, the daily room rent is capped at 1% of the Sum Insured, and ICU charges are capped at 2% of the Sum Insured. These limits do not apply if the treatment is for a listed procedure in a Preferred Provider Network (PPN).",
+          "traceabilityScore": 0,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1.5,
+          "documentWeight": 2,
+          "scoreContribution": 3
+        },
+        {
+          "question": "Does this policy cover AYUSH treatments?",
+          "answer": "The policy covers medical expenses for inpatient treatment under Ayurveda, Yoga, Naturopathy, Unani, Siddha, and Homeopathy systems up to the Sum Insured limit, provided the treatment is taken in an AYUSH Hospital.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is there any co-payment clause in this policy?",
+          "answer": "Co-payment of 5% on all claims for Insured Person aged less than equal to 75 years on policy inception. [Traceability: Keyword match: 'co-payment' found in query] [Confidence: High] [Sections: 7.5.28, 5.10.1, 5.10.1, 5.10.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Are dental treatments covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.5.17, 7.5, 7.5.1, 7.5 [Traceability: Checked sections: 2.5.17, 7.5, 7.5.1, 7.5] [Confidence: Low] [Sections: 2.5.17, 7.5, 7.5.1, 7.5]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What are the ambulance charges covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 7.5, 7.5, 7.5, 7.5 [Traceability: Checked sections: 7.5, 7.5, 7.5, 7.5] [Confidence: Low] [Sections: 7.5, 7.5, 7.5, 7.5]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is mental illness covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.3.23, 2.5.3, 1.3.28, 1.3.39 [Traceability: Checked sections: 1.3.23, 2.5.3, 1.3.28, 1.3.39] [Confidence: Low] [Sections: 1.3.23, 2.5.3, 1.3.28, 1.3.39]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What is the waiting period for specific diseases?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22 [Traceability: Checked sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22] [Confidence: Low] [Sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22]",
+          "traceabilityScore": 0,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is COVID-19 treatment covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.53, 2.53, 2.53, 2.53 [Traceability: Checked sections: 2.53, 2.53, 2.53, 2.53] [Confidence: Low] [Sections: 2.53, 2.53, 2.53, 2.53]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Are plastic surgery expenses covered?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.3.38, 1.1.1, 7.5.5, 3.1.5 [Traceability: Checked sections: 1.3.38, 1.1.1, 7.5.5, 3.1.5] [Confidence: Low] [Sections: 1.3.38, 1.1.1, 7.5.5, 3.1.5]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Are congenital diseases covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1 [Traceability: Checked sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1] [Confidence: Low] [Sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What day care procedures are covered?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.5.1, 2.14, 2.22.1, 2.5.1 [Traceability: Checked sections: 2.5.1, 2.14, 2.22.1, 2.5.1] [Confidence: Low] [Sections: 2.5.1, 2.14, 2.22.1, 2.5.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What is the sum insured available in this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.20, 2.20, 2.20, 2.20 [Traceability: Checked sections: 2.20, 2.20, 2.20, 2.20] [Confidence: Low] [Sections: 2.20, 2.20, 2.20, 2.20]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        }
+      ]
+    },
+    {
+      "documentName": "HDER.pdf",
+      "documentId": "HDER",
+      "success": true,
+      "responseTime": 57924,
+      "validAnswers": 15,
+      "totalQuestions": 15,
+      "successRate": 100,
+      "traceabilityScore": 60,
+      "qualityScore": 46.666666666666664,
+      "documentWeight": 2,
+      "weightedScore": 32,
+      "detailedResults": [
+        {
+          "question": "What is the grace period for premium payment?",
+          "answer": "A grace period of thirty days is provided for premium payment after the due date to renew or continue the policy without losing continuity benefits.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What is the waiting period for pre-existing diseases?",
+          "answer": "There is a waiting period of thirty-six (36) months of continuous coverage from the first policy inception for pre-existing diseases and their direct complications to be covered.",
+          "traceabilityScore": 0,
+          "qualityScore": 60,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is cataract surgery covered under this policy?",
+          "answer": "The policy has a specific waiting period of two (2) years for cataract surgery.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1.5,
+          "documentWeight": 2,
+          "scoreContribution": 3
+        },
+        {
+          "question": "What are the room rent limits in this policy?",
+          "answer": "Yes, for Plan A, the daily room rent is capped at 1% of the Sum Insured, and ICU charges are capped at 2% of the Sum Insured. These limits do not apply if the treatment is for a listed procedure in a Preferred Provider Network (PPN).",
+          "traceabilityScore": 0,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1.5,
+          "documentWeight": 2,
+          "scoreContribution": 3
+        },
+        {
+          "question": "Does this policy cover AYUSH treatments?",
+          "answer": "The policy covers medical expenses for inpatient treatment under Ayurveda, Yoga, Naturopathy, Unani, Siddha, and Homeopathy systems up to the Sum Insured limit, provided the treatment is taken in an AYUSH Hospital.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is there any co-payment clause in this policy?",
+          "answer": "Co-payment of 5% on all claims for Insured Person aged less than equal to 75 years on policy inception. [Traceability: Keyword match: 'co-payment' found in query] [Confidence: High] [Sections: 7.5.28, 5.10.1, 5.10.1, 5.10.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Are dental treatments covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.5.17, 2.5.17, 7.5, 7.5.1 [Traceability: Checked sections: 2.5.17, 2.5.17, 7.5, 7.5.1] [Confidence: Low] [Sections: 2.5.17, 2.5.17, 7.5, 7.5.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What are the ambulance charges covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 7.5, 7.5, 7.5, 7.5 [Traceability: Checked sections: 7.5, 7.5, 7.5, 7.5] [Confidence: Low] [Sections: 7.5, 7.5, 7.5, 7.5]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is mental illness covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.3.23, 2.5.3, 1.3.28, 1.3.39 [Traceability: Checked sections: 1.3.23, 2.5.3, 1.3.28, 1.3.39] [Confidence: Low] [Sections: 1.3.23, 2.5.3, 1.3.28, 1.3.39]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What is the waiting period for specific diseases?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22 [Traceability: Checked sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22] [Confidence: Low] [Sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22]",
+          "traceabilityScore": 0,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is COVID-19 treatment covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.53, 2.53, 2.53, 2.53 [Traceability: Checked sections: 2.53, 2.53, 2.53, 2.53] [Confidence: Low] [Sections: 2.53, 2.53, 2.53, 2.53]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Are plastic surgery expenses covered?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.3.38, 1.1.1, 7.5.5, 3.1.5 [Traceability: Checked sections: 1.3.38, 1.1.1, 7.5.5, 3.1.5] [Confidence: Low] [Sections: 1.3.38, 1.1.1, 7.5.5, 3.1.5]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Are congenital diseases covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1 [Traceability: Checked sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1] [Confidence: Low] [Sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What day care procedures are covered?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.5.1, 2.14, 2.22.1, 2.5.1 [Traceability: Checked sections: 2.5.1, 2.14, 2.22.1, 2.5.1] [Confidence: Low] [Sections: 2.5.1, 2.14, 2.22.1, 2.5.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What is the sum insured available in this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.20, 2.20, 2.20, 2.20 [Traceability: Checked sections: 2.20, 2.20, 2.20, 2.20] [Confidence: Low] [Sections: 2.20, 2.20, 2.20, 2.20]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        }
+      ]
+    },
+    {
+      "documentName": "ICICI.pdf",
+      "documentId": "ICICI",
+      "success": true,
+      "responseTime": 58838,
+      "validAnswers": 15,
+      "totalQuestions": 15,
+      "successRate": 100,
+      "traceabilityScore": 60,
+      "qualityScore": 46.666666666666664,
+      "documentWeight": 2,
+      "weightedScore": 32,
+      "detailedResults": [
+        {
+          "question": "What is the grace period for premium payment?",
+          "answer": "A grace period of thirty days is provided for premium payment after the due date to renew or continue the policy without losing continuity benefits.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What is the waiting period for pre-existing diseases?",
+          "answer": "There is a waiting period of thirty-six (36) months of continuous coverage from the first policy inception for pre-existing diseases and their direct complications to be covered.",
+          "traceabilityScore": 0,
+          "qualityScore": 60,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is cataract surgery covered under this policy?",
+          "answer": "The policy has a specific waiting period of two (2) years for cataract surgery.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1.5,
+          "documentWeight": 2,
+          "scoreContribution": 3
+        },
+        {
+          "question": "What are the room rent limits in this policy?",
+          "answer": "Yes, for Plan A, the daily room rent is capped at 1% of the Sum Insured, and ICU charges are capped at 2% of the Sum Insured. These limits do not apply if the treatment is for a listed procedure in a Preferred Provider Network (PPN).",
+          "traceabilityScore": 0,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1.5,
+          "documentWeight": 2,
+          "scoreContribution": 3
+        },
+        {
+          "question": "Does this policy cover AYUSH treatments?",
+          "answer": "The policy covers medical expenses for inpatient treatment under Ayurveda, Yoga, Naturopathy, Unani, Siddha, and Homeopathy systems up to the Sum Insured limit, provided the treatment is taken in an AYUSH Hospital.",
+          "traceabilityScore": 0,
+          "qualityScore": 30,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is there any co-payment clause in this policy?",
+          "answer": "Co-payment of 5% on all claims for Insured Person aged less than equal to 75 years on policy inception. [Traceability: Keyword match: 'co-payment' found in query] [Confidence: High] [Sections: 7.5.28, 7.5.28, 5.10.1, 5.10.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Are dental treatments covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.5.17, 2.5.17, 7.5, 7.5.1 [Traceability: Checked sections: 2.5.17, 2.5.17, 7.5, 7.5.1] [Confidence: Low] [Sections: 2.5.17, 2.5.17, 7.5, 7.5.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What are the ambulance charges covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 7.5, 7.5, 7.5, 7.5 [Traceability: Checked sections: 7.5, 7.5, 7.5, 7.5] [Confidence: Low] [Sections: 7.5, 7.5, 7.5, 7.5]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is mental illness covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.3.23, 1.3.23, 2.5.3, 1.3.28 [Traceability: Checked sections: 1.3.23, 1.3.23, 2.5.3, 1.3.28] [Confidence: Low] [Sections: 1.3.23, 1.3.23, 2.5.3, 1.3.28]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What is the waiting period for specific diseases?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22 [Traceability: Checked sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22] [Confidence: Low] [Sections: 1.2.22, 1.2.23, 1.2.24, 1.2.22]",
+          "traceabilityScore": 0,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Is COVID-19 treatment covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.53, 2.53, 2.53, 2.53 [Traceability: Checked sections: 2.53, 2.53, 2.53, 2.53] [Confidence: Low] [Sections: 2.53, 2.53, 2.53, 2.53]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Are plastic surgery expenses covered?",
+          "answer": "Information not found in the provided document sections. Checked sections: 1.3.38, 1.3.38, 1.1.1, 7.5.5 [Traceability: Checked sections: 1.3.38, 1.3.38, 1.1.1, 7.5.5] [Confidence: Low] [Sections: 1.3.38, 1.3.38, 1.1.1, 7.5.5]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "Are congenital diseases covered under this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1 [Traceability: Checked sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1] [Confidence: Low] [Sections: 7.5.1, 7.5.1, 7.5.1, 7.5.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What day care procedures are covered?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.5.1, 2.14, 2.22.1, 2.5.1 [Traceability: Checked sections: 2.5.1, 2.14, 2.22.1, 2.5.1] [Confidence: Low] [Sections: 2.5.1, 2.14, 2.22.1, 2.5.1]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        },
+        {
+          "question": "What is the sum insured available in this policy?",
+          "answer": "Information not found in the provided document sections. Checked sections: 2.20, 2.20, 2.20, 2.20 [Traceability: Checked sections: 2.20, 2.20, 2.20, 2.20] [Confidence: Low] [Sections: 2.20, 2.20, 2.20, 2.20]",
+          "traceabilityScore": 100,
+          "qualityScore": 50,
+          "valid": true,
+          "questionWeight": 1,
+          "documentWeight": 2,
+          "scoreContribution": 2
+        }
+      ]
+    }
+  ]
+}
