@@ -111,7 +111,7 @@ const ChatPage = () => {
 
     try {
       // Get AI response
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/chat/query`, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/query`, {
         query: input,
         userId: user.uid
       });
