@@ -18,3 +18,4 @@ venv/
 chroma_db/
 *.db
 *.sqlite
+node_modules/

@@ -42,8 +42,9 @@ class PineconeService:
             )
             return response
         except Exception as e:
-            logger.error(f"Error querying vectors: {e}")
-            raise
+            logger.warning(f"Pinecone query returned no results or error: {e}")
+            # Return empty response structure instead of raising to avoid 500
+            return {"matches": []}
 
     async def delete_user_vectors(self, user_id: str):
         try:

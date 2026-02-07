@@ -11,8 +11,8 @@ class Settings(BaseSettings):
     SKIP_AUTH: bool = False
     
     # Model Config
-    EMBEDDING_MODEL: str = "models/embedding-001"
-    GENERATION_MODEL: str = "gemini-pro"
+    EMBEDDING_MODEL: str = "models/text-embedding-004"
+    GENERATION_MODEL: str = "gemini-1.5-flash"
     
     class Config:
         env_file = ".env"

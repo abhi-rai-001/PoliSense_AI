@@ -159,7 +159,7 @@ ${parsed.text || parsed.html || 'No content'}
 
 export async function queryDocuments(req, res) {
   try {
-    const { question } = req.body;
+    const question = req.body.query || req.body.question;
     const userId = req.body.userId;
     
     // Ensure we have a valid Clerk user ID
