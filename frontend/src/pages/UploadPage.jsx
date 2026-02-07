@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion"; // eslint-disable-line no-unused-vars
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import GradientText from "../animations/GradientText";
@@ -39,7 +39,7 @@ export default function UploadPage() {
       if (!user?.uid) return;
       
       try {
-        await axios.delete("https://polisense-backend.onrender.com/user/clear-documents", {
+        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/user/clear-documents`, {
           data: { userId: user.uid } // Use actual Firebase user ID
         });
       } catch (error) {
@@ -94,7 +94,7 @@ export default function UploadPage() {
       
       console.log("DEBUG: FormData userId:", formData.get("userId")); // Add this debug line
       
-      await axios.post("https://polisense-backend.onrender.com/user/upload", formData, {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
       

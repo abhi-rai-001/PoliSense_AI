@@ -250,3 +250,20 @@ textarea::-webkit-scrollbar-thumb:hover {
             transform: translateX(0);
           }
         }
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2.5rem !important;
+    line-height: 1.2 !important;
+  }
+  
+  h2 {
+    font-size: 2rem !important;
+    line-height: 1.2 !important;
+  }
+  
+  .text-5xl, .text-6xl, .text-7xl {
+    font-size: 2.5rem !important;
+    line-height: 1.2 !important;
+  }
+}

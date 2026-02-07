@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GradientText from "../animations/GradientText";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion } from "framer-motion"; // eslint-disable-line no-unused-vars
 import { signInWithGoogle } from "../lib/firebase";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -10,7 +10,7 @@ export default function SignInPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, loginAsDev } = useAuth();
 
   // Redirect if already signed in
   React.useEffect(() => {
@@ -33,6 +33,12 @@ export default function SignInPage() {
       setLoading(false);
     }
   };
+
+  const handleDevLogin = () => {
+    loginAsDev();
+    navigate("/upload");
+  };
+
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
@@ -106,6 +112,15 @@ export default function SignInPage() {
                   </Link>
                 </p>
               </div>
+            </div>
+            {/* Dev Login for Testing */}
+            <div className="mt-4 text-center">
+              <button 
+                onClick={handleDevLogin}
+                className="text-gray-600 text-xs hover:text-gray-400 transition-colors"
+              >
+                (Dev Login)
+              </button>
             </div>
           </div>
         </motion.div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import GradientText from '@/animations/GradientText'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion' // eslint-disable-line no-unused-vars
 import { Link } from 'react-router-dom'
 
 const FAQ = () => {

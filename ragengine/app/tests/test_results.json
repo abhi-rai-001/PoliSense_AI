@@ -1,0 +1,136 @@
+{
+  "test_cases": [
+    {
+      "document": "https://hackrx.blob.core.windows.net/assets/policy.pdf?sv=2023-01-03&st=2025-07-04T09%3A11%3A24Z&se=2027-07-05T09%3A11%3A00Z&sr=b&sp=r&sig=N4a9OU0w0QXO6AOIBiu4bpl7AXvEZogeT%2FjUHNO7HzQ%3D",
+      "results": [
+        {
+          "question": "What is the waiting period for pre-existing diseases?",
+          "answer": "Information not found in the provided document sections.",
+          "expected": "The waiting period is 48 months for pre-existing conditions.",
+          "is_correct": false,
+          "traceability": {
+            "clause_id": "N/A",
+            "score": 0.0,
+            "text": "No matching clauses found in searched sections..."
+          },
+          "confidence": 0.0,
+          "explanation": "The document sections searched did not contain information answering this question. This could mean either: (1) The information is not covered in this document, or (2) The relevant section uses different terminology than your query.",
+          "processing_time": 109.00636315345764
+        },
+        {
+          "question": "Does this policy cover maternity expenses?",
+          "answer": "Information not found in the provided document sections.",
+          "expected": "Yes, the policy covers maternity expenses up to \u20b950,000.",
+          "is_correct": false,
+          "traceability": {
+            "clause_id": "N/A",
+            "score": 0.0,
+            "text": "No matching clauses found in searched sections..."
+          },
+          "confidence": 0.0,
+          "explanation": "The document sections searched did not contain information answering this question. This could mean either: (1) The information is not covered in this document, or (2) The relevant section uses different terminology than your query.",
+          "processing_time": 109.79779386520386
+        },
+        {
+          "question": "What is the maximum coverage amount for hospitalization?",
+          "answer": "Information not found in the provided document sections.",
+          "expected": "The maximum coverage amount is \u20b95,00,000 per year.",
+          "is_correct": false,
+          "traceability": {
+            "clause_id": "N/A",
+            "score": 0.0,
+            "text": "No matching clauses found in searched sections..."
+          },
+          "confidence": 0.0,
+          "explanation": "The document sections searched did not contain information answering this question. This could mean either: (1) The information is not covered in this document, or (2) The relevant section uses different terminology than your query.",
+          "processing_time": 110.51691579818726
+        }
+      ],
+      "success_rate": 0.0,
+      "avg_traceability_score": 0.0,
+      "avg_confidence": 0.0,
+      "total_processing_time": 110.51697611808777
+    },
+    {
+      "document": "https://hackrx.blob.core.windows.net/assets/policy.pdf?sv=2023-01-03&st=2025-07-04T09%3A11%3A24Z&se=2027-07-05T09%3A11%3A00Z&sr=b&sp=r&sig=N4a9OU0w0QXO6AOIBiu4bpl7AXvEZogeT%2FjUHNO7HzQ%3D",
+      "results": [
+        {
+          "question": "What is the deductible amount for collision coverage?",
+          "answer": "```json\n{\n    \"answer\": \"Information not found\",\n    \"clause_id\": null,\n    \"clause_text\": \"The provided text contains contact details for various Insurance Ombudsman offices and mentions a 'National ",
+          "expected": "The deductible is \u20b95,000 for collision coverage.",
+          "is_correct": false,
+          "traceability": {
+            "clause_id": "pdf_1.2",
+            "score": 0.3,
+            "text": "Email: Tel.: 0484 - 2358759 bimalokpal.ahmedabad@cioins.co.in Email: Office of the Insurance Ombudsm..."
+          },
+          "confidence": 0.3,
+          "explanation": "Response parsing encountered issues",
+          "processing_time": 77.23831105232239
+        },
+        {
+          "question": "Does this policy cover roadside assistance?",
+          "answer": "```json\n{\n    \"answer\": \"Information not found.\",\n    \"clause_id\": \"N/A\",\n    \"clause_text\": \"The provided clauses primarily list contact information for various offices of the Insurance Ombudsman acr",
+          "expected": "Yes, 24/7 roadside assistance is included.",
+          "is_correct": false,
+          "traceability": {
+            "clause_id": "pdf_1.2",
+            "score": 0.3,
+            "text": "Email: Tel.: 0484 - 2358759 bimalokpal.ahmedabad@cioins.co.in Email: Office of the Insurance Ombudsm..."
+          },
+          "confidence": 0.3,
+          "explanation": "Response parsing encountered issues",
+          "processing_time": 80.33579111099243
+        }
+      ],
+      "success_rate": 0.0,
+      "avg_traceability_score": 0.3,
+      "avg_confidence": 0.3,
+      "total_processing_time": 80.33581280708313
+    },
+    {
+      "document": "https://hackrx.blob.core.windows.net/assets/policy.pdf?sv=2023-01-03&st=2025-07-04T09%3A11%3A24Z&se=2027-07-05T09%3A11%3A00Z&sr=b&sp=r&sig=N4a9OU0w0QXO6AOIBiu4bpl7AXvEZogeT%2FjUHNO7HzQ%3D",
+      "results": [
+        {
+          "question": "What is the grace period for premium payments?",
+          "answer": "```json\n{\n    \"answer\": \"Information not found\",\n    \"clause_id\": null,\n    \"clause_text\": \"The provided text exclusively contains contact details and addresses for various Insurance Ombudsman offices",
+          "expected": "There is a 30-day grace period for premium payments.",
+          "is_correct": false,
+          "traceability": {
+            "clause_id": "pdf_1.2",
+            "score": 0.3,
+            "text": "Email: Tel.: 0484 - 2358759 bimalokpal.ahmedabad@cioins.co.in Email: Office of the Insurance Ombudsm..."
+          },
+          "confidence": 0.3,
+          "explanation": "Response parsing encountered issues",
+          "processing_time": 3.1521568298339844
+        },
+        {
+          "question": "Can I increase my coverage amount after policy issuance?",
+          "answer": "```json\n{\n    \"answer\": \"Information not found\",\n    \"clause_id\": null,\n    \"clause_text\": \"The provided clauses detail the contact information and jurisdictions of various Insurance Ombudsman offices",
+          "expected": "Yes, you can increase coverage during annual renewal.",
+          "is_correct": false,
+          "traceability": {
+            "clause_id": "pdf_1.2",
+            "score": 0.3,
+            "text": "Email: Tel.: 0484 - 2358759 bimalokpal.ahmedabad@cioins.co.in Email: Office of the Insurance Ombudsm..."
+          },
+          "confidence": 0.3,
+          "explanation": "Response parsing encountered issues",
+          "processing_time": 5.962751865386963
+        }
+      ],
+      "success_rate": 0.0,
+      "avg_traceability_score": 0.3,
+      "avg_confidence": 0.3,
+      "total_processing_time": 5.962769031524658
+    }
+  ],
+  "overall_success_rate": 0.0,
+  "overall_traceability_score": 0.19999999999999998,
+  "overall_confidence": 0.19999999999999998,
+  "performance_benchmark": {
+    "avg_processing_time": 65.60518598556519,
+    "total_processing_time": 196.81555795669556
+  }
+}

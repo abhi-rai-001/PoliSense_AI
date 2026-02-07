@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { auth, onAuthStateChange } from '../lib/firebase';
+import { onAuthStateChange } from '../lib/firebase';
 
 const AuthContext = createContext();
 
@@ -24,11 +24,23 @@ export const AuthProvider = ({ children }) => {
     return unsubscribe;
   }, []);
 
+  const loginAsDev = () => {
+    setUser({
+      uid: 'dev-user-123',
+      email: 'dev@example.com',
+      displayName: 'Dev User',
+      photoURL: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Dev'
+    });
+    setLoading(false);
+  };
+
+
   const value = {
     user,
     loading,
     isSignedIn: !!user,
-    userId: user?.uid
+    userId: user?.uid,
+    loginAsDev
   };
 
   return (

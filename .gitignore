@@ -1,6 +1,7 @@
 # Debug files
 debug_*.py
 temp_*.py
+.env
 
 # OS files
 .DS_Store

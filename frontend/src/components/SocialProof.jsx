@@ -36,7 +36,7 @@ const SocialProof = () => {
     }
   ]
 
-  const stats = [
+  const stats = [ // eslint-disable-line no-unused-vars
     { 
       icon: <FaUsers className="w-8 h-8" />, 
       number: "10,000+", 

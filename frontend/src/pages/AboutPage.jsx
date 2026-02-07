@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion"; // eslint-disable-line no-unused-vars
 import GradientText from '../animations/GradientText';
 import AILogo from '../components/GeometricLogo';
 import { Link } from 'react-router-dom';

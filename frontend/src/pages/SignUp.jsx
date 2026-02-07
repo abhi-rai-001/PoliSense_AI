@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion } from "framer-motion"; // eslint-disable-line no-unused-vars
 import { signInWithGoogle } from "../lib/firebase";
 import { useAuth } from "../contexts/AuthContext";
 import GradientText from "../animations/GradientText";

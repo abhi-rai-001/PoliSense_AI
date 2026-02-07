@@ -1,35 +1,70 @@
-
-import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { FaRobot, FaUser, FaPaperPlane, FaFileUpload } from "react-icons/fa";
-import GradientText from "../animations/GradientText";
-import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Send, Upload, X, FileText, Bot, User, Loader2, Sparkles, AlertCircle } from "lucide-react";
+// import ReactMarkdown from 'react-markdown';
 import { useAuth } from "../contexts/AuthContext";
+// import { getChatResponse } from "../lib/gemini";
+import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default function ChatPage() {
-  const navigate = useNavigate();
-  const location = useLocation();
+// Gradient Text Component
+const GradientText = ({ children, className = "", colors = ["#40ffaa", "#4079ff", "#40ffaa"], animationSpeed = 8, showBorder = false }) => {
+  const gradientStyle = {
+    backgroundImage: `linear-gradient(to right, ${colors.join(", ")})`,
+    animationDuration: `${animationSpeed}s`,
+  };
+
+  return (
+    <div className={`relative flex max-w-fit items-center justify-center rounded-[1.25rem] border-white/10 bg-white/5 px-2 py-1 md:px-6 md:py-2 shadow-inner backdrop-blur-[10px] transition-transform duration-300 hover:scale-105 cursor-default ${className}`}>
+        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 transition-opacity duration-300 hover:opacity-100 rounded-[1.25rem]"></span>
+        <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#40ffaa] via-[#4079ff] to-[#40ffaa] opacity-[0.1] blur-xl rounded-[1.25rem] animate-gradient"></div>
+        
+        {showBorder && (
+           <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#40ffaa] via-[#4079ff] to-[#40ffaa] rounded-[1.25rem] p-[1px] animate-gradient">
+              <div className="w-full h-full bg-black rounded-[1.25rem]"></div>
+           </div>
+        )}
+
+      <span className="relative z-10 inline-block bg-gradient-to-r from-[#40ffaa] via-[#4079ff] to-[#40ffaa] bg-[length:300%_100%] bg-clip-text text-transparent animate-gradient font-bold" style={gradientStyle}>
+        {children}
+      </span>
+    </div>
+  );
+};
+
+
+const ChatPage = () => {
   const { user } = useAuth();
-  const messagesEndRef = useRef(null);
+  const location = useLocation();
+  const navigate = useNavigate();
   const [messages, setMessages] = useState([
-    { 
-      sender: "ai", 
-      text: "Hi there! I'm ready to help you analyze your uploaded documents. What would you like to know?" 
-    },
+    {
+      id: 1,
+      text: "Hello! I've analyzed your document. What would you like to know about it?",
+      sender: "ai",
+      timestamp: new Date()
+    }
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
-    let isPageVisible = true;
+    scrollToBottom();
+  }, [messages]);
 
+  // Clear documents when leaving the page or closing the tab
+  useEffect(() => {
     const clearDocuments = async () => {
       if (!user?.uid) return;
-      
       try {
-        await axios.delete("https://polisense-backend.onrender.com/user/clear-all-documents", {
-          data: { userId: user.uid } // Make sure this uses user.uid, not hardcoded value
+        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/user/clear-all-documents`, {
+          data: { userId: user.uid }
         });
         console.log("Documents cleared for user:", user.uid);
       } catch (error) {
@@ -38,264 +73,279 @@ export default function ChatPage() {
     };
 
     const handleVisibilityChange = () => {
-      if (document.hidden && isPageVisible) {
-        const navigationType = performance.getEntriesByType('navigation')[0]?.type;
-        if (navigationType !== 'reload') {
-          clearDocuments();
-        }
-      }
-      isPageVisible = !document.hidden;
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      
-      const navigationType = performance.getEntriesByType('navigation')[0]?.type;
-      if (navigationType !== 'reload') {
+      if (document.hidden && user?.uid) {
         clearDocuments();
       }
     };
-  }, [user?.id]);
 
-  // Auto-scroll to bottom when messages change
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+    // Handle visibility change (tab switch/minimize)
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, isLoading]);
+    // Handle beforeunload (tab close/refresh)
+    window.addEventListener("beforeunload", clearDocuments);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("beforeunload", clearDocuments);
+      if (user?.uid) {
+        const blob = new Blob([JSON.stringify({ userId: user.uid })], { type: 'application/json' });
+        navigator.sendBeacon(`${import.meta.env.VITE_BACKEND_URL}/user/clear-all-documents`, blob);
+      }
+    };
+  }, [user?.uid]);
+
 
   const handleSend = async () => {
-    if (input.trim() === "" || isLoading) return;
-    
-    if (!user?.uid) {
-      toast.error("User not authenticated");
-      return;
-    }
-    
-    setMessages((prev) => [...prev, { sender: "user", text: input }]);
-    const userQuestion = input;
+    if (!input.trim()) return;
+
+    const userMessage = {
+      id: messages.length + 1,
+      text: input,
+      sender: "user",
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
-    
+
     try {
-      const response = await axios.post("https://polisense-backend.onrender.com/user/query", {
-        question: userQuestion,
-        userId: user.uid // Use actual Firebase user ID
+      // Get AI response
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/chat/query`, {
+        query: input,
+        userId: user.uid
       });
+
+      console.log("Full AI Response:", response.data);
+
+      const aiResponseText = response.data.answer || "I couldn't generate a response.";
       
+      // Parse structured data if available
+      let decision = null;
+      let amount = null;
+      let justification = null;
+      let cleanText = aiResponseText;
+
+      const jsonMatch = aiResponseText.match(/```json\n([\s\S]*?)\n```/) || aiResponseText.match(/{[\s\S]*}/);
+      
+      if (jsonMatch) {
+         try {
+            const jsonStr = jsonMatch[1] || jsonMatch[0];
+            const parsed = JSON.parse(jsonStr);
+            if (parsed.Decision) {
+               decision = parsed.Decision;
+               amount = parsed.Amount;
+               justification = parsed.Justification;
+               cleanText = justification || "I've analyzed the request.";
+            }
+         } catch (e) {
+            console.error("Failed to parse JSON from response", e);
+         }
+      }
+
+      if (response.data.decision) decision = response.data.decision;
+      if (response.data.amount) amount = response.data.amount;
+      if (response.data.justification) {
+         justification = response.data.justification;
+         cleanText = justification;
+      }
+
       const aiMessage = {
+        id: messages.length + 2,
+        text: cleanText,
         sender: "ai",
-        text: response.data.answer || "No response available",
-        Decision: response.data.Decision,
-        Amount: response.data.Amount,
-        Justification: response.data.Justification,
-        sources: response.data.sources || []
+        timestamp: new Date(),
+        Decision: decision,
+        Amount: amount,
+        Justification: justification
       };
-      
-      setMessages((prev) => [...prev, aiMessage]);
-      
+
+      setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
-      console.error('Query failed:', error);
-      setMessages((prev) => [...prev, { 
-        sender: "ai", 
-        text: "I apologize, but I encountered an error while processing your question. Please try again or rephrase your query."
-      }]);
+      console.error("Chat error:", error);
+      toast.error("Failed to get response");
+      
+      const errorMessage = {
+        id: messages.length + 2,
+        text: "Sorry, I encountered an error processing your request.",
+        sender: "ai",
+        timestamp: new Date(),
+        isError: true
+      };
+      setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
-      <header className="px-4 sm:px-6 py-4 sm:py-6 border-b border-gray-800/50 backdrop-blur-sm bg-black/20">
-        <div className="max-w-4xl mx-auto text-center">
-          <GradientText
-            colors={["#40ffaa", "#4079ff", "#40ffaa"]}
-            animationSpeed={8}
-            showBorder={false}
-            className="text-xl sm:text-2xl mx-auto md:text-3xl font-bold"
+    <div className="flex flex-col h-screen bg-black text-white font-sans selection:bg-purple-500/30">
+      <Toaster position="top-right" />
+      
+      {/* Header */}
+      <header className="flex-none p-4 border-b border-white/10 bg-black/50 backdrop-blur-lg z-10">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg">
+              <Bot className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <GradientText colors={["#40ffaa", "#4079ff", "#40ffaa"]} className="text-xl font-semibold">
+                Polisense AI
+              </GradientText>
+              <div className="flex items-center space-x-2 mt-1">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <span className="text-xs text-gray-400">Online & Ready</span>
+              </div>
+            </div>
+          </div>
+          <button 
+            onClick={() => navigate("/")}
+            className="p-2 hover:bg-white/5 rounded-full transition-colors text-gray-400 hover:text-white"
           >
-            AI Document Assistant
-          </GradientText>
-          <p className="text-gray-400 mt-2 text-xs sm:text-sm md:text-base">
-            Ask intelligent questions about your uploaded documents
-          </p>
+            <X className="w-5 h-5" />
+          </button>
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto px-2 sm:px-4 py-4 sm:py-6">
-        <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
-          {messages.map((msg, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-              className={`flex items-start gap-4 ${
-                msg.sender === "user" ? "justify-end" : "justify-start"
-              }`}
-            >
-              {msg.sender === "ai" && (
-                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-                  <FaRobot className="text-white text-sm" />
-                </div>
-              )}
-
-              <div
-                className={`max-w-[85%] sm:max-w-[75%] px-3 sm:px-4 md:px-6 py-3 sm:py-4 rounded-2xl shadow-lg ${
-                  msg.sender === "ai"
-                    ? "bg-gray-800/60 backdrop-blur-sm border border-gray-700/50 text-gray-100"
-                    : "bg-gradient-to-r from-blue-600 to-purple-600 text-white ml-auto"
-                }`}
+      {/* Chat Area */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-hide">
+        <div className="max-w-3xl mx-auto space-y-6 pb-4">
+          <AnimatePresence mode="popLayout">
+            {messages.map((msg) => (
+              <motion.div
+                key={msg.id}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3 }}
+                className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
               >
-                {msg.sender === "ai" && msg.Decision ? (
-                  <div className="space-y-4">
-                    {/* Decision Badge */}
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        msg.Decision === 'Approved' ? 'bg-green-500/20 text-green-400 border border-green-500/30' :
-                        msg.Decision === 'Rejected' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
-                        msg.Decision === 'Partially Approved' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
-                        'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                      }`}>
-                        {msg.Decision}
-                      </span>
-                      {msg.Amount && msg.Amount !== "Not applicable" && (
-                        <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-400 border border-purple-500/30">
-                          {msg.Amount}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Main Response */}
-                    <div className="text-gray-200 leading-relaxed">
-                      {msg.Justification?.Summary || msg.Justification || msg.text}
-                    </div>
-
-                    {/* Policy Clauses */}
-                    {msg.Justification?.Clauses && msg.Justification.Clauses.length > 0 && (
-                      <div className="mt-4 pt-3 border-t border-gray-600/30">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-sm font-medium text-gray-300">📋 Document References:</span>
-                        </div>
-                        <div className="space-y-2">
-                          {msg.Justification.Clauses.map((clause, idx) => (
-                            <div key={idx} className="bg-gray-700/30 rounded-lg p-3 border-l-2 border-blue-400/50">
-                              <div className="text-xs text-blue-400 font-medium mb-1">
-                                {clause.Reference}
-                              </div>
-                              <div className="text-sm text-gray-300 italic">
-                                "{clause.Text}"
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Sources */}
-                    {/* {msg.sources && msg.sources.length > 0 && (
-                      <div className="pt-3 border-t border-gray-600/30">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-sm font-medium text-gray-300">📚 Sources:</span>
-                        </div>
-                        <div className="space-y-1">
-                          {msg.sources.map((source, idx) => (
-                            <div key={idx} className="text-xs text-gray-400 flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 bg-gray-500 rounded-full"></span>
-                              {source.filename || `Document ${idx + 1}`}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )} */}
+                <div className={`flex max-w-[85%] md:max-w-[75%] ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"} items-start gap-3`}>
+                  
+                  {/* Icon */}
+                  <div className={`flex-none w-8 h-8 rounded-full flex items-center justify-center mt-1 shadow-lg ${
+                    msg.sender === "user" 
+                      ? "bg-gradient-to-br from-blue-600 to-purple-600" 
+                      : "bg-gradient-to-br from-emerald-600 to-teal-600"
+                  }`}>
+                    {msg.sender === "user" ? <User className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />}
                   </div>
-                ) : (
-                  <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap">
-                    {msg.text}
-                  </p>
-                )}
-              </div>
 
-              {msg.sender === "user" && (
-                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg">
-                  <FaUser className="text-white text-sm" />
+                  {/* Message Bubble */}
+                  <div className={`relative px-4 py-3 md:px-6 md:py-4 rounded-2xl shadow-xl backdrop-blur-sm border ${
+                    msg.sender === "user"
+                      ? "bg-blue-600/20 border-blue-500/30 text-blue-50"
+                      : "bg-white/5 border-white/10 text-gray-100"
+                  }`}>
+                    {/* Structured Decision Display */}
+                    {msg.sender === "ai" && msg.Decision ? (
+                       <div className="space-y-3">
+                          <div className={`flex items-center space-x-2 font-bold text-lg mb-2 ${
+                             msg.Decision === "Approved" ? "text-green-400" :
+                             msg.Decision === "Rejected" ? "text-red-400" : "text-yellow-400"
+                          }`}>
+                             {msg.Decision === "Approved" ? <div className="w-3 h-3 rounded-full bg-green-500" /> :
+                              msg.Decision === "Rejected" ? <div className="w-3 h-3 rounded-full bg-red-500" /> :
+                              <div className="w-3 h-3 rounded-full bg-yellow-500" />}
+                             <span>{msg.Decision}</span>
+                          </div>
+                          
+                          {msg.Amount && (
+                             <div className="text-xl font-mono text-white bg-white/5 p-2 rounded inline-block">
+                                {msg.Amount}
+                             </div>
+                          )}
+
+                           <div className="h-px bg-white/20 my-2" />
+
+                          <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap">
+                            {msg.text}
+                          </p>
+                       </div>
+                    ) : (
+                      <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap">
+                        {msg.text}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Timestamp */}
+                  <span className="text-[10px] text-gray-500 mt-2 select-none">
+                    {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
                 </div>
-              )}
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </AnimatePresence>
 
           {isLoading && (
-            <motion.div
+            <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="flex items-start gap-4"
+              className="flex justify-start items-center space-x-2 pl-12"
             >
-              <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                <FaRobot className="text-white text-sm" />
+              <div className="flex space-x-1">
+                <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
               </div>
-              <div className="bg-gray-800/60 backdrop-blur-sm border border-gray-700/50 px-6 py-4 rounded-2xl">
-                <div className="flex items-center space-x-2">
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-                  </div>
-                  <span className="text-gray-400 text-sm">Analyzing your documents...</span>
-                </div>
-              </div>
+              <span className="text-xs text-gray-400 animate-pulse">Analyzing document...</span>
             </motion.div>
           )}
-
-          {/* Auto-scroll anchor */}
           <div ref={messagesEndRef} />
         </div>
-      </main>
+      </div>
 
-      <footer className="px-2 sm:px-4 py-3 sm:py-4 border-t border-gray-800/50 backdrop-blur-sm bg-black/20">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-2 sm:gap-3 bg-gray-800/50 backdrop-blur-sm rounded-full border border-gray-700/50 p-2">
-
+      {/* Input Area */}
+      <div className="flex-none p-4 md:p-6 bg-black/80 backdrop-blur-xl border-t border-white/10">
+        <div className="max-w-3xl mx-auto relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="relative flex items-end gap-2 bg-white/5 rounded-xl border border-white/10 p-2 focus-within:border-purple-500/50 focus-within:bg-white/10 transition-all duration-300">
+            <button className="p-2 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-colors" title="Upload new document">
+               <Upload className="w-5 h-5" />
+            </button>
             
-            <input
-              type="text"
+            <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Ask anything about your documents..."
-              className="flex-1 bg-transparent text-white placeholder-gray-400 focus:outline-none px-2 py-2 text-sm sm:text-base"
-              disabled={isLoading}
+              onKeyDown={handleKeyPress}
+              placeholder="Ask about your document..."
+              className="flex-1 bg-transparent text-white placeholder-gray-500 text-sm md:text-base p-2 max-h-32 min-h-[44px] focus:outline-none resize-none scrollbar-hide"
+              rows="1"
             />
-            
+
             <button
               onClick={handleSend}
-              disabled={isLoading || input.trim() === ""}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white p-3 rounded-full transition-all duration-200 hover:scale-105"
+              disabled={!input.trim() || isLoading}
+              className={`p-2 rounded-lg transition-all duration-300 ${
+                input.trim() && !isLoading
+                  ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/30 hover:scale-105 active:scale-95" 
+                  : "bg-white/5 text-gray-500 cursor-not-allowed"
+              }`}
             >
-              {isLoading ? (
-                <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
-              ) : (
-                <FaPaperPlane size={16} />
-              )}
+              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
             </button>
           </div>
-          
-          <p className="text-center text-xs text-gray-500 mt-3">
-            Press Enter to send • Upload documents to get started
-          </p>
+          <div className="mt-2 text-center">
+            <p className="text-[10px] text-gray-600">
+              AI can make mistakes. Verify important information.
+            </p>
+          </div>
         </div>
-      </footer>
+      </div>
     </div>
   );
-}
+};
+
+export default ChatPage;

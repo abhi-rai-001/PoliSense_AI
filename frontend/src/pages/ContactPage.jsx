@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion } from "framer-motion"; // eslint-disable-line no-unused-vars
 import { FaEnvelope, FaInstagram, FaLinkedin, FaMapMarkerAlt } from "react-icons/fa";
 import GradientText from "../animations/GradientText";
 
