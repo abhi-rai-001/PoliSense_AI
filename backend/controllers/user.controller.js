@@ -23,10 +23,13 @@ export async function uploadFile(req, res) {
     // Clear previous documents first
     try {
       await uploadMongo.deleteMany({ userId: userId });
-      await axios.delete(`${PYTHON_SERVICE_URL}/clear_all_documents`);
+      await axios.post(`${PYTHON_SERVICE_URL}/clear_user_documents`, 
+        { user_id: userId },
+        { headers: { Authorization: `Bearer ${process.env.BEARER_TOKEN}` } }
+      );
       console.log("✅ Cleared previous documents before upload");
     } catch (clearError) {
-      console.error("❌ Failed to clear previous documents:", clearError.message);
+      console.error("❌ Failed to clear previous documents:", clearError.response?.data || clearError.message);
     }
 
     let parsedText = null;
@@ -121,13 +124,10 @@ ${parsed.text || parsed.html || 'No content'}
         console.log(`🔄 Sending to vector DB - User: ${userId}, Content length: ${parsedText.length}`);
         
         const vectorResponse = await axios.post(`${PYTHON_SERVICE_URL}/add_document`, {
-          doc_id: newFile._id.toString(),
-          content: parsedText,
-          filename: originalname,
-          user_id: userId,
-          document_type: mimetype === 'application/pdf' ? 'PDF' : 
-                        mimetype.includes('word') ? 'DOCX' : 
-                        mimetype === 'text/email' ? 'Email' : 'Unknown'
+          text: parsedText,
+          user_id: userId
+        }, {
+          headers: { Authorization: `Bearer ${process.env.BEARER_TOKEN}` }
         });
         
         console.log("✅ Vector DB response:", vectorResponse.data);
@@ -178,8 +178,10 @@ export async function queryDocuments(req, res) {
     console.log(`📊 MongoDB documents for user ${userId}: ${mongoCount}`);
 
     const response = await axios.post(`${PYTHON_SERVICE_URL}/query`, {
-      question: question,
+      query: question,
       user_id: userId
+    }, {
+      headers: { Authorization: `Bearer ${process.env.BEARER_TOKEN}` }
     });
 
     console.log(`🤖 RAG response for user ${userId}:`, response.data);
@@ -273,6 +275,8 @@ export async function clearAllDocuments(req, res) {
     try {
       const pythonResponse = await axios.post(`${PYTHON_SERVICE_URL}/clear_user_documents`, {
         user_id: userId
+      }, {
+        headers: { Authorization: `Bearer ${process.env.BEARER_TOKEN}` }
       });
       console.log("Python service response:", pythonResponse.data);
     } catch (pythonError) {
