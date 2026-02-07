@@ -18,7 +18,8 @@ class GeminiService:
                 model=self.embedding_model,
                 content=text,
                 task_type="retrieval_document",
-                title="Embedding"
+                title="Embedding",
+                output_dimensionality=settings.EMBEDDING_DIMENSION
             )
             return result['embedding']
         except Exception as e:
