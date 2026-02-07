@@ -28,8 +28,8 @@ services:
         sync: false
       - key: PINECONE_API_KEY
         sync: false
-      - key: PINECONE_ENVIRONMENT
-        value: us-east-1
+      - key: PINECONE_INDEX_NAME
+        value: polisense-index
       - key: BEARER_TOKEN
         fromService:
           type: web
