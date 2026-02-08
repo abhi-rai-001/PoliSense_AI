@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     
     # Model Config
     EMBEDDING_MODEL: str = "models/gemini-embedding-001"
-    GENERATION_MODEL: str = "gemini-1.5-flash"
+    GENERATION_MODEL: str = "models/gemini-2.0-flash"
     EMBEDDING_DIMENSION: int = 768
     
     class Config:
