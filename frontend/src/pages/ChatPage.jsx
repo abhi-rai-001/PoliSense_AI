@@ -1,38 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Upload, X, FileText, Bot, User, Loader2, Sparkles, AlertCircle } from "lucide-react";
-// import ReactMarkdown from 'react-markdown';
+import { Send, X, Bot, User, Loader2, Sparkles } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
-// import { getChatResponse } from "../lib/gemini";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-
-// Gradient Text Component
-const GradientText = ({ children, className = "", colors = ["#40ffaa", "#4079ff", "#40ffaa"], animationSpeed = 8, showBorder = false }) => {
-  const gradientStyle = {
-    backgroundImage: `linear-gradient(to right, ${colors.join(", ")})`,
-    animationDuration: `${animationSpeed}s`,
-  };
-
-  return (
-    <div className={`relative flex max-w-fit items-center justify-center rounded-[1.25rem] border-white/10 bg-white/5 px-2 py-1 md:px-6 md:py-2 shadow-inner backdrop-blur-[10px] transition-transform duration-300 hover:scale-105 cursor-default ${className}`}>
-        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 transition-opacity duration-300 hover:opacity-100 rounded-[1.25rem]"></span>
-        <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#40ffaa] via-[#4079ff] to-[#40ffaa] opacity-[0.1] blur-xl rounded-[1.25rem] animate-gradient"></div>
-        
-        {showBorder && (
-           <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#40ffaa] via-[#4079ff] to-[#40ffaa] rounded-[1.25rem] p-[1px] animate-gradient">
-              <div className="w-full h-full bg-black rounded-[1.25rem]"></div>
-           </div>
-        )}
-
-      <span className="relative z-10 inline-block bg-gradient-to-r from-[#40ffaa] via-[#4079ff] to-[#40ffaa] bg-[length:300%_100%] bg-clip-text text-transparent animate-gradient font-bold" style={gradientStyle}>
-        {children}
-      </span>
-    </div>
-  );
-};
-
+import GradientText from "../animations/GradientText";
 
 const ChatPage = () => {
   const { user } = useAuth();
@@ -61,39 +34,41 @@ const ChatPage = () => {
   // Clear documents when leaving the page or closing the tab
   useEffect(() => {
     const clearDocuments = async () => {
-      if (!user?.uid) return;
       try {
-        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/user/clear-all-documents`, {
-          data: { userId: user.uid }
+        if (!user?.id) return;
+        
+        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/user/clear-documents`, {
+          data: { userId: user.id }
         });
-        console.log("Documents cleared for user:", user.uid);
+        console.log("Documents cleared for user:", user.id);
       } catch (error) {
         console.error('Failed to clear documents:', error);
       }
     };
 
     const handleVisibilityChange = () => {
-      if (document.hidden && user?.uid) {
+      if (document.hidden && user?.id) {
         clearDocuments();
       }
     };
 
-    // Handle visibility change (tab switch/minimize)
-    document.addEventListener("visibilitychange", handleVisibilityChange);
+    const handleBeforeUnload = (e) => {
+      // Send a synchronous beacon request before page unloads
+      // This is more reliable than fetch/axios during page unload
+      if (user?.id) {
+        const blob = new Blob([JSON.stringify({ userId: user.id })], { type: 'application/json' });
+        navigator.sendBeacon(`${import.meta.env.VITE_BACKEND_URL}/user/clear-documents`, blob);
+      }
+    };
 
-    // Handle beforeunload (tab close/refresh)
-    window.addEventListener("beforeunload", clearDocuments);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-      window.removeEventListener("beforeunload", clearDocuments);
-      if (user?.uid) {
-        const blob = new Blob([JSON.stringify({ userId: user.uid })], { type: 'application/json' });
-        navigator.sendBeacon(`${import.meta.env.VITE_BACKEND_URL}/user/clear-all-documents`, blob);
-      }
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [user?.uid]);
-
+  }, [user?.id]);
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -113,7 +88,7 @@ const ChatPage = () => {
       // Get AI response
       const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/query`, {
         query: input,
-        userId: user.uid
+        userId: user.id
       });
 
       console.log("Full AI Response:", response.data);
@@ -186,32 +161,45 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-black text-white font-sans selection:bg-purple-500/30">
-      <Toaster position="top-right" />
+    <div className="flex flex-col h-screen bg-[#050508] text-white font-sans selection:bg-cyan-500/30 overflow-hidden relative">
+      {/* Background Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[600px] bg-gradient-to-br from-cyan-500/5 via-violet-500/5 to-transparent blur-[120px] pointer-events-none z-0"></div>
+
+      <Toaster 
+        position="top-right" 
+        toastOptions={{
+          style: {
+            background: 'rgba(22, 22, 31, 0.9)',
+            backdropFilter: 'blur(10px)',
+            color: '#f0f0f5',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+          }
+        }}
+      />
       
       {/* Header */}
-      <header className="flex-none p-4 border-b border-white/10 bg-black/50 backdrop-blur-lg z-10">
+      <header className="flex-none p-4 border-b border-white/5 bg-black/40 backdrop-blur-xl z-10 sticky top-0">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg">
+            <div className="p-2 bg-gradient-to-br from-cyan-500 to-violet-500 rounded-xl shadow-lg shadow-cyan-500/20">
               <Bot className="w-6 h-6 text-white" />
             </div>
             <div>
-              <GradientText colors={["#40ffaa", "#4079ff", "#40ffaa"]} className="text-xl font-semibold">
+              <h2 className="text-xl font-bold font-['Clash_Grotesk'] tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-400">
                 Polisense AI
-              </GradientText>
-              <div className="flex items-center space-x-2 mt-1">
+              </h2>
+              <div className="flex items-center space-x-2 mt-0.5">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
-                <span className="text-xs text-gray-400">Online & Ready</span>
+                <span className="text-xs text-gray-400 font-medium">Online & Ready</span>
               </div>
             </div>
           </div>
           <button 
             onClick={() => navigate("/")}
-            className="p-2 hover:bg-white/5 rounded-full transition-colors text-gray-400 hover:text-white"
+            className="p-2.5 bg-white/5 hover:bg-white/10 border border-white/5 rounded-full transition-colors text-gray-400 hover:text-white"
           >
             <X className="w-5 h-5" />
           </button>
@@ -219,8 +207,8 @@ const ChatPage = () => {
       </header>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-hide">
-        <div className="max-w-3xl mx-auto space-y-6 pb-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-hide z-10 relative">
+        <div className="max-w-3xl mx-auto space-y-8 pb-4 pt-4">
           <AnimatePresence mode="popLayout">
             {messages.map((msg) => (
               <motion.div
@@ -231,43 +219,43 @@ const ChatPage = () => {
                 transition={{ duration: 0.3 }}
                 className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
               >
-                <div className={`flex max-w-[85%] md:max-w-[75%] ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"} items-start gap-3`}>
+                <div className={`flex max-w-[85%] md:max-w-[75%] ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"} items-end gap-3 group`}>
                   
                   {/* Icon */}
-                  <div className={`flex-none w-8 h-8 rounded-full flex items-center justify-center mt-1 shadow-lg ${
+                  <div className={`flex-none w-8 h-8 rounded-full flex items-center justify-center shadow-lg ${
                     msg.sender === "user" 
-                      ? "bg-gradient-to-br from-blue-600 to-purple-600" 
-                      : "bg-gradient-to-br from-emerald-600 to-teal-600"
+                      ? "bg-gradient-to-br from-cyan-500 to-blue-600" 
+                      : "bg-gradient-to-br from-violet-500 to-fuchsia-600"
                   }`}>
-                    {msg.sender === "user" ? <User className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />}
+                    {msg.sender === "user" ? <User className="w-4 h-4 text-white" /> : <Sparkles className="w-4 h-4 text-white" />}
                   </div>
 
                   {/* Message Bubble */}
-                  <div className={`relative px-4 py-3 md:px-6 md:py-4 rounded-2xl shadow-xl backdrop-blur-sm border ${
+                  <div className={`relative px-5 py-4 rounded-2xl shadow-xl backdrop-blur-md border transition-all ${
                     msg.sender === "user"
-                      ? "bg-blue-600/20 border-blue-500/30 text-blue-50"
-                      : "bg-white/5 border-white/10 text-gray-100"
+                      ? "bg-cyan-900/30 border-cyan-500/30 text-cyan-50 rounded-br-sm"
+                      : "bg-white/5 border-white/10 text-gray-200 rounded-bl-sm group-hover:bg-white/10 group-hover:border-white/20"
                   }`}>
                     {/* Structured Decision Display */}
                     {msg.sender === "ai" && msg.Decision ? (
-                       <div className="space-y-3">
-                          <div className={`flex items-center space-x-2 font-bold text-lg mb-2 ${
-                             msg.Decision === "Approved" ? "text-green-400" :
-                             msg.Decision === "Rejected" ? "text-red-400" : "text-yellow-400"
+                       <div className="space-y-4">
+                          <div className={`flex items-center space-x-2 font-bold text-lg ${
+                             msg.Decision === "Approved" ? "text-emerald-400" :
+                             msg.Decision === "Rejected" ? "text-rose-400" : "text-yellow-400"
                           }`}>
-                             {msg.Decision === "Approved" ? <div className="w-3 h-3 rounded-full bg-green-500" /> :
-                              msg.Decision === "Rejected" ? <div className="w-3 h-3 rounded-full bg-red-500" /> :
-                              <div className="w-3 h-3 rounded-full bg-yellow-500" />}
-                             <span>{msg.Decision}</span>
+                             {msg.Decision === "Approved" ? <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" /> :
+                              msg.Decision === "Rejected" ? <div className="w-3 h-3 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.8)]" /> :
+                              <div className="w-3 h-3 rounded-full bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.8)]" />}
+                             <span className="font-['Clash_Grotesk'] tracking-wide">{msg.Decision}</span>
                           </div>
                           
                           {msg.Amount && (
-                             <div className="text-xl font-mono text-white bg-white/5 p-2 rounded inline-block">
+                             <div className="text-xl font-mono text-white bg-black/40 border border-white/10 px-3 py-1.5 rounded-lg inline-block shadow-inner">
                                 {msg.Amount}
                              </div>
                           )}
 
-                           <div className="h-px bg-white/20 my-2" />
+                           <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-3" />
 
                           <p className="text-sm md:text-base leading-relaxed whitespace-pre-wrap">
                             {msg.text}
@@ -281,7 +269,7 @@ const ChatPage = () => {
                   </div>
 
                   {/* Timestamp */}
-                  <span className="text-[10px] text-gray-500 mt-2 select-none">
+                  <span className="text-[10px] text-gray-500/0 group-hover:text-gray-500 transition-colors select-none mb-1">
                     {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
@@ -293,14 +281,13 @@ const ChatPage = () => {
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="flex justify-start items-center space-x-2 pl-12"
+              className="flex justify-start items-center space-x-3 pl-12"
             >
-              <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+              <div className="flex space-x-1.5 p-3 glass-panel rounded-2xl rounded-bl-sm border border-white/10">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                <div className="w-2 h-2 bg-violet-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
               </div>
-              <span className="text-xs text-gray-400 animate-pulse">Analyzing document...</span>
             </motion.div>
           )}
           <div ref={messagesEndRef} />
@@ -308,37 +295,33 @@ const ChatPage = () => {
       </div>
 
       {/* Input Area */}
-      <div className="flex-none p-4 md:p-6 bg-black/80 backdrop-blur-xl border-t border-white/10">
+      <div className="flex-none p-4 md:p-6 bg-black/60 backdrop-blur-2xl border-t border-white/5 z-20">
         <div className="max-w-3xl mx-auto relative group">
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <div className="relative flex items-end gap-2 bg-white/5 rounded-xl border border-white/10 p-2 focus-within:border-purple-500/50 focus-within:bg-white/10 transition-all duration-300">
-            <button className="p-2 hover:bg-white/10 rounded-lg text-gray-400 hover:text-white transition-colors" title="Upload new document">
-               <Upload className="w-5 h-5" />
-            </button>
-            
+          <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 via-violet-500/20 to-emerald-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="relative flex items-end gap-3 bg-[#0a0a0f] rounded-2xl border border-white/10 p-2 focus-within:border-cyan-500/50 focus-within:shadow-[0_0_20px_rgba(6,182,212,0.15)] transition-all duration-300">
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyPress}
               placeholder="Ask about your document..."
-              className="flex-1 bg-transparent text-white placeholder-gray-500 text-sm md:text-base p-2 max-h-32 min-h-[44px] focus:outline-none resize-none scrollbar-hide"
+              className="flex-1 bg-transparent text-white placeholder-gray-500 text-sm md:text-base p-3 max-h-32 min-h-[48px] focus:outline-none resize-none scrollbar-hide"
               rows="1"
             />
 
             <button
               onClick={handleSend}
               disabled={!input.trim() || isLoading}
-              className={`p-2 rounded-lg transition-all duration-300 ${
+              className={`p-3 rounded-xl transition-all duration-300 ${
                 input.trim() && !isLoading
-                  ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/30 hover:scale-105 active:scale-95" 
-                  : "bg-white/5 text-gray-500 cursor-not-allowed"
+                  ? "bg-gradient-to-r from-cyan-500 to-violet-500 text-white shadow-lg shadow-cyan-500/25 hover:scale-105 active:scale-95" 
+                  : "bg-white/5 text-gray-600 cursor-not-allowed"
               }`}
             >
               {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
             </button>
           </div>
-          <div className="mt-2 text-center">
-            <p className="text-[10px] text-gray-600">
+          <div className="mt-3 text-center">
+            <p className="text-[11px] text-gray-500 font-medium">
               AI can make mistakes. Verify important information.
             </p>
           </div>

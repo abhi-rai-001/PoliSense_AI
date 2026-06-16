@@ -6,35 +6,16 @@ services:
     buildCommand: cd backend && npm install
     startCommand: cd backend && npm start
     envVars:
-      - key: MONGO_URI
-        sync: false # User must provide this secret manually in dashboard
-      - key: PYTHON_SERVICE_URL
-        fromService:
-          type: web
-          name: polisense-rag-engine
-          property: url
-      - key: BEARER_TOKEN
-        generateValue: true # Auto-generate a shared secret
-    autoDeploy: true
-
-  # RAG Engine Service
-  - type: web
-    name: polisense-rag-engine
-    env: python
-    buildCommand: cd ragengine && pip install -r requirements.txt
-    startCommand: cd ragengine && gunicorn app.main:app --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
-    envVars:
       - key: GEMINI_API_KEY
         sync: false
       - key: PINECONE_API_KEY
         sync: false
       - key: PINECONE_INDEX_NAME
         value: polisense-index
-      - key: BEARER_TOKEN
-        fromService:
-          type: web
-          name: polisense-backend
-          envVarKey: BEARER_TOKEN
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
     autoDeploy: true
 
   # Frontend Static Site
@@ -49,15 +30,7 @@ services:
           type: web
           name: polisense-backend
           property: url
-      - key: VITE_FIREBASE_API_KEY
+      - key: VITE_SUPABASE_URL
         sync: false
-      - key: VITE_FIREBASE_AUTH_DOMAIN
-        sync: false
-      - key: VITE_FIREBASE_PROJECT_ID
-        sync: false
-      - key: VITE_FIREBASE_STORAGE_BUCKET
-        sync: false
-      - key: VITE_FIREBASE_MESSAGING_SENDER_ID
-        sync: false
-      - key: VITE_FIREBASE_APP_ID
+      - key: VITE_SUPABASE_ANON_KEY
         sync: false

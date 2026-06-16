@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { onAuthStateChange } from '../lib/firebase';
+import { onAuthStateChange } from '../lib/supabase';
 
 const AuthContext = createContext();
 
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
 
   const loginAsDev = () => {
     setUser({
-      uid: 'dev-user-123',
+      id: 'dev-user-123',
       email: 'dev@example.com',
       displayName: 'Dev User',
       photoURL: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Dev'
@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     isSignedIn: !!user,
-    userId: user?.uid,
+    userId: user?.id,
     loginAsDev
   };
 

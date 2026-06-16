@@ -7,21 +7,33 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js"
+    "dev": "tsx watch server.ts",
+    "start": "tsx server.ts"
   },
   "dependencies": {
     "@google/genai": "^1.9.0",
+    "@langchain/core": "^1.1.49",
+    "@langchain/google-genai": "^2.1.31",
+    "@pinecone-database/pinecone": "^7.2.0",
+    "@supabase/supabase-js": "^2.108.2",
     "axios": "^1.10.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
+    "langchain": "^1.4.5",
     "mailparser": "^3.7.4",
     "mammoth": "^1.9.1",
-    "mongodb": "^7.1.0",
-    "mongoose": "^8.16.3",
     "multer": "^2.0.1",
     "nodemon": "^3.1.10",
     "pdf-extraction": "^1.0.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/mongoose": "^5.11.96",
+    "@types/multer": "^2.1.0",
+    "@types/node": "^25.9.3",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
   }
 }

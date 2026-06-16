@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion"; // eslint-disable-line no-unused-vars
+import { motion, AnimatePresence } from "framer-motion"; 
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import GradientText from "../animations/GradientText";
+import { FileUp, Mail, FileText, FileBadge } from "lucide-react";
 
 export default function UploadPage() {
   const navigate = useNavigate();
@@ -13,8 +14,6 @@ export default function UploadPage() {
   const [emailText, setEmailText] = useState("");
   const [uploading, setUploading] = useState(false);
   const [inputMode, setInputMode] = useState("file");
-
-
 
   const maxSizeMB = 10;
 
@@ -36,11 +35,11 @@ export default function UploadPage() {
 
     // Clear previous documents when new file is selected
     const clearPreviousDocuments = async () => {
-      if (!user?.uid) return;
+      if (!user?.id) return;
       
       try {
         await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/user/clear-documents`, {
-          data: { userId: user.uid } // Use actual Firebase user ID
+          data: { userId: user.id } // Use actual user ID
         });
       } catch (error) {
         console.error('Failed to clear previous documents:', error);
@@ -68,12 +67,12 @@ export default function UploadPage() {
       return;
     }
 
-    if (!user?.uid) {
+    if (!user?.id) {
       toast.error("User not authenticated");
       return;
     }
 
-    console.log("DEBUG: Uploading with user ID:", user.uid); // Add this debug line
+    console.log("DEBUG: Uploading with user ID:", user.id); // Add this debug line
 
     setUploading(true);
     toast.loading("Uploading...");
@@ -90,7 +89,7 @@ export default function UploadPage() {
         formData.append("isEmailText", "true");
       }
       
-      formData.append("userId", user.uid); // Make sure this line exists and uses user.uid
+      formData.append("userId", user.id); // Make sure this line exists and uses user.id
       
       console.log("DEBUG: FormData userId:", formData.get("userId")); // Add this debug line
       
@@ -116,78 +115,69 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black pt-20 text-white flex flex-col">
+    <div className="min-h-screen bg-[#050508] relative overflow-hidden flex flex-col text-white">
+      {/* Aurora Ambient Glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[600px] bg-gradient-to-br from-cyan-500/10 via-violet-500/10 to-transparent blur-[120px] pointer-events-none z-0"></div>
+
       <Toaster 
         position="top-center"
         toastOptions={{
           duration: 3000,
           style: {
-            background: '#1f2937',
-            color: '#ffffff',
-            border: '1px solid #374151',
+            background: 'rgba(22, 22, 31, 0.9)',
+            backdropFilter: 'blur(10px)',
+            color: '#f0f0f5',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
           },
           success: {
-            style: {
-              background: '#065f46',
-              border: '1px solid #059669',
-            },
+            iconTheme: { primary: '#34d399', secondary: '#fff' },
           },
           error: {
-            style: {
-              background: '#7f1d1d',
-              border: '1px solid #dc2626',
-            },
-          },
-          loading: {
-            style: {
-              background: '#1e40af',
-              border: '1px solid #3b82f6',
-            },
+            iconTheme: { primary: '#f43f5e', secondary: '#fff' },
           },
         }}
       />
       
-      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 md:px-8 py-16 sm:py-24 md:py-32">
+      <main className="flex-1 relative z-10 flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 py-16 mt-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full max-w-lg sm:max-w-xl md:max-w-2xl"
+          className="w-full max-w-lg sm:max-w-xl md:max-w-3xl"
         >
-          <div className="text-center mb-8">
+          <div className="text-center mb-10">
             <GradientText
-              colors={["#40ffaa", "#4079ff", "#40ffaa"]}
-              animationSpeed={8}
-              showBorder={false}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl mx-auto font-bold mb-4"
+              className="text-4xl md:text-5xl lg:text-6xl mx-auto font-bold mb-4 font-['Clash_Grotesk'] tracking-tight"
             >
-              Upload Your Document
+              Document Intelligence
             </GradientText>
             <p className="text-gray-400 text-sm sm:text-base md:text-lg">
               Upload PDF, DOCX, or Email files for AI-powered analysis
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-4 mx-auto">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-8 justify-center">
             <button
               onClick={() => setInputMode("file")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+              className={`flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 font-medium ${
                 inputMode === "file" 
-                  ? "bg-blue-600 text-white scale-105" 
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 scale-105" 
+                  : "glass-panel text-gray-400 hover:text-white"
               }`}
             >
-              📁 Upload File
+              <FileUp className="w-4 h-4" />
+              Upload File
             </button>
             <button
               onClick={() => setInputMode("text")}
-              className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+              className={`flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 font-medium ${
                 inputMode === "text" 
-                  ? "bg-blue-600 text-white scale-105" 
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  ? "bg-violet-500/10 border border-violet-500/30 text-violet-400 scale-105" 
+                  : "glass-panel text-gray-400 hover:text-white"
               }`}
             >
-              📧 Paste Email
+              <Mail className="w-4 h-4" />
+              Paste Email
             </button>
           </div>
 
@@ -200,22 +190,23 @@ export default function UploadPage() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.95 }}
                 transition={{ duration: 0.4, ease: "easeInOut" }}
-                className="border-2 border-dashed border-gray-700 rounded-lg p-6 sm:p-8 md:p-12 text-center bg-gray-900/50 backdrop-blur-sm hover:border-blue-400 transition-colors cursor-pointer"
+                className="relative glass-panel rounded-3xl p-8 sm:p-12 text-center group cursor-pointer overflow-hidden border-dashed border-2 border-white/20 hover:border-cyan-500/50 hover:bg-white/[0.04] transition-all"
                 onDrop={handleDrop}
                 onDragOver={(e) => e.preventDefault()}
                 onClick={() => document.getElementById("fileInput").click()}
               >
+                <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <motion.div 
-                  className="text-4xl sm:text-5xl md:text-6xl mb-4"
-                  animate={{ rotate: [0, 5, -5, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                  className="flex justify-center mb-6 text-cyan-400"
+                  animate={{ y: [0, -5, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  📁
+                  <FileUp className="w-16 h-16" />
                 </motion.div>
-                <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">
+                <h3 className="text-xl sm:text-2xl font-semibold text-white mb-2 font-['Clash_Grotesk'] tracking-wide">
                   Drop your file here or click to browse
                 </h3>
-                <p className="text-gray-400 text-xs sm:text-sm mb-4">
+                <p className="text-gray-400 text-sm mb-6">
                   Supports PDF, DOCX, and EML files up to {maxSizeMB}MB
                 </p>
 
@@ -223,12 +214,17 @@ export default function UploadPage() {
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="text-left mb-4 p-4 bg-green-900/30 border border-green-700 rounded-lg"
+                    className="text-left mx-auto max-w-sm p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-between"
                   >
-                    <p className="text-sm text-green-300">📄 {file.name}</p>
-                    <p className="text-xs text-green-400">
-                      {(file.size / (1024 * 1024)).toFixed(2)} MB
-                    </p>
+                    <div className="truncate flex-1 pr-4">
+                      <p className="text-sm font-medium text-emerald-400 truncate">{file.name}</p>
+                      <p className="text-xs text-emerald-500/70">
+                        {(file.size / (1024 * 1024)).toFixed(2)} MB
+                      </p>
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
+                      <span className="text-emerald-400 text-xs">✓</span>
+                    </div>
                   </motion.div>
                 )}
 
@@ -247,25 +243,21 @@ export default function UploadPage() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.95 }}
                 transition={{ duration: 0.4, ease: "easeInOut" }}
-                className="bg-gray-900/50 backdrop-blur-sm border-2 border-gray-700 rounded-lg p-4 sm:p-6 md:p-8 hover:border-blue-400 transition-colors"
+                className="glass-panel rounded-3xl p-6 sm:p-8"
               >
-                <motion.div 
-                  className="text-4xl sm:text-5xl md:text-6xl mb-4 text-center"
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                >
-                  📧
-                </motion.div>
-                <h3 className="text-lg sm:text-xl font-semibold text-white mb-4 text-center">
+                <div className="flex justify-center mb-6 text-violet-400">
+                  <Mail className="w-12 h-12" />
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-4 text-center font-['Clash_Grotesk'] tracking-wide">
                   Paste Your Email Content
                 </h3>
                 <textarea
                   value={emailText}
                   onChange={handleEmailTextChange}
                   placeholder="Paste email headers and content here..."
-                  className="w-full h-32 sm:h-40 md:h-48 p-3 sm:p-4 bg-gray-800/50 border border-gray-600 text-white rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-sm sm:text-base"
+                  className="w-full h-40 sm:h-48 p-4 bg-black/40 border border-white/10 text-gray-300 rounded-xl resize-none focus:ring-1 focus:ring-violet-500 focus:border-violet-500 transition-all text-sm"
                 />
-                <p className="text-xs text-gray-400 mt-3 text-center">
+                <p className="text-xs text-gray-500 mt-3 text-center">
                   Include headers (From, To, Subject) and email body for best results
                 </p>
                 
@@ -273,10 +265,10 @@ export default function UploadPage() {
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
-                    className="mt-4 p-3 bg-green-900/30 border border-green-700 rounded-lg"
+                    className="mt-4 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-center"
                   >
-                    <p className="text-sm text-green-300">
-                      ✅ Email content ready ({emailText.length} characters)
+                    <p className="text-sm text-emerald-400">
+                      ✅ Content ready ({emailText.length} chars)
                     </p>
                   </motion.div>
                 )}
@@ -284,44 +276,56 @@ export default function UploadPage() {
             )}
           </AnimatePresence>
 
+          {/* Action Buttons */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="mt-6 flex gap-4 justify-center"
+            className="mt-8 flex flex-col sm:flex-row gap-4 justify-center"
           >
             <button
               onClick={handleUpload}
               disabled={uploading}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-600 text-white px-8 py-3 rounded-lg font-semibold transition-all"
+              className="relative group overflow-hidden rounded-full p-[1px] w-full sm:w-auto disabled:opacity-50"
             >
-              {uploading ? "Uploading..." : "Upload & Analyze"}
+              <span className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-violet-500 to-emerald-500 rounded-full opacity-100 group-hover:opacity-80 transition-opacity animate-gradient"></span>
+              <div className="relative bg-black px-8 py-3 rounded-full transition-all group-hover:bg-transparent flex justify-center items-center h-full">
+                <span className="text-sm font-semibold text-white flex items-center gap-2">
+                  {uploading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      Processing...
+                    </>
+                  ) : "Analyze Document"}
+                </span>
+              </div>
             </button>
             <button
               onClick={() => {
                 setFile(null);
                 setEmailText("");
               }}
-              className="bg-gray-800 hover:bg-gray-700 text-gray-300 px-6 py-3 rounded-lg font-semibold transition-colors"
+              className="px-8 py-3 rounded-full text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all w-full sm:w-auto text-center"
             >
               Clear
             </button>
           </motion.div>
 
-          <div className="mt-12 grid md:grid-cols-3 gap-6">
-            <div className="text-center p-6 bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-lg">
-              <div className="text-3xl mb-2">📄</div>
-              <h4 className="font-semibold text-white">PDF Files</h4>
-              <p className="text-sm text-gray-400">Contracts, policies, reports</p>
+          {/* Info Grid */}
+          <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="text-center p-6 glass-panel rounded-2xl">
+              <div className="flex justify-center text-cyan-400 mb-3"><FileText className="w-8 h-8" /></div>
+              <h4 className="font-semibold text-white font-['Clash_Grotesk']">PDF Files</h4>
+              <p className="text-xs text-gray-400 mt-1">Contracts & reports</p>
             </div>
-            <div className="text-center p-6 bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-lg">
-              <div className="text-3xl mb-2">📝</div>
-              <h4 className="font-semibold text-white">DOCX Files</h4>
-              <p className="text-sm text-gray-400">Word documents, proposals</p>
+            <div className="text-center p-6 glass-panel rounded-2xl">
+              <div className="flex justify-center text-violet-400 mb-3"><FileBadge className="w-8 h-8" /></div>
+              <h4 className="font-semibold text-white font-['Clash_Grotesk']">DOCX Files</h4>
+              <p className="text-xs text-gray-400 mt-1">Proposals & essays</p>
             </div>
-            <div className="text-center p-6 bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-lg">
-              <div className="text-3xl mb-2">📧</div>
-              <h4 className="font-semibold text-white">Email Files</h4>
-              <p className="text-sm text-gray-400">EML format emails</p>
+            <div className="text-center p-6 glass-panel rounded-2xl">
+              <div className="flex justify-center text-emerald-400 mb-3"><Mail className="w-8 h-8" /></div>
+              <h4 className="font-semibold text-white font-['Clash_Grotesk']">Email Files</h4>
+              <p className="text-xs text-gray-400 mt-1">EML formats</p>
             </div>
           </div>
         </motion.div>

@@ -3,8 +3,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        'tan-kulture': ['TAN-KULTURE', 'Poppins', 'sans-serif'],
-        'poppins': ['Poppins', 'sans-serif'],
+        'clash': ['"Clash Grotesk"', 'sans-serif'],
+        'sans': ['Inter', 'sans-serif'],
       }
     }
   }
