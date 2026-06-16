@@ -1,8 +1,6 @@
 import React from 'react';
 import GradientText from '@/animations/GradientText';
 import { Star, Users, FileText, Globe } from 'lucide-react';
-import { motion } from 'framer-motion';
-
 const SocialProof = () => {
   const testimonials = [
     {

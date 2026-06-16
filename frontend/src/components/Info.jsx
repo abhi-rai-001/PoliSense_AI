@@ -1,6 +1,5 @@
 import React from 'react';
 import Card from './Card';
-import { motion } from 'framer-motion';
 import { FileText, FileBadge, Mail } from 'lucide-react';
 import GradientText from '@/animations/GradientText';
 

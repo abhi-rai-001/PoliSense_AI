@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { signUpWithEmail } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import GradientText from "../animations/GradientText";

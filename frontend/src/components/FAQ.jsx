@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import GradientText from '@/animations/GradientText';
 import { ChevronDown } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence  } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const FAQ = () => {

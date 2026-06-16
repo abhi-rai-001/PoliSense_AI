@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { Mail, MapPin, Instagram, Linkedin, Send, CheckCircle2 } from "lucide-react";
 import GradientText from "../animations/GradientText";
 import toast, { Toaster } from "react-hot-toast";

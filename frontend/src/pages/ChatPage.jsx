@@ -1,15 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence  } from 'framer-motion';
 import { Send, X, Bot, User, Loader2, Sparkles } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import GradientText from "../animations/GradientText";
 
 const ChatPage = () => {
   const { user } = useAuth();
-  const location = useLocation();
+  
   const navigate = useNavigate();
   const [messages, setMessages] = useState([
     {
@@ -52,7 +52,7 @@ const ChatPage = () => {
       }
     };
 
-    const handleBeforeUnload = (e) => {
+    const handleBeforeUnload = () => {
       // Send a synchronous beacon request before page unloads
       // This is more reliable than fetch/axios during page unload
       if (user?.id) {
@@ -113,7 +113,7 @@ const ChatPage = () => {
                justification = parsed.Justification;
                cleanText = justification || "I've analyzed the request.";
             }
-         } catch (e) {
+         } catch (e) {  
             console.error("Failed to parse JSON from response", e);
          }
       }

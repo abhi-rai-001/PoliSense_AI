@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import GradientText from "../animations/GradientText";
-import { motion } from "framer-motion";
 import { signInWithEmail } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { ArrowLeft } from "lucide-react";

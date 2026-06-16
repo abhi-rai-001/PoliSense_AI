@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from "framer-motion";
 import GradientText from '../animations/GradientText';
 import GeometricLogo from '../components/GeometricLogo';
 import { Link } from 'react-router-dom';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence  } from 'framer-motion';
 import GeometricLogo from './GeometricLogo';
 import { useAuth } from '../contexts/AuthContext';
 import { signOutUser } from '../lib/supabase';

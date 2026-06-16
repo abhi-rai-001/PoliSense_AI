@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { Link as RouterLink } from "react-router-dom";
 import Threads from '@/animations/Thread';
 

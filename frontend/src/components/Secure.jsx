@@ -1,8 +1,6 @@
 import React from 'react';
 import GradientText from '../animations/GradientText';
 import { ShieldCheck, Lock, Server } from 'lucide-react';
-import { motion } from 'framer-motion';
-
 const Secure = () => {
   const features = [
     {
