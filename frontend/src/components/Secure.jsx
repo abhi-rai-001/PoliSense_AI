@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import { motion } from 'framer-motion';
 import React from 'react';
 import GradientText from '../animations/GradientText';
 import { ShieldCheck, Lock, Server } from 'lucide-react';

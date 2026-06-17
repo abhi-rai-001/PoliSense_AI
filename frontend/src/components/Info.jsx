@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import { motion } from 'framer-motion';
 import React from 'react';
 import Card from './Card';
 import { FileText, FileBadge, Mail } from 'lucide-react';

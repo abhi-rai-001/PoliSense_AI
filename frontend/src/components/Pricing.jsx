@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import { motion } from 'framer-motion';
 import React from 'react';
 import { Check, Star, Zap, Building2 } from 'lucide-react';
 import GradientText from '../animations/GradientText';

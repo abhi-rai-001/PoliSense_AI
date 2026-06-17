@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import { motion } from 'framer-motion';
 import React, { useState, useRef, useEffect } from "react";
 import { AnimatePresence  } from 'framer-motion';
 import { Send, X, Bot, User, Loader2, Sparkles } from "lucide-react";

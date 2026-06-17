@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import { motion } from 'framer-motion';
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import Threads from '@/animations/Thread';

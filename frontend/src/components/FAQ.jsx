@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 import GradientText from '@/animations/GradientText';
 import { ChevronDown } from 'lucide-react';

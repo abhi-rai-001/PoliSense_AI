@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import { motion } from 'framer-motion';
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail, MapPin, Instagram, Linkedin, Send, CheckCircle2 } from "lucide-react";

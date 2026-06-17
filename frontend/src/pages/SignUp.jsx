@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import { motion } from 'framer-motion';
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { signUpWithEmail } from "../lib/supabase";
