@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Lenis from 'lenis';
 import LandingPage from "./pages/LandingPage";
 import UploadPage from "./pages/UploadPage";
@@ -12,21 +12,33 @@ import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+// Lenis smooth scroll — disabled on /chat so the chat container can scroll natively
+function LenisProvider() {
+  const location = useLocation();
 
-function App() {
   useEffect(() => {
-    const lenis = new Lenis();
+    if (location.pathname === '/chat') return; // skip for chat page
 
+    const lenis = new Lenis();
     function raf(time) {
       lenis.raf(time);
       requestAnimationFrame(raf);
     }
+    const id = requestAnimationFrame(raf);
 
-    requestAnimationFrame(raf);
-  }, []);
+    return () => {
+      cancelAnimationFrame(id);
+      lenis.destroy();
+    };
+  }, [location.pathname]);
 
+  return null;
+}
+
+function App() {
   return (
     <Router>
+      <LenisProvider />
       <Routes>
         <Route path="/" element={<><Navbar/> <LandingPage /> <Footer/> </>} />
         <Route 

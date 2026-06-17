@@ -163,7 +163,7 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[#050508] text-white font-sans selection:bg-cyan-500/30 overflow-hidden relative">
+    <div className="flex flex-col h-screen bg-[#050508] text-white font-sans selection:bg-cyan-500/30 relative">
       {/* Background Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[600px] bg-gradient-to-br from-cyan-500/5 via-violet-500/5 to-transparent blur-[120px] pointer-events-none z-0"></div>
 
@@ -180,36 +180,55 @@ const ChatPage = () => {
       />
       
       {/* Header */}
-      <header className="flex-none p-4 border-b border-white/5 bg-black/40 backdrop-blur-xl z-10 sticky top-0">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-gradient-to-br from-cyan-500 to-violet-500 rounded-xl shadow-lg shadow-cyan-500/20">
-              <Bot className="w-6 h-6 text-white" />
+      <header className="flex-none z-10 relative">
+        {/* Top gradient line */}
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent" />
+        <div className="px-5 py-3 bg-[#07070d]/80 backdrop-blur-2xl border-b border-white/[0.06] flex items-center justify-between">
+
+          {/* Left — Logo + Info */}
+          <div className="flex items-center gap-4">
+            {/* Logo mark */}
+            <div className="relative flex-none">
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-cyan-500 to-violet-600 blur-md opacity-50" />
+              <div className="relative w-9 h-9 bg-gradient-to-br from-cyan-500 to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/20 ring-1 ring-white/10">
+                <Bot className="w-4.5 h-4.5 text-white" strokeWidth={2} />
+              </div>
             </div>
-            <div>
-              <h2 className="text-xl font-bold font-['Clash_Grotesk'] tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-400">
-                Polisense AI
-              </h2>
-              <div className="flex items-center space-x-2 mt-0.5">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+
+            {/* Brand text */}
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2.5">
+                <span className="text-[15px] font-semibold tracking-[-0.01em] text-white" style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.01em' }}>
+                  PoliSense
                 </span>
-                <span className="text-xs text-gray-400 font-medium">Online & Ready</span>
+              </div>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
+                </span>
+                <span className="text-[11px] text-white/30 tracking-wide" style={{ fontFamily: "'Inter', sans-serif" }}>
+                  Model active · Gemini 3.5 Flash
+                </span>
               </div>
             </div>
           </div>
-          <button 
-            onClick={() => navigate("/")}
-            className="p-2.5 bg-white/5 hover:bg-white/10 border border-white/5 rounded-full transition-colors text-gray-400 hover:text-white"
-          >
-            <X className="w-5 h-5" />
-          </button>
+
+          {/* Right — Actions */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate("/")}
+              className="group flex items-center gap-2 px-3.5 py-2 rounded-xl text-white/40 hover:text-white/80 bg-white/0 hover:bg-white/5 border border-white/0 hover:border-white/10 transition-all duration-200"
+            >
+              <X className="w-4 h-4 transition-transform group-hover:rotate-90 duration-200" />
+              <span className="text-[12px] font-medium hidden sm:block" style={{ fontFamily: "'Inter', sans-serif" }}>Close</span>
+            </button>
+          </div>
         </div>
       </header>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-hide z-10 relative">
+      <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-6 scrollbar-hide z-10 relative">
         <div className="max-w-3xl mx-auto space-y-8 pb-4 pt-4">
           <AnimatePresence mode="popLayout">
             {messages.map((msg) => (
