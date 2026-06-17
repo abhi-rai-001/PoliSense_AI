@@ -17,20 +17,3 @@ services:
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
     autoDeploy: true
-
-  # Frontend Static Site
-  - type: static
-    name: polisense-frontend
-    env: static
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
-    envVars:
-      - key: VITE_BACKEND_URL
-        fromService:
-          type: web
-          name: polisense-backend
-          property: url
-      - key: VITE_SUPABASE_URL
-        sync: false
-      - key: VITE_SUPABASE_ANON_KEY
-        sync: false
