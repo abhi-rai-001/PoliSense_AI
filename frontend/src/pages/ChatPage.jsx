@@ -208,7 +208,7 @@ const ChatPage = () => {
                   <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
                 </span>
                 <span className="text-[11px] text-white/30 tracking-wide" style={{ fontFamily: "'Inter', sans-serif" }}>
-                  Model active · Gemini 2.5 Flash
+                  Model active · Gemini 3.5 Flash
                 </span>
               </div>
             </div>
